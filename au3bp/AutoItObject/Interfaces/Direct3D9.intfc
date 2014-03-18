@@ -1,0 +1,950 @@
+#include-once
+;===============================================================================
+#API "Direct3D"
+; IDirect3D9
+; IDirect3DDevice9
+; IDirect3DResource9
+; IDirect3DVertexBuffer9
+; IDirect3DIndexBuffer9
+; IDirect3DSurface9
+; IDirect3DBaseTexture9
+; IDirect3DTexture9
+; IDirect3DCubeTexture9
+; IDirect3DVolumeTexture9
+; IDirect3DVertexShader9
+; IDirect3DPixelShader9
+; IDirect3DVertexDeclaration9
+; ID3DXBaseMesh
+; ID3DXMesh
+; ID3DXPMesh
+; ID3DXFont
+; ID3DXSprite
+; ID3DXBuffer
+; ID3DXConstantTable
+; ID3DXBaseEffect
+; ID3DXEffect
+; ID3DXRenderToSurface
+; ID3DXRenderToEnvMap
+;===============================================================================
+
+;.......written by Authenticity
+
+;===============================================================================
+#interface "IDirect3D9"
+Global Const $sIID_IDirect3D9 = "{81BDCBCA-64D4-426d-AE8D-AD0147F4275C}"
+; Definition
+Global $dtagIDirect3D9 = $dtagIUnknown & _
+	"RegisterSoftwareDevice hresult(ptr);" & _
+	"GetAdapterCount uint();" & _
+    "GetAdapterIdentifier hresult(uint;uint;ptr);" & _
+	"GetAdapterModeCount uint(uint;uint);" & _
+	"EnumAdapterModes hresult(uint;uint;uint;ptr);" & _
+	"GetAdapterDisplayMode hresult(uint;ptr);" & _
+	"CheckDeviceType hresult(uint;uint;uint;uint;bool);" & _
+	"CheckDeviceFormat hresult(uint;uint;uint;uint;uint;uint);" & _
+	"CheckDeviceMultiSampleType hresult(uint;uint;uint;bool;uint;uint*);" & _
+	"CheckDepthStencilMatch hresult(uint;uint;uint;uint;uint);" & _
+	"CheckDeviceFormatConversion hresult(uint;uint;uint;uint);" & _
+	"GetDeviceCaps hresult(uint;uint;ptr);" & _
+	"GetAdapterMonitor ptr(uint);" & _
+	"CreateDevice hresult(uint;uint;hwnd;uint;ptr;ptr*);"
+; List
+Global $ltagIDirect3D9 = $ltagIUnknown & _
+	"RegisterSoftwareDevice;" & _
+	"GetAdapterCount;" & _
+	"GetAdapterIdentifier;" & _
+	"GetAdapterModeCount;" & _
+	"EnumAdapterModes;" & _
+	"GetAdapterDisplayMode;" & _
+	"CheckDeviceType;" & _
+	"CheckDeviceFormat;" & _
+	"CheckDeviceMultiSampleType;" & _
+	"CheckDepthStencilMatch;" & _
+	"CheckDeviceFormatConversion;" & _
+	"GetDeviceCaps;" & _
+	"GetAdapterMonitor;" & _
+	"CreateDevice;"
+;===============================================================================
+;===============================================================================
+#interface "IDirect3DDevice9"
+Global Const $sIID_IDirect3DDevice9 = "{D0223B96-BF7A-43fd-92BD-A43B0D82B9EB}"
+; Definition
+Global $dtagIDirect3DDevice9 = $dtagIUnknown & _
+	"TestCooperativeLevel hresult();" & _
+	"GetAvailableTextureMem uint();" & _
+	"EvictManagedResources hresult();" & _
+	"GetDirect3D hresult(ptr*);" & _
+	"GetDeviceCaps hresult(ptr);" & _
+	"GetDisplayMode hresult(uint;ptr);" & _
+	"GetCreationParameters hresult(ptr);" & _
+	"SetCursorProperties hresult(uint;uint;ptr);" & _
+	"SetCursorPosition none(int;int;uint);" & _
+	"ShowCursor bool(bool);" & _
+	"CreateAdditionalSwapChain hresult(ptr;ptr*);" & _
+	"GetSwapChain hresult(uint;ptr*);" & _
+	"GetNumberOfSwapChains uint();" & _
+	"Reset hresult(ptr);" & _
+	"Present hresult(ptr;ptr;hwnd;ptr);" & _
+	"GetBackBuffer hresult(uint;uint;uint;ptr*);" & _
+	"GetRasterStatus hresult(uint;ptr);" & _
+	"SetDialogBoxMode hresult(bool);" & _
+	"SetGammaRamp none(uint;uint;ptr);" & _
+	"GetGammaRamp none(uint;ptr);" & _
+	"CreateTexture hresult(uint;uint;uint;uint;uint;uint;ptr*;ptr);" & _
+	"CreateVolumeTexture hresult(uint;uint;uint;uint;uint;uint;uint;ptr*;ptr);" & _
+	"CreateCubeTexture hresult(uint;uint;uint;uint;uint;ptr*;ptr);" & _
+	"CreateVertexBuffer hresult(uint;uint;uint;uint;ptr*;ptr);" & _
+	"CreateIndexBuffer hresult(uint;uint;uint;uint;ptr*;ptr);" & _
+	"CreateRenderTarget hresult(uint;uint;uint;uint;uint;bool;ptr*;ptr);" & _
+	"CreateDepthStencilSurface hresult(uint;uint;uint;uint;uint;bool;ptr*;ptr);" & _
+	"UpdateSurface hresult(ptr;ptr;ptr;ptr);" & _
+	"UpdateTexture hresult(ptr;ptr);" & _
+	"GetRenderTargetData hresult(ptr;ptr);" & _
+	"GetFrontBufferData hresult(uint;ptr);" & _
+	"StretchRect hresult(ptr;ptr;ptr;ptr;uint);" & _
+	"ColorFill hresult(ptr;ptr;uint);" & _
+	"CreateOffscreenPlainSurface hresult(uint;uint;uint;uint;ptr*;ptr);" & _
+	"SetRenderTarget hresult(uint;ptr);" & _
+	"GetRenderTarget hresult(uint;ptr;ptr*);" & _
+	"SetDepthStencilSurface hresult(ptr);" & _
+	"GetDepthStencilSurface hresult(ptr*);" & _
+	"BeginScene hresult();" & _
+	"EndScene hresult();" & _
+	"Clear hresult(uint;ptr;uint;uint;float;uint);" & _
+	"SetTransform hresult(uint;ptr);" & _
+	"GetTransform hresult(uint;ptr);" & _
+	"MultiplyTransform hresult(uint;ptr);" & _
+	"SetViewport hresult(ptr);" & _
+	"GetViewport hresult(ptr);" & _
+	"SetMaterial hresult(ptr);" & _
+	"GetMaterial hresult(ptr);" & _
+	"SetLight hresult(uint;ptr);" & _
+	"GetLight hresult(uint;ptr);" & _
+	"LightEnable hresult(uint;bool);" & _
+	"GetLightEnable hresult(uint;bool*);" & _
+	"SetClipPlane hresult(uint;float*);" & _
+	"GetClipPlane hresult(uint;float*);" & _
+	"SetRenderState hresult(uint;uint);" & _
+	"GetRenderState hresult(uint;uint*);" & _
+	"CreateStateBlock hresult(uint;ptr*);" & _
+	"BeginStateBlock hresult();" & _
+	"EndStateBlock hresult(ptr*);" & _
+	"SetClipStatus hresult(ptr);" & _
+	"GetClipStatus hresult(ptr);" & _
+	"GetTexture hresult(uint;ptr*);" & _
+	"SetTexture hresult(uint;ptr);" & _
+	"GetTextureStageState hresult(uint;uint;uint*);" & _
+	"SetTextureStageState hresult(uint;uint;uint);" & _
+	"GetSamplerState hresult(uint;uint;uint*);" & _
+	"SetSamplerState hresult(uint;uint;uint);" & _
+	"ValidateDevice hresult(uint*);" & _
+	"SetPaletteEntries hresult(uint;ptr);" & _
+	"GetPaletteEntries hresult(uint;ptr);" & _
+	"SetCurrentTexturePalette hresult(uint);" & _
+	"GetCurrentTexturePalette hresult(uint*);" & _
+	"SetScissorRect hresult(ptr);" & _
+	"GetScissorRect hresult(ptr);" & _
+	"SetSoftwareVertexProcessing hresult(bool);" & _
+	"GetSoftwareVertexProcessing bool();" & _
+	"SetNPatchMode hresult(float);" & _
+	"GetNPatchMode float();" & _
+	"DrawPrimitive hresult(uint;uint;uint);" & _
+	"DrawIndexedPrimitive hresult(uint;int;uint;uint;uint;uint);" & _
+	"DrawPrimitiveUP hresult(uint;uint;ptr;uint);" & _
+	"DrawIndexedPrimitiveUP hresult(uint;uint;uint;uint;ptr;uint;ptr;uint);" & _
+	"ProcessVertices hresult(uint;uint;uint;ptr;ptr;uint);" & _
+	"CreateVertexDeclaration hresult(ptr;ptr*);" & _
+	"SetVertexDeclaration hresult(ptr);" & _
+	"GetVertexDeclaration hresult(ptr*);" & _
+	"SetFVF hresult(uint);" & _
+	"GetFVF hresult(uint*);" & _
+	"CreateVertexShader hresult(ptr;ptr*);" & _
+	"SetVertexShader hresult(ptr);" & _
+	"GetVertexShader hresult(ptr*);" & _
+	"SetVertexShaderConstantF hresult(uint;ptr;uint);" & _
+	"GetVertexShaderConstantF hresult(uint;ptr;uint);" & _
+	"SetVertexShaderConstantI hresult(uint;ptr;uint);" & _
+	"GetVertexShaderConstantI hresult(uint;ptr;uint);" & _
+	"SetVertexShaderConstantB hresult(uint;ptr;uint);" & _
+	"GetVertexShaderConstantB hresult(uint;ptr;uint);" & _
+	"SetStreamSource hresult(uint;ptr;uint;uint);" & _
+	"GetStreamSource hresult(uint;ptr*;uint*;uint*);" & _
+	"SetStreamSourceFreq hresult(uint;uint);" & _
+	"GetStreamSourceFreq hresult(uint;uint*);" & _
+	"SetIndices hresult(ptr);" & _
+	"GetIndices hresult(ptr*);" & _
+	"CreatePixelShader hresult(ptr;ptr*);" & _
+	"SetPixelShader hresult(ptr);" & _
+	"GetPixelShader hresult(ptr*);" & _
+	"SetPixelShaderConstantF hresult(uint;ptr;uint);" & _
+	"GetPixelShaderConstantF hresult(uint;ptr;uint);" & _
+	"SetPixelShaderConstantI hresult(uint;ptr;uint);" & _
+	"GetPixelShaderConstantI hresult(uint;ptr;uint);" & _
+	"SetPixelShaderConstantB hresult(uint;ptr;uint);" & _
+	"GetPixelShaderConstantB hresult(uint;ptr;uint);" & _
+	"DrawRectPatch hresult(uint;ptr;ptr);" & _
+	"DrawTriPatch hresult(uint;ptr;ptr);" & _
+	"DeletePatch hresult(uint);" & _
+	"CreateQuery hresult(uint;ptr*);"
+; List
+Global $ltagIDirect3DDevice9 = $ltagIUnknown & _
+	"TestCooperativeLevel;" & _
+	"GetAvailableTextureMem;" & _
+	"EvictManagedResources;" & _
+	"GetDirect3D;" & _
+	"GetDeviceCaps;" & _
+	"GetDisplayMode;" & _
+	"GetCreationParameters;" & _
+	"SetCursorProperties;" & _
+	"SetCursorPosition;" & _
+	"ShowCursor;" & _
+	"CreateAdditionalSwapChain;" & _
+	"GetSwapChain;" & _
+	"GetNumberOfSwapChains;" & _
+	"Reset;" & _
+	"Present;" & _
+	"GetBackBuffer;" & _
+	"GetRasterStatus;" & _
+	"SetDialogBoxMode;" & _
+	"SetGammaRamp;" & _
+	"GetGammaRamp;" & _
+	"CreateTexture;" & _
+	"CreateVolumeTexture;" & _
+	"CreateCubeTexture;" & _
+	"CreateVertexBuffer;" & _
+	"CreateIndexBuffer;" & _
+	"CreateRenderTarget;" & _
+	"CreateDepthStencilSurface;" & _
+	"UpdateSurface;" & _
+	"UpdateTexture;" & _
+	"GetRenderTargetData;" & _
+	"GetFrontBufferData;" & _
+	"StretchRect;" & _
+	"ColorFill;" & _
+	"CreateOffscreenPlainSurface;" & _
+	"SetRenderTarget;" & _
+	"GetRenderTarget;" & _
+	"SetDepthStencilSurface;" & _
+	"GetDepthStencilSurface;" & _
+	"BeginScene;" & _
+	"EndScene;" & _
+	"Clear;" & _
+	"SetTransform;" & _
+	"GetTransform;" & _
+	"MultiplyTransform;" & _
+	"SetViewport;" & _
+	"GetViewport;" & _
+	"SetMaterial;" & _
+	"GetMaterial;" & _
+	"SetLight;" & _
+	"GetLight;" & _
+	"LightEnable;" & _
+	"GetLightEnable;" & _
+	"SetClipPlane;" & _
+	"GetClipPlane;" & _
+	"SetRenderState;" & _
+	"GetRenderState;" & _
+	"CreateStateBlock;" & _
+	"BeginStateBlock;" & _
+	"EndStateBlock;" & _
+	"SetClipStatus;" & _
+	"GetClipStatus;" & _
+	"GetTexture;" & _
+	"SetTexture;" & _
+	"GetTextureStageState;" & _
+	"SetTextureStageState;" & _
+	"GetSamplerState;" & _
+	"SetSamplerState;" & _
+	"ValidateDevice;" & _
+	"SetPaletteEntries;" & _
+	"GetPaletteEntries;" & _
+	"SetCurrentTexturePalette;" & _
+	"GetCurrentTexturePalette;" & _
+	"SetScissorRect;" & _
+	"GetScissorRect;" & _
+	"SetSoftwareVertexProcessing;" & _
+	"GetSoftwareVertexProcessing;" & _
+	"SetNPatchMode;" & _
+	"GetNPatchMode;" & _
+	"DrawPrimitive;" & _
+	"DrawIndexedPrimitive;" & _
+	"DrawPrimitiveUP;" & _
+	"DrawIndexedPrimitiveUP;" & _
+	"ProcessVertices;" & _
+	"CreateVertexDeclaration;" & _
+	"SetVertexDeclaration;" & _
+	"GetVertexDeclaration;" & _
+	"SetFVF;" & _
+	"GetFVF;" & _
+	"CreateVertexShader;" & _
+	"SetVertexShader;" & _
+	"GetVertexShader;" & _
+	"SetVertexShaderConstantF;" & _
+	"GetVertexShaderConstantF;" & _
+	"SetVertexShaderConstantI;" & _
+	"GetVertexShaderConstantI;" & _
+	"SetVertexShaderConstantB;" & _
+	"GetVertexShaderConstantB;" & _
+	"SetStreamSource;" & _
+	"GetStreamSource;" & _
+	"SetStreamSourceFreq;" & _
+	"GetStreamSourceFreq;" & _
+	"SetIndices;" & _
+	"GetIndices;" & _
+	"CreatePixelShader;" & _
+	"SetPixelShader;" & _
+	"GetPixelShader;" & _
+	"SetPixelShaderConstantF;" & _
+	"GetPixelShaderConstantF;" & _
+	"SetPixelShaderConstantI;" & _
+	"GetPixelShaderConstantI;" & _
+	"SetPixelShaderConstantB;" & _
+	"GetPixelShaderConstantB;" & _
+	"DrawRectPatch;" & _
+	"DrawTriPatch;" & _
+	"DeletePatch;" & _
+	"CreateQuery;"
+;===============================================================================
+;===============================================================================
+#interface "IDirect3DResource9"
+Global Const $sIID_IDirect3DResource9 = "{05EEC05D-8F7D-4362-B999-D1BAF357C704}"
+; Definition
+Global $dtagIDirect3DResource9 = $dtagIUnknown & _
+	"GetDevice hresult(ptr*);" & _
+	"SetPrivateData hresult(ptr;ptr;uint;uint);" & _
+	"GetPrivateData hresult(ptr;ptr;uint*);" & _
+	"FreePrivateData hresult(ptr);" & _
+	"SetPriority uint(uint);" & _
+	"GetPriority uint();" & _
+	"PreLoad none();" & _
+	"GetType uint();"
+; List
+Global $ltagIDirect3DResource9 = $ltagIUnknown & _
+	"GetDevice;" & _
+	"SetPrivateData;" & _
+	"GetPrivateData;" & _
+	"FreePrivateData;" & _
+	"SetPriority;" & _
+	"GetPriority;" & _
+	"PreLoad;" & _
+	"GetType;"
+;===============================================================================
+;===============================================================================
+#interface "IDirect3DVertexBuffer9"
+Global Const $sIID_IDirect3DVertexBuffer9 = "{B64BB1B5-FD70-4df6-BF91-19D0A12455E3}"
+; Definition
+Global $dtagIDirect3DVertexBuffer9 = $dtagIDirect3DResource9 & _
+	"Lock hresult(uint;uint;ptr*;uint);" & _
+	"Unlock hresult();" & _
+	"GetDesc hresult(ptr);"
+; List
+Global $ltagIDirect3DVertexBuffer9 = $ltagIDirect3DResource9 & _
+	"Lock;" & _
+	"Unlock;" & _
+	"GetDesc;"
+;===============================================================================
+;===============================================================================
+#interface "IDirect3DIndexBuffer9"
+Global Const $sIID_IDirect3DIndexBuffer9 = "{7C9DD65E-D3F7-4529-ACEE-785830ACDE35}"
+; Definition
+Global $dtagIDirect3DIndexBuffer9 = $dtagIDirect3DResource9 & _
+	"Lock hresult(uint;uint;ptr*;uint);" & _
+	"Unlock hresult();" & _
+	"GetDesc hresult(ptr);"
+; List
+Global $ltagIDirect3DIndexBuffer9 = $ltagIDirect3DResource9 & _
+	"Lock;" & _
+	"Unlock;" & _
+	"GetDesc;"
+;===============================================================================
+;===============================================================================
+#interface "IDirect3DSurface9"
+Global Const $sIID_IDirect3DSurface9 = "{0CFBAF3A-9FF6-429a-99B3-A2796AF8B89B}"
+; Definition
+Global $dtagIDirect3DSurface9 = $dtagIDirect3DResource9 & _
+	"GetContainer hresult(ptr;ptr*);" & _
+	"GetDesc hresult(ptr);" & _
+	"LockRect hresult(ptr;ptr;uint);" & _
+	"UnlockRect hresult();" & _
+	"GetDC hresult(ptr*);" & _
+	"ReleaseDC hresult(ptr);"
+; List
+Global $ltagIDirect3DSurface9 = $ltagIDirect3DResource9 & _
+	"GetContainer;" & _
+	"GetDesc;" & _
+	"LockRect;" & _
+	"UnlockRect;" & _
+	"GetDC;" & _
+	"ReleaseDC;"
+;===============================================================================
+;===============================================================================
+#interface "IDirect3DBaseTexture9"
+Global Const $sIID_IDirect3DBaseTexture9 = "{580CA87E-1D3C-4d54-991D-B7D3E3C298CE}"
+; Definition
+Global $dtagIDirect3DBaseTexture9 = $dtagIDirect3DResource9 & _
+	"SetLOD uint(uint);" & _
+	"GetLOD uint();" & _
+	"GetLevelCount uint();" & _
+	"SetAutoGenFilterType hresult(uint);" & _
+	"GetAutoGenFilterType uint();" & _
+	"GenerateMipSubLevels none();"
+; List
+Global $ltagIDirect3DBaseTexture9 = $ltagIDirect3DResource9 & _
+	"SetLOD;" & _
+	"GetLOD;" & _
+	"GetLevelCount;" & _
+	"SetAutoGenFilterType;" & _
+	"GetAutoGenFilterType;" & _
+	"GenerateMipSubLevels;"
+;===============================================================================
+;===============================================================================
+#interface "IDirect3DTexture9"
+Global Const $sIID_IDirect3DTexture9 = "{85C31227-3DE5-4f00-9B3A-F11AC38C18B5}"
+; Definition
+Global $dtagIDirect3DTexture9 = $dtagIDirect3DBaseTexture9 & _
+	"GetLevelDesc hresult(uint;ptr);" & _
+	"GetSurfaceLevel hresult(uint;ptr*);" & _
+	"LockRect hresult(uint;ptr;ptr;uint);" & _
+	"UnlockRect hresult(uint);" & _
+	"AddDirtyRect hresult(ptr);"
+; List
+Global $ltagIDirect3DTexture9 = $ltagIDirect3DBaseTexture9 & _
+	"GetLevelDesc;" & _
+	"GetSurfaceLevel;" & _
+	"LockRect;" & _
+	"UnlockRect;" & _
+	"AddDirtyRect;"
+;===============================================================================
+;===============================================================================
+#interface "IDirect3DCubeTexture9"
+Global Const $sIID_IDirect3DCubeTexture9 = "{FFF32F81-D953-473a-9223-93D652ABA93F}"
+; Definition
+Global $dtagIDirect3DCubeTexture9 = $dtagIDirect3DBaseTexture9 & _
+	"GetLevelDesc hresult(uint;ptr);" & _
+	"GetCubeMapSurface hresult(uint;uint;ptr*);" & _
+	"LockRect hresult(uint;uint;ptr;ptr;uint);" & _
+	"UnlockRect hresult(uint;uint);" & _
+	"AddDirtyRect hresult(uint;ptr);"
+; List
+Global $ltagIDirect3DCubeTexture9 = $ltagIDirect3DBaseTexture9 & _
+	"GetLevelDesc;" & _
+	"GetCubeMapSurface;" & _
+	"LockRect;" & _
+	"UnlockRect;" & _
+	"AddDirtyRect;"
+;===============================================================================
+;===============================================================================
+#interface "IDirect3DVolumeTexture9"
+Global Const $sIID_IDirect3DVolumeTexture9 = "{2518526C-E789-4111-A7B9-47EF328D13E6}"
+; Definition
+Global $dtagIDirect3DVolumeTexture9 = $dtagIDirect3DBaseTexture9 & _
+	"GetLevelDesc hresult(uint;ptr);" & _
+	"GetVolumeLevel hresult(uint;ptr*);" & _
+	"LockBox hresult(uint;ptr;ptr;uint);" & _
+	"UnlockBox hresult(uint);" & _
+	"AddDirtyBox hresult(ptr);"
+; List
+Global $ltagIDirect3DVolumeTexture9 = $ltagIDirect3DBaseTexture9 & _
+	"GetLevelDesc;" & _
+	"GetVolumeLevel;" & _
+	"LockBox;" & _
+	"UnlockBox;" & _
+	"AddDirtyBox;"
+;===============================================================================
+;===============================================================================
+#interface "IDirect3DVertexShader9"
+Global Const $sIID_IDirect3DVertexShader9 = "{EFC5557E-6265-4613-8A94-43857889EB36}"
+; Definition
+Global $dtagIDirect3DVertexShader9 = $dtagIUnknown & _
+	"GetDevice hresult(ptr*);" & _
+    "GetFunction hresult(ptr;uint*);"
+; List
+Global $ltagIDirect3DVertexShader9 = $ltagIUnknown & _
+	"GetDevice;" & _
+    "GetFunction;"
+;===============================================================================
+;===============================================================================
+#interface "IDirect3DPixelShader9"
+Global Const $sIID_IDirect3DPixelShader9 = "{6D3BDBDC-5B02-4415-B852-CE5E8BCCB289}"
+; Definition
+Global $dtagIDirect3DPixelShader9 = $dtagIUnknown & _
+	"GetDevice hresult(ptr*);" & _
+    "GetFunction hresult(ptr;uint*);"
+; List
+Global $ltagIDirect3DPixelShader9 = $ltagIUnknown & _
+	"GetDevice;" & _
+    "GetFunction;"
+;===============================================================================
+;===============================================================================
+#interface "IDirect3DVertexDeclaration9"
+Global Const $sIID_IDirect3DVertexDeclaration9 = "{DD13C59C-36FA-4098-A8FB-C7ED39DC8546}"
+; Definition
+Global $dtagIDirect3DVertexDeclaration9 = $dtagIUnknown & _
+	"GetDevice hresult(ptr*);" & _
+    "GetDeclaration hresult(ptr;uint*);"
+; List
+Global $ltagIDirect3DVertexDeclaration9 = $ltagIUnknown & _
+	"GetDevice;" & _
+	"GetDeclaration;"
+;===============================================================================
+#endregion Direct3D Interfaces
+
+#region D3DX Interfaces
+;===============================================================================
+#interface "ID3DXBaseMesh"
+Global Const $sIID_ID3DXBaseMesh = "{7ED943DD-52E8-40b5-A8D8-76685C406330}"
+; Definition
+Global $dtagID3DXBaseMesh = $dtagIUnknown & _
+    "DrawSubset hresult(uint);" & _
+    "GetNumFaces uint();" & _
+    "GetNumVertices uint();" & _
+    "GetFVF uint();" & _
+    "GetDeclaration hresult(ptr);" & _
+    "GetNumBytesPerVertex uint();" & _
+    "GetOptions uint();" & _
+    "GetDevice hresult(ptr*);" & _
+    "CloneMeshFVF hresult(uint;uint;ptr;ptr*);" & _
+    "CloneMesh hresult(uint;ptr;ptr;ptr*);" & _
+    "GetVertexBuffer hresult(ptr*);" & _
+    "GetIndexBuffer hresult(ptr*);" & _
+    "LockVertexBuffer hresult(uint;ptr*);" & _
+    "UnlockVertexBuffer hresult();" & _
+    "LockIndexBuffer hresult(uint;ptr*);" & _
+    "UnlockIndexBuffer hresult();" & _
+    "GetAttributeTable hresult(ptr;uint*);" & _
+    "ConvertPointRepsToAdjacency hresult(ptr;ptr);" & _
+    "ConvertAdjacencyToPointReps hresult(ptr;ptr);" & _
+    "GenerateAdjacency hresult(float;ptr);" & _
+    "UpdateSemantics hresult(ptr);"
+; List
+Global $ltagID3DXBaseMesh = $ltagIUnknown & _
+    "DrawSubset;" & _
+    "GetNumFaces;" & _
+    "GetNumVertices;" & _
+    "GetFVF;" & _
+    "GetDeclaration;" & _
+    "GetNumBytesPerVertex;" & _
+    "GetOptions;" & _
+    "GetDevice;" & _
+    "CloneMeshFVF;" & _
+    "CloneMesh;" & _
+    "GetVertexBuffer;" & _
+    "GetIndexBuffer;" & _
+    "LockVertexBuffer;" & _
+    "UnlockVertexBuffer;" & _
+    "LockIndexBuffer;" & _
+    "UnlockIndexBuffer;" & _
+    "GetAttributeTable;" & _
+    "ConvertPointRepsToAdjacency;" & _
+    "ConvertAdjacencyToPointReps;" & _
+    "GenerateAdjacency;" & _
+    "UpdateSemantics;"
+;===============================================================================
+;===============================================================================
+#interface "ID3DXMesh"
+Global Const $sIID_ID3DXMesh = "{4020E5C2-1403-4929-883F-E2E849FAC195}"
+; Definition
+Global $dtagID3DXMesh = $dtagID3DXBaseMesh & _
+    "LockAttributeBuffer hresult(uint;ptr*);" & _
+    "UnlockAttributeBuffer hresult();" & _
+    "Optimize hresult(uint;ptr;ptr;ptr;ptr;ptr*);" & _
+    "OptimizeInplace hresult(uint;ptr;ptr;ptr;ptr);" & _
+    "SetAttributeTable hresult(ptr;uint);"
+; List
+Global $ltagID3DXMesh = $ltagID3DXBaseMesh & _
+    "LockAttributeBuffer;" & _
+    "UnlockAttributeBuffer;" & _
+    "Optimize;" & _
+    "OptimizeInplace;" & _
+    "SetAttributeTable;"
+;===============================================================================
+;===============================================================================
+#interface "ID3DXPMesh"
+Global Const $sIID_ID3DXPMesh = "{8875769A-D579-4088-AAEB-534D1AD84E96}"
+; Definition
+Global $dtagID3DXPMesh = $dtagID3DXBaseMesh & _
+	"ClonePMeshFVF hresult(uint;uint;ptr;ptr*);" & _
+	"ClonePMesh hresult(uint;ptr;ptr;ptr*);" & _
+	"SetNumFaces hresult(uint);" & _
+	"SetNumVertices hresult(uint);" & _
+	"GetMaxFaces uint();" & _
+	"GetMinFaces uint();" & _
+	"GetMaxVertices uint();" & _
+	"GetMinVertices uint();" & _
+	"Save hresult(ptr;ptr;ptr;uint);" & _
+	"Optimize hresult(uint;ptr;ptr;ptr;ptr*);" & _
+	"OptimizeBaseLOD hresult(uint;ptr);" & _
+	"TrimByFaces hresult(uint;uint;ptr;ptr);" & _
+	"TrimByVertices hresult(uint;uint;ptr;ptr);" & _
+	"GetAdjacency hresult(ptr);" & _
+	"GenerateVertexHistory hresult(ptr);"
+; List
+Global $ltagID3DXPMesh = $ltagID3DXBaseMesh & _
+	"ClonePMeshFVF;" & _
+	"ClonePMesh;" & _
+	"SetNumFaces;" & _
+	"SetNumVertices;" & _
+	"GetMaxFaces;" & _
+	"GetMinFaces;" & _
+	"GetMaxVertices;" & _
+	"GetMinVertices;" & _
+	"Save;" & _
+	"Optimize;" & _
+	"OptimizeBaseLOD;" & _
+	"TrimByFaces;" & _
+	"TrimByVertices;" & _
+	"GetAdjacency;" & _
+	"GenerateVertexHistory;"
+;===============================================================================
+;===============================================================================
+#interface "ID3DXFont"
+Global Const $sIID_ID3DXFont = "{D79DBB70-5F21-4d36-BBC2-FF525C213CDC}"
+; Definition
+Global $dtagID3DXFont = $dtagIUnknown & _
+	"GetDevice hresult(ptr*);" & _
+	"GetDescA hresult(ptr);" & _
+	"GetDescW hresult(ptr);" & _
+	"GetTextMetricsA bool(ptr);" & _
+	"GetTextMetricsW bool(ptr);" & _
+	"GetDC ptr();" & _
+	"GetGlyphData hresult(uint;ptr*;ptr;ptr);" & _
+	"PreloadCharacters hresult(uint;uint);" & _
+	"PreloadGlyphs hresult(uint;uint);" & _
+	"PreloadTextA hresult(str;int);" & _
+	"PreloadTextW hresult(wstr;int);" & _
+	"DrawTextA int(ptr;str;int;ptr;uint;uint);" & _
+	"DrawTextW int(ptr;wstr;int;ptr;uint;uint);" & _
+	"OnLostDevice hresult();" & _
+	"OnResetDevice hresult();"
+; List
+Global $ltagID3DXFont = $ltagIUnknown & _
+	"GetDevice;" & _
+	"GetDescA;" & _
+	"GetDescW;" & _
+	"GetTextMetricsA;" & _
+	"GetTextMetricsW;" & _
+	"GetDC;" & _
+	"GetGlyphData;" & _
+	"PreloadCharacters;" & _
+	"PreloadGlyphs;" & _
+	"PreloadTextA;" & _
+	"PreloadTextW;" & _
+	"DrawTextA;" & _
+	"DrawTextW;" & _
+	"OnLostDevice;" & _
+	"OnResetDevice;"
+;===============================================================================
+;===============================================================================
+#interface "ID3DXSprite"
+Global Const $sIID_ID3DXSprite = "{BA0B762D-7D28-43ec-B9DC-2F84443B0614}"
+; Definition
+Global $dtagID3DXSprite = $dtagIUnknown & _
+	"GetDevice hresult(ptr*);" & _
+	"GetTransform hresult(ptr);" & _
+	"SetTransform hresult(ptr);" & _
+	"SetWorldViewRH hresult(ptr;ptr);" & _
+	"SetWorldViewLH hresult(ptr;ptr);" & _
+	"Begin hresult(uint);" & _
+	"Draw hresult(ptr;ptr;ptr;ptr;uint);" & _
+	"Flush hresult();" & _
+	"End hresult();" & _
+	"OnLostDevice hresult();" & _
+	"OnResetDevice hresult();"
+; List
+Global $ltagID3DXSprite = $ltagIUnknown & _
+	"GetDevice;" & _
+	"GetTransform;" & _
+	"SetTransform;" & _
+	"SetWorldViewRH;" & _
+	"SetWorldViewLH;" & _
+	"Begin;" & _
+	"Draw;" & _
+	"Flush;" & _
+	"End;" & _
+	"OnLostDevice;" & _
+	"OnResetDevice;"
+;===============================================================================
+;===============================================================================
+#interface "ID3DXBuffer"
+Global Const $sIID_ID3DXBuffer = "{8BA5FB08-5195-40e2-AC58-0D989C3A0102}"
+; Definition
+Global $dtagID3DXBuffer = $dtagIUnknown & _
+    "GetBufferPointer ptr();" & _
+    "GetBufferSize uint();"
+; List
+Global $ltagID3DXBuffer = $ltagIUnknown & _
+    "GetBufferPointer;" & _
+    "GetBufferSize;"
+;===============================================================================
+;===============================================================================
+#interface "ID3DXConstantTable"
+Global Const $sIID_ID3DXConstantTable = "{AB3C758F-093E-4356-B762-4DB18F1B3A01}"
+; Definition
+Global $dtagID3DXConstantTable = $dtagIUnknown & _
+    "GetBufferPointer ptr();" & _
+    "GetBufferSize uint();" & _
+	"GetDesc hresult(ptr);" & _
+	"GetConstantDesc hresult(ptr;ptr;uint*);" & _
+	"GetSamplerIndex uint(ptr);" & _
+	"GetConstant ptr(ptr;uint);" & _
+	"GetConstantByName ptr(ptr;str);" & _
+	"GetConstantElement ptr(ptr;uint);" & _
+	"SetDefaults hresult(ptr);" & _
+	"SetValue hresult(ptr;ptr;ptr;uint);" & _
+	"SetBool hresult(ptr;ptr;bool);" & _
+	"SetBoolArray hresult(ptr;ptr;ptr;uint);" & _
+	"SetInt hresult(ptr;ptr;int);" & _
+	"SetIntArray hresult(ptr;ptr;ptr;uint);" & _
+	"SetFloat hresult(ptr;ptr;float);" & _
+	"SetFloatArray hresult(ptr;ptr;ptr;uint);" & _
+	"SetVector hresult(ptr;ptr;ptr);" & _
+	"SetVectorArray hresult(ptr;ptr;ptr;uint);" & _
+	"SetMatrix hresult(ptr;ptr;ptr);" & _
+	"SetMatrixArray hresult(ptr;ptr;ptr;uint);" & _
+	"SetMatrixPointerArray hresult(ptr;ptr;ptr*;uint);" & _
+	"SetMatrixTranspose hresult(ptr;ptr;ptr);" & _
+	"SetMatrixTransposeArray hresult(ptr;ptr;ptr;uint);" & _
+	"SetMatrixTransposePointerArray hresult(ptr;ptr;ptr*;uint);"
+; List
+Global $ltagID3DXConstantTable = $ltagIUnknown & _
+	"GetBufferPointer;" & _
+	"GetBufferSize;" & _
+	"GetDesc;" & _
+	"GetConstantDesc;" & _
+	"GetSamplerIndex;" & _
+	"GetConstant;" & _
+	"GetConstantByName;" & _
+	"GetConstantElement;" & _
+	"SetDefaults;" & _
+	"SetValue;" & _
+	"SetBool;" & _
+	"SetBoolArray;" & _
+	"SetInt;" & _
+	"SetIntArray;" & _
+	"SetFloat;" & _
+	"SetFloatArray;" & _
+	"SetVector;" & _
+	"SetVectorArray;" & _
+	"SetMatrix;" & _
+	"SetMatrixArray;" & _
+	"SetMatrixPointerArray;" & _
+	"SetMatrixTranspose;" & _
+	"SetMatrixTransposeArray;" & _
+	"SetMatrixTransposePointerArray;"
+;===============================================================================
+;===============================================================================
+#interface "ID3DXBaseEffect"
+Global Const $sIID_ID3DXBaseEffect = "{017C18AC-103F-4417-8C51-6BF6EF1E56BE}"
+; Definition
+Global $dtagID3DXBaseEffect = $dtagIUnknown & _
+	"GetDesc hresult(ptr);" & _
+	"GetParameterDesc hresult(ptr;ptr);" & _
+	"GetTechniqueDesc hresult(ptr;ptr);" & _
+	"GetPassDesc hresult(ptr;ptr);" & _
+	"GetFunctionDesc hresult(ptr;ptr);" & _
+	"GetParameter ptr(ptr;uint);" & _
+	"GetParameterByName ptr(ptr;str);" & _
+	"GetParameterBySemantic ptr(ptr;str);" & _
+	"GetParameterElement ptr(ptr;uint);" & _
+	"GetTechnique ptr(uint);" & _
+	"GetTechniqueByName ptr(str);" & _
+	"GetPass ptr(ptr;uint);" & _
+	"GetPassByName ptr(ptr;str);" & _
+	"GetFunction ptr(uint);" & _
+	"GetFunctionByName ptr(str);" & _
+	"GetAnnotation ptr(ptr;uint);" & _
+	"GetAnnotationByName ptr(ptr;str);" & _
+	"SetValue hresult(ptr;ptr;uint);" & _
+	"GetValue hresult(ptr;ptr;uint);" & _
+	"SetBool hresult(ptr;bool);" & _
+	"GetBool hresult(ptr;bool*);" & _
+	"SetBoolArray hresult(ptr;ptr;uint);" & _
+	"GetBoolArray hresult(ptr;ptr;uint);" & _
+	"SetInt hresult(ptr;int);" & _
+	"GetInt hresult(ptr;int*);" & _
+	"SetIntArray hresult(ptr;ptr;uint);" & _
+	"GetIntArray hresult(ptr;ptr;uint);" & _
+	"SetFloat hresult(ptr;float);" & _
+	"GetFloat hresult(ptr;float*);" & _
+	"SetFloatArray hresult(ptr;ptr;uint);" & _
+	"GetFloatArray hresult(ptr;ptr;uint);" & _
+	"SetVector hresult(ptr;ptr);" & _
+	"GetVector hresult(ptr;ptr);" & _
+	"SetVectorArray hresult(ptr;ptr;uint);" & _
+	"GetVectorArray hresult(ptr;ptr;uint);" & _
+	"SetMatrix hresult(ptr;ptr);" & _
+	"GetMatrix hresult(ptr;ptr);" & _
+	"SetMatrixArray hresult(ptr;ptr;uint);" & _
+	"GetMatrixArray hresult(ptr;ptr;uint);" & _
+	"SetMatrixPointerArray hresult(ptr;ptr*;uint);" & _
+	"GetMatrixPointerArray hresult(ptr;ptr*;uint);" & _
+	"SetMatrixTranspose hresult(ptr;ptr);" & _
+	"GetMatrixTranspose hresult(ptr;ptr);" & _
+	"SetMatrixTransposeArray hresult(ptr;ptr;uint);" & _
+	"GetMatrixTransposeArray hresult(ptr;ptr;uint);" & _
+	"SetMatrixTransposePointerArray hresult(ptr;ptr*;uint);" & _
+	"GetMatrixTransposePointerArray hresult(ptr;ptr*;uint);" & _
+	"SetString hresult(ptr;str);" & _
+	"GetString hresult(ptr;ptr);" & _
+	"SetTexture hresult(ptr;ptr);" & _
+	"GetTexture hresult(ptr;ptr*);" & _
+	"GetPixelShader hresult(ptr;ptr*);" & _
+	"GetVertexShader hresult(ptr;ptr*);" & _
+	"SetArrayRange hresult(ptr;uint;uint);"
+; List
+Global $ltagID3DXBaseEffect = $ltagIUnknown & _
+	"GetDesc;" & _
+	"GetParameterDesc;" & _
+	"GetTechniqueDesc;" & _
+	"GetPassDesc;" & _
+	"GetFunctionDesc;" & _
+	"GetParameter;" & _
+	"GetParameterByName;" & _
+	"GetParameterBySemantic;" & _
+	"GetParameterElement;" & _
+	"GetTechnique;" & _
+	"GetTechniqueByName;" & _
+	"GetPass;" & _
+	"GetPassByName;" & _
+	"GetFunction;" & _
+	"GetFunctionByName;" & _
+	"GetAnnotation;" & _
+	"GetAnnotationByName;" & _
+	"SetValue;" & _
+	"GetValue;" & _
+	"SetBool;" & _
+	"GetBool;" & _
+	"SetBoolArray;" & _
+	"GetBoolArray;" & _
+	"SetInt;" & _
+	"GetInt;" & _
+	"SetIntArray;" & _
+	"GetIntArray;" & _
+	"SetFloat;" & _
+	"GetFloat;" & _
+	"SetFloatArray;" & _
+	"GetFloatArray;" & _
+	"SetVector;" & _
+	"GetVector;" & _
+	"SetVectorArray;" & _
+	"GetVectorArray;" & _
+	"SetMatrix;" & _
+	"GetMatrix;" & _
+	"SetMatrixArray;" & _
+	"GetMatrixArray;" & _
+	"SetMatrixPointerArray;" & _
+	"GetMatrixPointerArray;" & _
+	"SetMatrixTranspose;" & _
+	"GetMatrixTranspose;" & _
+	"SetMatrixTransposeArray;" & _
+	"GetMatrixTransposeArray;" & _
+	"SetMatrixTransposePointerArray;" & _
+	"GetMatrixTransposePointerArray;" & _
+	"SetString;" & _
+	"GetString;" & _
+	"SetTexture;" & _
+	"GetTexture;" & _
+	"GetPixelShader;" & _
+	"GetVertexShader;" & _
+	"SetArrayRange;"
+;===============================================================================
+;===============================================================================
+#interface "ID3DXEffect"
+Global Const $sIID_ID3DXEffect = "{F6CEB4B3-4E4C-40dd-B883-8D8DE5EA0CD5}"
+; Definition
+Global $dtagID3DXEffect = $dtagID3DXBaseEffect & _
+	"GetPool hresult(ptr*);" & _
+	"SetTechnique hresult(ptr);" & _
+	"GetCurrentTechnique ptr();" & _
+	"ValidateTechnique hresult(ptr);" & _
+	"FindNextValidTechnique hresult(ptr;ptr*);" & _
+	"IsParameterUsed bool(ptr;ptr);" & _
+	"Begin hresult(uint*;uint);" & _
+	"BeginPass hresult(uint);" & _
+	"CommitChanges hresult();" & _
+	"EndPass hresult();" & _
+	"End hresult();" & _
+	"GetDevice hresult(ptr*);" & _
+	"OnLostDevice hresult();" & _
+	"OnResetDevice hresult();" & _
+	"SetStateManager hresult(ptr);" & _
+	"GetStateManager hresult(ptr*);" & _
+	"BeginParameterBlock hresult();" & _
+	"EndParameterBlock ptr();" & _
+	"ApplyParameterBlock hresult(ptr);" & _
+	"DeleteParameterBlock hresult(ptr);" & _
+	"CloneEffect hresult(ptr;ptr*);" & _
+	"SetRawValue hresult(ptr;ptr;uint;uint);"
+; List
+Global $ltagID3DXEffect = $ltagID3DXBaseEffect & _
+	"GetPool;" & _
+	"SetTechnique;" & _
+	"GetCurrentTechnique;" & _
+	"ValidateTechnique;" & _
+	"FindNextValidTechnique;" & _
+	"IsParameterUsed;" & _
+	"Begin;" & _
+	"BeginPass;" & _
+	"CommitChanges;" & _
+	"EndPass;" & _
+	"End;" & _
+	"GetDevice;" & _
+	"OnLostDevice;" & _
+	"OnResetDevice;" & _
+	"SetStateManager;" & _
+	"GetStateManager;" & _
+	"BeginParameterBlock;" & _
+	"EndParameterBlock;" & _
+	"ApplyParameterBlock;" & _
+	"DeleteParameterBlock;" & _
+	"CloneEffect;" & _
+	"SetRawValue;"
+;===============================================================================
+;===============================================================================
+#interface "ID3DXRenderToSurface"
+Global Const $sIID_ID3DXRenderToSurface = "{6985F346-2C3D-43b3-BE8B-DAAE8A03D894}"
+; Definition
+Global $dtagID3DXRenderToSurface = $dtagIUnknown & _
+	"GetDevice hresult(ptr*);" & _
+	"GetDesc hresult(ptr);" & _
+	"BeginScene hresult(ptr;ptr);" & _
+	"EndScene hresult(uint);" & _
+	"OnLostDevice hresult();" & _
+	"OnResetDevice hresult();"
+; List
+Global $ltagID3DXRenderToSurface = $ltagIUnknown & _
+	"GetDevice;" & _
+	"GetDesc;" & _
+	"BeginScene;" & _
+	"EndScene;" & _
+	"OnLostDevice;" & _
+	"OnResetDevice;"
+;===============================================================================
+;===============================================================================
+#interface "ID3DXRenderToEnvMap"
+Global Const $sIID_ID3DXRenderToEnvMap = "{313F1B4B-C7B0-4fa2-9D9D-8D380B64385E}"
+; Definition
+Global $dtagID3DXRenderToEnvMap = $dtagIUnknown & _
+	"GetDevice hresult(ptr*);" & _
+	"GetDesc hresult(ptr);" & _
+	"BeginCube hresult(ptr);" & _
+	"BeginSphere hresult(ptr);" & _
+	"BeginHemisphere hresult(ptr;ptr);" & _
+	"BeginParabolic hresult(ptr;ptr);" & _
+	"Face hresult(uint;uint);" & _
+	"End hresult(uint);" & _
+	"OnLostDevice hresult();" & _
+	"OnResetDevice hresult();"
+; List
+Global $ltagID3DXRenderToEnvMap = $ltagIUnknown & _
+	"GetDevice;" & _
+	"GetDesc;" & _
+	"BeginCube;" & _
+	"BeginSphere;" & _
+	"BeginHemisphere;" & _
+	"BeginParabolic;" & _
+	"Face;" & _
+	"End;" & _
+	"OnLostDevice;" & _
+ 	"OnResetDevice;"
+;===============================================================================

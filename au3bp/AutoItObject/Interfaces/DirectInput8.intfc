@@ -1,0 +1,99 @@
+#include-once
+;===============================================================================
+#API "DirectInput"
+; IDirectInput8W
+; IDirectInputDevice8W
+;===============================================================================
+
+;.......written by Authenticity
+
+;===============================================================================
+#interface "IDirectInput8W"
+Global const $sIID_IDirectInput8W = "{BF798031-483A-4DA2-AA99-5D64ED369700}"
+; Definition
+Global $dtagIDirectInput8W = $dtagIUnknown & _
+	"CreateDevice hresult(ptr;ptr*;ptr);" & _
+	"EnumDevices hresult(uint;ptr;ptr;uint);" & _
+	"GetDeviceStatus hresult(ptr);" & _
+	"RunControlPanel hresult(ptr;uint);" & _
+	"Initialize hresult(ptr;uint)" & _
+	"FindDevice hresult(ptr;wstr;ptr);" & _
+	"EnumDevicesBySemantics hresult(wstr;ptr;ptr;ptr;uint);" & _
+	"ConfigureDevices hresult(ptr;ptr;uint;ptr);"
+; List
+Global $ltagIDirectInput8W = $ltagIUnknown & _
+	"CreateDevice;" & _
+	"EnumDevices;" & _
+	"GetDeviceStatus;" & _
+	"RunControlPanel;" & _
+	"Initialize;" & _
+	"FindDevice;" & _
+	"EnumDevicesBySemantics;" & _
+	"ConfigureDevices;"
+;===============================================================================
+;===============================================================================
+#interface "IDirectInputDevice8W"
+Global const $sIID_IDirectInputDevice8W = "{54D41081-DC15-4833-A41B-748F73A38179}"
+; Definition
+Global $dtagIDirectInputDevice8W = $dtagIUnknown & _
+	"GetCapabilities hresult(ptr);" & _
+	"EnumObjects hresult(ptr;ptr;uint);" & _
+	"GetProperty hresult(ptr;ptr);" & _
+	"SetProperty hresult(ptr;ptr);" & _
+	"Acquire hresult();" & _
+	"Unacquire hresult();" & _
+	"GetDeviceState hresult(uint;ptr);" & _
+	"GetDeviceData hresult(uint;ptr;uint*;uint);" & _
+	"SetDataFormat hresult(ptr);" & _
+	"SetEventNotification hresult(ptr);" & _
+	"SetCooperativeLevel hresult(ptr;uint);" & _
+	"GetObjectInfo hresult(ptr;uint;uint);" & _
+	"GetDeviceInfo hresult(ptr);" & _
+	"RunControlPanel hresult(ptr;uint);" & _
+	"Initialize hresult(ptr;uint;ptr);" & _
+	"CreateEffect hresult(ptr;ptr;ptr*;ptr);" & _
+	"EnumEffects hresult(ptr;ptr;uint);" & _
+	"GetEffectInfo hresult(ptr;ptr);" & _
+	"GetForceFeedbackState hresult(uint*);" & _
+	"SendForceFeedbackCommand hresult(uint);" & _
+	"EnumCreatedEffectObjects hresult(ptr;ptr;uint);" & _
+	"Escape hresult(ptr);" & _
+	"Poll hresult();" & _
+	"SendDeviceData hresult(uint;ptr;uint*;uint);" & _
+	"EnumEffectsInFile hresult(wstr;ptr;ptr;uint);" & _
+	"WriteEffectToFile hresult(wstr;uint;ptr;uint);" & _
+	"BuildActionMap hresult(ptr;wstr;uint);" & _
+	"SetActionMap hresult(ptr;wstr;uint);" & _
+	"GetImageInfo hresult(ptr);"
+; List
+Global $ltagIDirectInputDevice8W = $ltagIUnknown & _
+	"GetCapabilities;" & _
+	"EnumObjects;" & _
+	"GetProperty;" & _
+	"SetProperty;" & _
+	"Acquire;" & _
+	"Unacquire;" & _
+	"GetDeviceState;" & _
+	"GetDeviceData;" & _
+	"SetDataFormat;" & _
+	"SetEventNotification;" & _
+	"SetCooperativeLevel;" & _
+	"GetObjectInfo;" & _
+	"GetDeviceInfo;" & _
+	"RunControlPanel;" & _
+	"Initialize;" & _
+	"CreateEffect;" & _
+	"EnumEffects;" & _
+	"GetEffectInfo;" & _
+	"GetForceFeedbackState;" & _
+	"SendForceFeedbackCommand;" & _
+	"EnumCreatedEffectObjects;" & _
+	"Escape;" & _
+	"Poll;" & _
+	"SendDeviceData;" & _
+	"EnumEffectsInFile;" & _
+	"WriteEffectToFile;" & _
+	"BuildActionMap;" & _
+	"SetActionMap;" & _
+	"GetImageInfo;"
+;===============================================================================

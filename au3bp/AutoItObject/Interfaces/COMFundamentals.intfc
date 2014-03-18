@@ -1,0 +1,38 @@
+#include-once
+;===============================================================================
+#API "COM Fundamentals"
+; IPersist
+; IPersistStream
+;===============================================================================
+
+;.......written by trancexx (trancexx at yahoo dot com)
+
+;===============================================================================
+#interface "IPersist"
+Global Const $sIID_IPersist = "{0000010c-0000-0000-C000-000000000046}"
+; Definition
+Global $dtagIPersist = $dtagIUnknown & _
+		"GetClassID hresult(ptr*);"
+; List
+Global $ltagIPersist = $ltagIUnknown & _
+		"GetClassID;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IPersistStream"
+Global Const $sIID_IPersistStream = "{00000109-0000-0000-C000-000000000046}"
+; Definition
+Global $dtagIPersistStream = $dtagIPersist & _
+		"IsDirty hresult(ptr);" & _
+		"Load hresult(ptr);" & _
+		"Save hresult(ptr;bool);" & _
+		"GetSizeMax hresult(uint64*);"
+; List
+Global $ltagIPersistStream = $ltagIPersist & _
+		"IsDirty;" & _
+		"Load;" & _
+		"Save;" & _
+		"GetSizeMax;"
+;===============================================================================
+

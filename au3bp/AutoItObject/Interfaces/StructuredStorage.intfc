@@ -1,0 +1,284 @@
+#include-once
+;===============================================================================
+#API "Structured Storage"
+; ISequentialStream
+; IStream
+; IDirectWriterLock
+; IEnumSTATPROPSETSTG
+; IEnumSTATPROPSTG
+; IEnumSTATSTG
+; IFillLockBytes
+; ILayoutStorage
+; ILockBytes
+;-- IMemoryAllocator --
+; IPropertySetStorage
+; IPropertyStorage
+; IRootStorage
+; IStorage
+
+;===============================================================================
+
+;.......written by trancexx (trancexx at yahoo dot com)
+
+;===============================================================================
+#interface "IEnumSTATSTG"
+Global Const $sIID_IEnumSTATSTG = "{0000000d-0000-0000-C000-000000000046}"
+; Definition
+Global $dtagIEnumSTATSTG = $dtagIUnknown & _
+		"Next hresult(dword;ptr;dword*);" & _
+		"Skip hresult(dword);" & _
+		"Reset hresult();" & _
+		"Clone hresult(ptr*);"
+; List
+Global $ltagIEnumSTATSTG = $ltagIUnknown & _
+		"Next;" & _
+		"Skip;" & _
+		"Reset;" & _
+		"Clone;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IEnumSTATPROPSETSTG"
+Global Const $sIID_IEnumSTATPROPSETSTG = "{0000013B-0000-0000-C000-000000000046}"
+; Definition
+Global $dtagIEnumSTATPROPSETSTG = $dtagIUnknown & _
+		"Next hresult(dword;ptr;dword*);" & _
+		"Skip hresult(dword);" & _
+		"Reset hresult();" & _
+		"Clone hresult(ptr*);"
+; List
+Global $ltagIEnumSTATPROPSETSTG = $ltagIUnknown & _
+		"Next;" & _
+		"Skip;" & _
+		"Reset;" & _
+		"Clone;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IStorage"
+Global Const $sIID_IStorage = "{0000000b-0000-0000-C000-000000000046}"
+; Definition
+Global $dtagIStorage = $dtagIUnknown & _
+		"CreateStream hresult(wstr;dword;dword;dword;ptr*);" & _
+		"OpenStream hresult(wstr;ptr;dword;dword;ptr*);" & _
+		"CreateStorage hresult(wstr;dword;dword;dword;ptr*);" & _
+		"OpenStorage hresult(wstr;ptr;dword;wstr;dword;ptr*);" & _
+		"CopyTo hresult(dword;ptr;wstr;ptr);" & _
+		"MoveElementTo hresult(wstr;ptr;wstr;dword);" & _
+		"Commit hresult(dword);" & _
+		"Revert hresult();" & _
+		"EnumElements hresult(dword;ptr;dword;ptr*);" & _
+		"DestroyElement hresult(wstr);" & _
+		"RenameElement hresult(wstr;wstr);" & _
+		"SetElementTimes hresult(wstr;ptr;ptr;ptr);" & _
+		"SetClass hresult(ptr);" & _
+		"SetStateBits hresult(dword;dword);" & _
+		"Stat hresult(ptr*;dword);"
+; List
+Global $ltagIStorage = $ltagIUnknown & _
+		"CreateStream;" & _
+		"OpenStream;" & _
+		"CreateStorage;" & _
+		"OpenStorage;" & _
+		"CopyTo;" & _
+		"MoveElementTo;" & _
+		"Commit;" & _
+		"Revert;" & _
+		"EnumElements;" & _
+		"DestroyElement;" & _
+		"RenameElement;" & _
+		"SetElementTimes;" & _
+		"SetClass;" & _
+		"SetStateBits;" & _
+		"Stat;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IRootStorage"
+Global Const $sIID_IRootStorage = "{00000012-0000-0000-C000-000000000046}"
+; Definition
+Global $dtagIRootStorage = $dtagIUnknown & _
+		"SwitchToFile hresult(wstr);"
+; List
+Global $ltagIRootStorage = $ltagIUnknown & _
+		"SwitchToFile;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IPropertyStorage"
+Global Const $sIID_IPropertyStorage = "{00000138-0000-0000-C000-000000000046}"
+; Definition
+Global $dtagIPropertyStorage = $dtagIUnknown & _
+		"ReadMultiple hresult(ptr;ptr;ptr*);" & _
+		"WriteMultiple hresult(dword;ptr;ptr;ptr);" & _
+		"DeleteMultiple hresult(dword;ptr);" & _
+		"ReadPropertyNames hresult(dword;ptr;wstr);" & _
+		"WritePropertyNames hresult(dword;ptr;wstr);" & _
+		"DeletePropertyNames hresult(dword;dword);" & _
+		"Commit hresult(dword);" & _
+		"Revert hresult();" & _
+		"Enum hresult(ptr*);" & _
+		"SetTimes hresult(ptr;ptr;ptr);" & _
+		"SetClass hresult(ptr);" & _
+		"Stat hresult(ptr*);"
+; List
+Global $ltagIPropertyStorage = $ltagIUnknown & _
+		"ReadMultiple;" & _
+		"WriteMultiple;" & _
+		"DeleteMultiple;" & _
+		"ReadPropertyNames;" & _
+		"WritePropertyNames;" & _
+		"DeletePropertyNames;" & _
+		"Commit;" & _
+		"Revert;" & _
+		"Enum;" & _
+		"SetTimes;" & _
+		"SetClass;" & _
+		"Stat;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IPropertySetStorage"
+Global Const $sIID_IPropertySetStorage = "{0000013A-0000-0000-C000-000000000046}"
+; Definition
+Global $dtagIPropertySetStorage = $dtagIUnknown & _
+		"Create hresult(ptr;ptr;dword;dword;ptr*);" & _
+		"Open hresult(ptr;dword;ptr*);" & _
+		"Delete hresult(ptr);" & _
+		"Enum hresult(ptr*);"
+; List
+Global $ltagIPropertySetStorage = $ltagIUnknown & _
+		"Create;" & _
+		"Open;" & _
+		"Delete;" & _
+		"Enum;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ILockBytes"
+Global Const $sIID_ILockBytes = "{0000000a-0000-0000-C000-000000000046}"
+; Definition
+Global $dtagILockBytes = $dtagIUnknown & _
+		"ReadAt hresult(uint64;ptr;dword;dword);" & _
+		"WriteAt hresult(uint64;ptr;dword;dword);" & _
+		"Flush hresult();" & _
+		"SetSize hresult(uint64);" & _
+		"LockRegion hresult(uint64;uint64;dword);" & _
+		"UnlockRegion hresult(uint64;uint64;dword);" & _
+		"Stat hresult(ptr*;dword);"
+; List
+Global $ltagILockBytes = $ltagIUnknown & _
+		"ReadAt;" & _
+		"WriteAt;" & _
+		"Flush;" & _
+		"SetSize;" & _
+		"LockRegion;" & _
+		"UnlockRegion;" & _
+		"Stat;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ILayoutStorage"
+Global Const $sIID_ILayoutStorage = "{0e6d4d90-6738-11cf-9608-00aa00680db4}"
+; Definition
+Global $dtagILayoutStorage = $dtagIUnknown & _
+		"LayoutScript hresult(ptr;dword;dword);" & _
+		"BeginMonitor hresult();" & _
+		"EndMonitor hresult();" & _
+		"ReLayoutDocfile hresult(wstr);" & _
+		"ReLayoutDocfileOnILockBytes hresult(ptr);"
+; List
+Global $ltagILayoutStorage = $ltagIUnknown & _
+		"LayoutScript;" & _
+		"BeginMonitor;" & _
+		"EndMonitor;" & _
+		"ReLayoutDocfile;" & _
+		"ReLayoutDocfileOnILockBytes;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IDirectWriterLock"
+Global Const $sIID_IFillLockBytes = "{99caf010-415e-11cf-8814-00aa00b569f5}"
+; Definition
+Global $dtagIFillLockBytes = $dtagIUnknown & _
+		"FillAppend hresult(ptr;dword;dword*);" & _
+		"FillAt hresult(uint64;ptr;dword;dword*);" & _
+		"SetFillSize hresult(uint64);" & _
+		"Terminate hresult(bool);"
+; List
+Global $ltagIFillLockBytes = $ltagIUnknown & _
+		"FillAppend;" & _
+		"FillAt;" & _
+		"SetFillSize;" & _
+		"Terminate;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IDirectWriterLock"
+Global Const $sIID_IDirectWriterLock = "{0e6d4d92-6738-11cf-9608-00aa00680db4}"
+; Definition
+Global $dtagIDirectWriterLock = $dtagIUnknown & _
+		"WaitForWriteAccess hresult(dword);" & _
+		"ReleaseWriteAccess hresult();" & _
+		"HaveWriteAccess hresult();"
+; List
+Global $ltagIDirectWriterLock = $ltagIUnknown & _
+		"WaitForWriteAccess;" & _
+		"ReleaseWriteAccess;" & _
+		"HaveWriteAccess;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ISequentialStream"
+Global Const $sIID_ISequentialStream = "{0c733a30-2a1c-11ce-ade5-00aa0044773d}"
+; Definition
+Global $dtagISequentialStream = $dtagIUnknown & _
+		"Read hresult(ptr;dword;dword*);" & _
+		"Write hresult(ptr;dword;dword*);"
+; List
+Global $ltagISequentialStream = $ltagIUnknown & _
+		"Read;" & _
+		"Write;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IStream"
+Global Const $sIID_IStream = "{000000c-0000-0000-C000-000000000046}"
+; Definition
+Global $dtagIStream = $dtagISequentialStream & _
+		"Seek hresult(uint64;dword;uint64*);" & _
+		"SetSize hresult(uint64);" & _
+		"CopyTo hresult(ptr;uint64;uint64*;uint64*);" & _
+		"Commit hresult(dword);" & _
+		"Revert hresult();" & _
+		"LockRegion hresult(uint64;uint64;dword);" & _
+		"UnlockRegion hresult(uint64;uint64;dword);" & _
+		"Stat hresult(ptr;dword);" & _
+		"Clone hresult(ptr*);"
+; List
+Global $ltagIStream = $ltagISequentialStream & _
+		"Seek;" & _
+		"SetSize;" & _
+		"CopyTo;" & _
+		"Commit;" & _
+		"Revert;" & _
+		"LockRegion;" & _
+		"UnlockRegion;" & _
+		"Stat;" & _
+		"Clone;"
+;===============================================================================
+
+
+
+

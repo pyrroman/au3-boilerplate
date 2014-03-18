@@ -1,0 +1,649 @@
+#include-once
+;===============================================================================
+#API "Direct2D"
+; ID2D1Resource
+; ID2D1Bitmap
+; ID2D1GradientStopCollection
+; ID2D1Brush
+; ID2D1BitmapBrush
+; ID2D1SolidColorBrush
+; ID2D1LinearGradientBrush
+; ID2D1RadialGradientBrush
+; ID2D1StrokeStyle
+; ID2D1Geometry
+; ID2D1RectangleGeometry
+; ID2D1RoundedRectangleGeometry
+; ID2D1EllipseGeometry
+; ID2D1GeometryGroup
+; ID2D1TransformedGeometry
+; ID2D1SimplifiedGeometrySink
+; ID2D1GeometrySink
+; ID2D1TessellationSink
+; ID2D1PathGeometry
+; ID2D1Mesh
+; ID2D1Layer
+; ID2D1DrawingStateBlock
+; ID2D1RenderTarget
+; ID2D1BitmapRenderTarget
+; ID2D1HwndRenderTarget
+; ID2D1GdiInteropRenderTarget
+; ID2D1DCRenderTarget
+; ID2D1Factory
+;===============================================================================
+
+;.......written by trancexx (trancexx at yahoo dot com)
+
+;===============================================================================
+#interface "ID2D1Resource"
+Global Const $sIID_ID2D1Resource = "{2cd90691-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1Resource = $dtagIUnknown & _
+		"GetFactory hresult(ptr*);"
+; List
+Global $ltagID2D1Resource = $ltagIUnknown & _
+		"GetFactory;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1Bitmap"
+Global Const $sIID_ID2D1Bitmap = "{a2296057-ea42-4099-983b-539fb6505426}"
+; Definition
+Global $dtagID2D1Bitmap = $dtagID2D1Resource & _
+		"GetSize ptr(ptr);" & _
+		"GetPixelSize ptr(ptr);" & _
+		"GetPixelFormat ptr(ptr);" & _
+		"GetDpi none(float*;float*);" & _
+		"CopyFromBitmap hresult(ptr;ptr;ptr);" & _
+		"CopyFromRenderTarget hresult(ptr;ptr;ptr);" & _
+		"CopyFromMemory hresult(ptr;ptr;dword);"
+; List
+Global $ltagID2D1Bitmap = $ltagID2D1Resource & _
+		"GetSize;" & _
+		"GetPixelSize;" & _
+		"GetPixelFormat;" & _
+		"GetDpi;" & _
+		"CopyFromBitmap;" & _
+		"CopyFromRenderTarget;" & _
+		"CopyFromMemory;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1GradientStopCollection"
+Global Const $sIID_ID2D1GradientStopCollection = "{2cd906a7-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1GradientStopCollection = $dtagID2D1Resource & _
+		"GetGradientStopCount dword();" & _
+		"GetGradientStops none(ptr*;dword);" & _
+		"GetColorInterpolationGamma dword();" & _
+		"GetExtendMode dword();"
+; List
+Global $ltagID2D1GradientStopCollection = $ltagID2D1Resource & _
+		"GetGradientStopCount;" & _
+		"GetGradientStops;" & _
+		"GetColorInterpolationGamma;" & _
+		"GetExtendMode;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1Brush"
+Global Const $sIID_ID2D1Brush = "{2cd906a8-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1Brush = $dtagID2D1Resource & _
+		"SetOpacity none(float);" & _
+		"SetTransform none(ptr);" & _
+		"GetOpacity float();" & _
+		"GetTransform none(ptr*);"
+; List
+Global $ltagID2D1Brush = $ltagID2D1Resource & _
+		"SetOpacity;" & _
+		"SetTransform;" & _
+		"GetOpacity;" & _
+		"GetTransform;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1BitmapBrush"
+Global Const $sIID_ID2D1BitmapBrush = "{2cd906aa-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1BitmapBrush = $dtagID2D1Brush & _
+		"SetExtendModeX none(dword);" & _
+		"SetExtendModeY none(dword);" & _
+		"SetInterpolationMode none(dword);" & _
+		"SetBitmap none(ptr);" & _
+		"GetExtendModeX dword();" & _
+		"GetExtendModeY dword();" & _
+		"GetInterpolationMode dword();" & _
+		"GetBitmap none(ptr*);"
+; List
+Global $ltagID2D1BitmapBrush = $ltagID2D1Brush & _
+		"SetExtendModeX;" & _
+		"SetExtendModeY;" & _
+		"SetInterpolationMode;" & _
+		"SetBitmap;" & _
+		"GetExtendModeX;" & _
+		"GetExtendModeY;" & _
+		"GetInterpolationMode;" & _
+		"GetBitmap;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1SolidColorBrush"
+Global Const $sIID_ID2D1SolidColorBrush = "{2cd906a9-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1SolidColorBrush = $dtagID2D1Brush & _
+		"SetColor none(ptr);" & _
+		"GetColor ptr(ptr);"
+; List
+Global $ltagID2D1SolidColorBrush = $ltagID2D1Brush & _
+		"SetColor;" & _
+		"GetColor;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1LinearGradientBrush"
+Global Const $sIID_ID2D1LinearGradientBrush = "{2cd906ab-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1LinearGradientBrush = $dtagID2D1Brush & _
+		"SetStartPoint none(ptr);" & _
+		"SetEndPoint none(ptr);" & _
+		"GetStartPoint ptr(ptr);" & _
+		"GetEndPoint ptr(ptr);" & _
+		"GetGradientStopCollection none(ptr*);"
+; List
+Global $ltagID2D1LinearGradientBrush = $ltagID2D1Brush & _
+		"SetStartPoint;" & _
+		"SetEndPoint;" & _
+		"GetStartPoint;" & _
+		"GetEndPoint;" & _
+		"GetGradientStopCollection;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1RadialGradientBrush"
+Global Const $sIID_ID2D1RadialGradientBrush = "{2cd906ac-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1RadialGradientBrush = $dtagID2D1Brush & _
+		"SetCenter none(ptr);" & _
+		"SetGradientOriginOffset none(ptr);" & _
+		"SetRadiusX none(float);" & _
+		"SetRadiusY none(float);" & _
+		"GetCenter ptr(ptr);" & _
+		"GetGradientOriginOffset ptr(ptr);" & _
+		"GetRadiusX float();" & _
+		"GetRadiusY float();" & _
+		"GetGradientStopCollection none(ptr*);"
+; List
+Global $ltagID2D1RadialGradientBrush = $ltagID2D1Brush & _
+		"SetCenter;" & _
+		"SetGradientOriginOffset;" & _
+		"SetRadiusX;" & _
+		"SetRadiusY;" & _
+		"GetCenter;" & _
+		"GetGradientOriginOffset;" & _
+		"GetRadiusX;" & _
+		"GetRadiusY;" & _
+		"GetGradientStopCollection;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1StrokeStyle"
+Global Const $sIID_ID2D1StrokeStyle = "{2cd9069d-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1StrokeStyle = $dtagID2D1Resource & _
+		"GetStartCap dword();" & _
+		"GetEndCap dword();" & _
+		"GetDashCap dword();" & _
+		"GetMiterLimit float();" & _
+		"GetLineJoin dword();" & _
+		"GetDashOffset float();" & _
+		"GetDashStyle dword();" & _
+		"GetDashesCount dword();" & _
+		"GetDashes none(ptr*;dword);"
+; List
+Global $ltagID2D1StrokeStyle = $ltagID2D1Resource & _
+		"GetStartCap;" & _
+		"GetEndCap;" & _
+		"GetDashCap;" & _
+		"GetMiterLimit;" & _
+		"GetLineJoin;" & _
+		"GetDashOffset;" & _
+		"GetDashStyle;" & _
+		"GetDashesCount;" & _
+		"GetDashes;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1Geometry"
+Global Const $sIID_ID2D1Geometry = "{2cd906a1-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1Geometry = $dtagID2D1Resource & _
+		"GetBounds hresult(ptr;ptr*);" & _
+		"GetWidenedBounds hresult(float;ptr;ptr;float;ptr*);" & _
+		"StrokeContainsPoint hresult(float;float;float;ptr;ptr;float;bool*);" & _
+		"FillContainsPoint hresult(float;float;ptr;float;bool*);" & _
+		"CompareWithGeometry hresult(ptr;ptr;float;dword*);" & _
+		"Simplify hresult(dword;ptr;float;ptr*);" & _
+		"Tessellate hresult(ptr;float;ptr*);" & _
+		"CombineWithGeometry hresult(ptr;dword;ptr;float;ptr*);" & _
+		"Outline hresult(ptr;float;ptr*);" & _
+		"ComputeArea hresult(ptr;float;ptr*);" & _
+		"ComputeLength hresult(ptr;float;ptr*);" & _
+		"ComputePointAtLength hresult(float;ptr;float;ptr*;ptr*);" & _
+		"Widen hresult(float;ptr;ptr;float;ptr);"
+; List
+Global $ltagID2D1Geometry = $ltagID2D1Resource & _
+		"GetBounds;" & _
+		"GetWidenedBounds;" & _
+		"StrokeContainsPoint;" & _
+		"FillContainsPoint;" & _
+		"CompareWithGeometry;" & _
+		"Simplify;" & _
+		"Tessellate;" & _
+		"CombineWithGeometry;" & _
+		"Outline;" & _
+		"ComputeArea;" & _
+		"ComputeLength;" & _
+		"ComputePointAtLength;" & _
+		"Widen;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1RectangleGeometry"
+Global Const $sIID_ID2D1RectangleGeometry = "{2cd906a2-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1RectangleGeometry = $dtagID2D1Geometry & _
+		"GetRect none(ptr*);"
+; List
+Global $ltagID2D1RectangleGeometry = $ltagID2D1Geometry & _
+		"GetRect;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1RoundedRectangleGeometry"
+Global Const $sIID_ID2D1RoundedRectangleGeometry = "{2cd906a3-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1RoundedRectangleGeometry = $dtagID2D1Geometry & _
+		"GetRoundedRect none(ptr*);"
+; List
+Global $ltagID2D1RoundedRectangleGeometry = $ltagID2D1Geometry & _
+		"GetRoundedRect;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1EllipseGeometry"
+Global Const $sIID_ID2D1EllipseGeometry = "{2cd906a4-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1EllipseGeometry = $dtagID2D1Geometry & _
+		"GetEllipse none(ptr*);"
+; List
+Global $ltagID2D1EllipseGeometry = $ltagID2D1Geometry & _
+		"GetEllipse;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1GeometryGroup"
+Global Const $sIID_ID2D1GeometryGroup = "{2cd906a6-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1GeometryGroup = $dtagID2D1Geometry & _
+		"GetFillMode dword();" & _
+		"GetSourceGeometryCount dword();" & _
+		"GetSourceGeometries none(ptr*;dword);"
+; List
+Global $ltagID2D1GeometryGroup = $ltagID2D1Geometry & _
+		"GetFillMode;" & _
+		"GetSourceGeometryCount;" & _
+		"GetSourceGeometries;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1TransformedGeometry"
+Global Const $sIID_ID2D1TransformedGeometry = "{2cd906bb-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1TransformedGeometry = $dtagID2D1Geometry & _
+		"GetSourceGeometry none(ptr*);" & _
+		"GetTransform none(ptr*);"
+; List
+Global $ltagID2D1TransformedGeometry = $ltagID2D1Geometry & _
+		"GetSourceGeometry;" & _
+		"GetTransform;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1SimplifiedGeometrySink"
+Global Const $sIID_ID2D1SimplifiedGeometrySink = "{2cd9069e-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1SimplifiedGeometrySink = $dtagIUnknown & _
+		"SetFillMode none(dword);" & _
+		"SetSegmentFlags none(dword);" & _
+		"BeginFigure none(float;float;dword);" & _
+		"AddLines none(ptr;dword);" & _
+		"AddBeziers none(ptr;dword);" & _
+		"EndFigure none(dword);" & _
+		"Close hresult();"
+; List
+Global $ltagID2D1SimplifiedGeometrySink = $ltagIUnknown & _
+		"SetFillMode;" & _
+		"SetSegmentFlags;" & _
+		"BeginFigure;" & _
+		"AddLines;" & _
+		"AddBeziers;" & _
+		"EndFigure;" & _
+		"Close;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1GeometrySink"
+Global Const $sIID_ID2D1GeometrySink = "{2cd9069f-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1GeometrySink = $dtagID2D1SimplifiedGeometrySink & _
+		"AddLine none(float;float);" & _
+		"AddBezier none(ptr);" & _
+		"AddQuadraticBezier none(ptr);" & _
+		"AddQuadraticBeziers none(ptr;dword);" & _
+		"AddArc none(ptr);"
+; List
+Global $ltagID2D1GeometrySink = $ltagID2D1SimplifiedGeometrySink & _
+		"AddLine;" & _
+		"AddBezier;" & _
+		"AddQuadraticBezier;" & _
+		"AddQuadraticBeziers;" & _
+		"AddArc;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1TessellationSink"
+Global Const $sIID_ID2D1TessellationSink = "{2cd906c1-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1TessellationSink = $dtagIUnknown & _
+		"AddTriangles none(ptr;dword);" & _
+		"Close hresult();"
+; List
+Global $ltagID2D1TessellationSink = $ltagIUnknown & _
+		"AddTriangles;" & _
+		"Close;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1PathGeometry"
+Global Const $sIID_ID2D1PathGeometry = "{2cd906a5-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1PathGeometry = $dtagID2D1Geometry & _
+		"Open hresult(ptr*);" & _
+		"Stream hresult(ptr*);" & _
+		"GetSegmentCount hresult(dword*);" & _
+		"GetFigureCount hresult(dword*);"
+; List
+Global $ltagID2D1PathGeometry = $ltagID2D1Geometry & _
+		"Open;" & _
+		"Stream;" & _
+		"GetSegmentCount;" & _
+		"GetFigureCount;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1Mesh"
+Global Const $sIID_ID2D1Mesh = "{2cd906c2-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1Mesh = $dtagID2D1Resource & _
+		"Open hresult(ptr*);"
+; List
+Global $ltagID2D1Mesh = $ltagID2D1Resource & _
+		"Open;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1Layer"
+Global Const $sIID_ID2D1Layer = "{2cd9069b-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1Layer = $dtagID2D1Resource & _
+		"GetSize ptr(ptr);"
+; List
+Global $ltagID2D1Layer = $ltagID2D1Resource & _
+		"GetSize;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1DrawingStateBlock"
+Global Const $sIID_ID2D1DrawingStateBlock = "{28506e39-ebf6-46a1-bb47-fd85565ab957}"
+; Definition
+Global $dtagID2D1DrawingStateBlock = $dtagID2D1Resource & _
+		"GetDescription none(ptr*);" & _
+		"SetDescription none(ptr);" & _
+		"SetTextRenderingParams none(ptr);" & _
+		"GetTextRenderingParams none(ptr*);"
+; List
+Global $ltagID2D1DrawingStateBlock = $ltagID2D1Resource & _
+		"GetDescription;" & _
+		"SetDescription;" & _
+		"SetTextRenderingParams;" & _
+		"GetTextRenderingParams;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1RenderTarget"
+Global Const $sIID_ID2D1RenderTarget = "{2cd90694-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1RenderTarget = $dtagID2D1Resource & _
+		"CreateBitmap hresult(dword;dword;ptr;ptr;ptr*);" & _
+		"CreateBitmapFromWicBitmap hresult(ptr;ptr;ptr*);" & _
+		"CreateSharedBitmap hresult(ptr;ptr*;ptr;ptr*);" & _
+		"CreateBitmapBrush hresult(ptr;ptr;ptr*);" & _
+		"CreateSolidColorBrush hresult(ptr;ptr;ptr*);" & _
+		"CreateGradientStopCollection hresult(ptr;dword;dword;dword;ptr*);" & _
+		"CreateLinearGradientBrush hresult(ptr;ptr;ptr;ptr*);" & _
+		"CreateRadialGradientBrush hresult(ptr;ptr;ptr;ptr*);" & _
+		"CreateCompatibleRenderTarget hresult(ptr;ptr;ptr;dword;ptr*);" & _
+		"CreateLayer hresult(ptr;ptr*);" & _
+		"CreateMesh hresult(ptr*);" & _
+		"DrawLine none(float;float;float;float;ptr;float;ptr);" & _ ; 64bit issue!
+		"DrawRectangle none(ptr;ptr;float;ptr);" & _
+		"FillRectangle none(ptr;ptr);" & _
+		"DrawRoundedRectangle none(ptr;ptr;float;ptr);" & _
+		"FillRoundedRectangle none(ptr;ptr);" & _
+		"DrawEllipse none(ptr;ptr;float;ptr);" & _
+		"FillEllipse none(ptr;ptr);" & _
+		"DrawGeometry none(ptr;ptr;float;ptr);" & _
+		"FillGeometry none(ptr;ptr;ptr);" & _
+		"FillMesh none(ptr;ptr);" & _
+		"FillOpacityMask none(ptr;ptr;dword;ptr;ptr);" & _
+		"DrawBitmap none(ptr;ptr;float;dword;ptr);" & _
+		"DrawText none(wstr;dword;ptr;ptr;ptr;dword;dword);" & _
+		"DrawTextLayout none(float;float;ptr;ptr;uint64);" & _ ; 64bit issue!
+		"DrawGlyphRun none(float;float;ptr;ptr;dword);" & _
+		"SetTransform none(ptr);" & _
+		"GetTransform none(ptr*);" & _
+		"SetAntialiasMode none(dword);" & _
+		"GetAntialiasMode dword();" & _
+		"SetTextAntialiasMode none(dword);" & _
+		"GetTextAntialiasMode dword();" & _
+		"SetTextRenderingParams none(ptr);" & _
+		"GetTextRenderingParams none(ptr*);" & _
+		"SetTags none(uint64;uint64);" & _
+		"GetTags none(uint64*;uint64*);" & _
+		"PushLayer none(ptr;ptr);" & _
+		"PopLayer none();" & _
+		"Flush hresult(uint64*;uint64*);" & _
+		"SaveDrawingState none(ptr);" & _
+		"RestoreDrawingState none(ptr);" & _
+		"PushAxisAlignedClip none(ptr;dword);" & _
+		"PopAxisAlignedClip none();" & _
+		"Clear none(ptr);" & _
+		"BeginDraw none();" & _
+		"EndDraw hresult(uint64*;uint64*);" & _
+		"GetPixelFormat ptr(ptr);" & _
+		"SetDpi none(float;float);" & _
+		"GetDpi none(float*;float*);" & _
+		"GetSize ptr(ptr);" & _
+		"GetPixelSize ptr(ptr);" & _
+		"GetMaximumBitmapSize dword();" & _
+		"IsSupported bool(ptr);"
+; List
+Global $ltagID2D1RenderTarget = $ltagID2D1Resource & _
+		"CreateBitmap;" & _
+		"CreateBitmapFromWicBitmap;" & _
+		"CreateSharedBitmap;" & _
+		"CreateBitmapBrush;" & _
+		"CreateSolidColorBrush;" & _
+		"CreateGradientStopCollection;" & _
+		"CreateLinearGradientBrush;" & _
+		"CreateRadialGradientBrush;" & _
+		"CreateCompatibleRenderTarget;" & _
+		"CreateLayer;" & _
+		"CreateMesh;" & _
+		"DrawLine;" & _
+		"DrawRectangle;" & _
+		"FillRectangle;" & _
+		"DrawRoundedRectangle;" & _
+		"FillRoundedRectangle;" & _
+		"DrawEllipse;" & _
+		"FillEllipse;" & _
+		"DrawGeometry;" & _
+		"FillGeometry;" & _
+		"FillMesh;" & _
+		"FillOpacityMask;" & _
+		"DrawBitmap;" & _
+		"DrawText;" & _
+		"DrawTextLayout;" & _
+		"DrawGlyphRun;" & _
+		"SetTransform;" & _
+		"GetTransform;" & _
+		"SetAntialiasMode;" & _
+		"GetAntialiasMode;" & _
+		"SetTextAntialiasMode;" & _
+		"GetTextAntialiasMode;" & _
+		"SetTextRenderingParams;" & _
+		"GetTextRenderingParams;" & _
+		"SetTags;" & _
+		"GetTags;" & _
+		"PushLayer;" & _
+		"PopLayer;" & _
+		"Flush;" & _
+		"SaveDrawingState;" & _
+		"RestoreDrawingState;" & _
+		"PushAxisAlignedClip;" & _
+		"PopAxisAlignedClip;" & _
+		"Clear;" & _
+		"BeginDraw;" & _
+		"EndDraw;" & _
+		"GetPixelFormat;" & _
+		"SetDpi;" & _
+		"GetDpi;" & _
+		"GetSize;" & _
+		"GetPixelSize;" & _
+		"GetMaximumBitmapSize;" & _
+		"IsSupported;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1BitmapRenderTarget"
+Global Const $sIID_ID2D1BitmapRenderTarget = "{2cd90695-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1BitmapRenderTarget = $dtagID2D1RenderTarget & _
+		"GetBitmap hresult(ptr*);"
+; List
+Global $ltagID2D1BitmapRenderTarget = $ltagID2D1RenderTarget & _
+		"GetBitmap;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1HwndRenderTarget"
+Global Const $sIID_ID2D1HwndRenderTarget = "{2cd90698-12e2-11dc-9fed-001143a055f9}"
+; Definition
+Global $dtagID2D1HwndRenderTarget = $dtagID2D1RenderTarget & _
+		"CheckWindowState dword();" & _
+		"Resize hresult(ptr);" & _
+		"GetHwnd hwnd();"
+; List
+Global $ltagID2D1HwndRenderTarget = $ltagID2D1RenderTarget & _
+		"CheckWindowState;" & _
+		"Resize;" & _
+		"GetHwnd;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1GdiInteropRenderTarget"
+Global Const $sIID_ID2D1GdiInteropRenderTarget = "{e0db51c3-6f77-4bae-b3d5-e47509b35838}"
+; Definition
+Global $dtagID2D1GdiInteropRenderTarget = $dtagIUnknown & _
+		"GetDC hresult(dword;handle);" & _
+		"ReleaseDC hresult(ptr);"
+; List
+Global $ltagID2D1GdiInteropRenderTarget = $ltagIUnknown & _
+		"GetDC;" & _
+		"ReleaseDC;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1DCRenderTarget"
+Global Const $sIID_ID2D1DCRenderTarget = "{1c51bc64-de61-46fd-9899-63a5d8f03950}"
+; Definition
+Global $dtagID2D1DCRenderTarget = $dtagID2D1RenderTarget & _
+		"BindDC hresult(handle;ptr);"
+; List
+Global $ltagID2D1DCRenderTarget = $ltagID2D1RenderTarget & _
+		"BindDC;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "ID2D1Factory"
+Global Const $sIID_ID2D1Factory = "{06152247-6f50-465a-9245-118bfd3b6007}"
+; Definition
+Global $dtagID2D1Factory = $dtagIUnknown & _
+		"ReloadSystemMetrics hresult();" & _
+		"GetDesktopDpi hresult(float*;float*);" & _
+		"CreateRectangleGeometry hresult(ptr;ptr*);" & _
+		"CreateRoundedRectangleGeometry hresult(ptr;ptr*);" & _
+		"CreateEllipseGeometry hresult(ptr;ptr*);" & _
+		"CreateGeometryGroup hresult(dword;ptr;dword;ptr*);" & _
+		"CreateTransformedGeometry hresult(ptr;ptr;ptr*);" & _
+		"CreatePathGeometry hresult(ptr*);" & _
+		"CreateStrokeStyle hresult(ptr;ptr;dword;ptr*);" & _
+		"CreateDrawingStateBlock hresult(ptr;ptr;ptr*);" & _
+		"CreateWicBitmapRenderTarget hresult(ptr;ptr;ptr*);" & _
+		"CreateHwndRenderTarget hresult(ptr;ptr;ptr*);" & _
+		"CreateDxgiSurfaceRenderTarget hresult(ptr;ptr;ptr*);" & _
+		"CreateDCRenderTarget hresult(ptr;ptr*);"
+; List
+Global $ltagID2D1Factory = $ltagIUnknown & _
+		"ReloadSystemMetrics;" & _
+		"GetDesktopDpi;" & _
+		"CreateRectangleGeometry;" & _
+		"CreateRoundedRectangleGeometry;" & _
+		"CreateEllipseGeometry;" & _
+		"CreateGeometryGroup;" & _
+		"CreateTransformedGeometry;" & _
+		"CreatePathGeometry;" & _
+		"CreateStrokeStyle;" & _
+		"CreateDrawingStateBlock;" & _
+		"CreateWicBitmapRenderTarget;" & _
+		"CreateHwndRenderTarget;" & _
+		"CreateDxgiSurfaceRenderTarget;" & _
+		"CreateDCRenderTarget;"
+;===============================================================================

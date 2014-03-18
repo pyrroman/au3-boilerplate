@@ -1,0 +1,374 @@
+#include-once
+;===============================================================================
+#API "Windows Animation"
+; IUIAnimationInterpolator
+; IUIAnimationManager
+; IUIAnimationManagerEventHandler
+; IUIAnimationPriorityComparison
+; IUIAnimationStoryboard
+; IUIAnimationStoryboardEventHandler
+; IUIAnimationTimer
+; IUIAnimationTimerClientEventHandler
+; IUIAnimationTimerEventHandler
+; IUIAnimationTimerUpdateHandler
+; IUIAnimationTransition
+; IUIAnimationTransitionFactory
+; IUIAnimationTransitionLibrary
+; IUIAnimationVariable
+; IUIAnimationVariableChangeHandler
+; IUIAnimationVariableIntegerChangeHandler
+;===============================================================================
+
+;.......written by trancexx (trancexx at yahoo dot com)
+
+;===============================================================================
+#interface "IUIAnimationInterpolator"
+Global Const $sIID_IUIAnimationInterpolator = "{7815CBBA-DDF7-478c-A46C-7B6C738B7978}"
+; Definition
+Global $dtagIUIAnimationInterpolator = $dtagIUnknown & _
+		"SetInitialValueAndVelocity hresult(double;double);" & _
+		"SetDuration hresult(double);" & _
+		"GetDuration hresult(double*);" & _
+		"GetFinalValue hresult(double*);" & _
+		"InterpolateValue hresult(double;double*);" & _
+		"InterpolateVelocity hresult(double;double*);" & _
+		"GetDependencies hresult(dword*;dword*;dword*);"
+; List
+Global $ltagIUIAnimationInterpolator = $ltagIUnknown & _
+		"SetInitialValueAndVelocity;" & _
+		"SetDuration;" & _
+		"GetDuration;" & _
+		"GetFinalValue;" & _
+		"InterpolateValue;" & _
+		"InterpolateVelocity;" & _
+		"GetDependencies;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationManager"
+Global Const $sCLSID_UIAnimationManager = "{4C1FC63A-695C-47E8-A339-1A194BE3D0B8}"
+Global Const $sIID_IUIAnimationManager = "{9169896C-AC8D-4e7d-94E5-67FA4DC2F2E8}"
+; Definition
+Global $dtagIUIAnimationManager = $dtagIUnknown & _
+		"CreateAnimationVariable hresult(double;ptr*);" & _
+		"ScheduleTransition hresult(ptr;ptr;double);" & _
+		"CreateStoryboard hresult(ptr*);" & _
+		"FinishAllStoryboards hresult(double);" & _
+		"AbandonAllStoryboards hresult();" & _
+		"Update hresult(double;dword*);" & _
+		"GetVariableFromTag hresult(ptr;dword;ptr*);" & _
+		"GetStoryboardFromTag hresult(ptr;dword;ptr*);" & _
+		"GetStatus hresult(dword*);" & _
+		"SetAnimationMode hresult(dword);" & _
+		"Pause hresult();" & _
+		"Resume hresult();" & _
+		"SetManagerEventHandler hresult(ptr);" & _
+		"SetCancelPriorityComparison hresult(ptr);" & _
+		"SetTrimPriorityComparison hresult(ptr);" & _
+		"SetCompressPriorityComparison hresult(ptr);" & _
+		"SetConcludePriorityComparison hresult(ptr);" & _
+		"SetDefaultLongestAcceptableDelay hresult(double);" & _
+		"Shutdown hresult();"
+; List
+Global $ltagIUIAnimationManager = $ltagIUnknown & _
+		"CreateAnimationVariable;" & _
+		"ScheduleTransition;" & _
+		"CreateStoryboard;" & _
+		"FinishAllStoryboards;" & _
+		"AbandonAllStoryboards;" & _
+		"Update;" & _
+		"GetVariableFromTag;" & _
+		"GetStoryboardFromTag;" & _
+		"GetStatus;" & _
+		"SetAnimationMode;" & _
+		"Pause;" & _
+		"Resume;" & _
+		"SetManagerEventHandler;" & _
+		"SetCancelPriorityComparison;" & _
+		"SetTrimPriorityComparison;" & _
+		"SetCompressPriorityComparison;" & _
+		"SetConcludePriorityComparison;" & _
+		"SetDefaultLongestAcceptableDelay;" & _
+		"Shutdown;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationManagerEventHandler"
+Global Const $sIID_IUIAnimationManagerEventHandler = "{783321ED-78A3-4366-B574-6AF607A64788}"
+; Definition
+Global $dtagIUIAnimationManagerEventHandler = $dtagIUnknown & _
+		"OnManagerStatusChanged hresult(dword;dword);"
+; List
+Global $ltagIUIAnimationManagerEventHandler = $ltagIUnknown & _
+		"OnManagerStatusChanged;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationPriorityComparison"
+Global Const $sIID_IUIAnimationPriorityComparison = "{83FA9B74-5F86-4618-BC6A-A2FAC19B3F44}"
+; Definition
+Global $dtagIUIAnimationPriorityComparison = $dtagIUnknown & _
+		"HasPriority hresult(ptr;ptr;dword);"
+; List
+Global $ltagIUIAnimationPriorityComparison = $ltagIUnknown & _
+		"HasPriority;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationStoryboard"
+Global Const $sIID_IUIAnimationStoryboard = "{A8FF128F-9BF9-4af1-9E67-E5E410DEFB84}"
+; Definition
+Global $dtagIUIAnimationStoryboard = $dtagIUnknown & _
+		"AddTransition hresult(ptr;ptr);" & _
+		"AddKeyframeAtOffset hresult(dword;double;dword*);" & _
+		"AddKeyframeAfterTransition hresult(ptr;dword*);" & _
+		"AddTransitionAtKeyframe hresult(ptr;ptr;dword);" & _
+		"AddTransitionBetweenKeyframes hresult(ptr;ptr;dword;dword);" & _
+		"RepeatBetweenKeyframes hresult(dword;dword;int);" & _
+		"HoldVariable hresult(ptr);" & _
+		"SetLongestAcceptableDelay hresult(double);" & _
+		"Schedule hresult(double;dword*);" & _
+		"Conclude hresult();" & _
+		"Finish hresult(double);" & _
+		"Abandon hresult();" & _
+		"SetTag hresult(ptr;dword);" & _
+		"GetTag hresult(ptr*;dword*);" & _
+		"GetStatus hresult(dword*);" & _
+		"GetElapsedTime hresult(double*);" & _
+		"SetStoryboardEventHandler hresult(ptr);"
+; List
+Global $ltagIUIAnimationStoryboard = $ltagIUnknown & _
+		"AddTransition;" & _
+		"AddKeyframeAtOffset;" & _
+		"AddKeyframeAfterTransition;" & _
+		"AddTransitionAtKeyframe;" & _
+		"AddTransitionBetweenKeyframes;" & _
+		"RepeatBetweenKeyframes;" & _
+		"HoldVariable;" & _
+		"SetLongestAcceptableDelay;" & _
+		"Schedule;" & _
+		"Conclude;" & _
+		"Finish;" & _
+		"Abandon;" & _
+		"SetTag;" & _
+		"GetTag;" & _
+		"GetStatus;" & _
+		"GetElapsedTime;" & _
+		"SetStoryboardEventHandler;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationStoryboardEventHandler"
+Global Const $sIID_IUIAnimationStoryboardEventHandler = "{3D5C9008-EC7C-4364-9F8A-9AF3C58CBAE6}"
+; Definition
+Global $dtagIUIAnimationStoryboardEventHandler = $dtagIUnknown & _
+		"OnStoryboardStatusChanged hresult(ptr);" & _
+		"OnStoryboardUpdated hresult(ptr;dword;dword);"
+; List
+Global $ltagIUIAnimationStoryboardEventHandler = $ltagIUnknown & _
+		"OnStoryboardStatusChanged;" & _
+		"OnStoryboardUpdated;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationTimer"
+Global Const $sCLSID_UIAnimationTimer = "{BFCD4A0C-06B6-4384-B768-0DAA792C380E}"
+Global Const $sIID_IUIAnimationTimer = "{6B0EFAD1-A053-41d6-9085-33A689144665}"
+; Definition
+Global $dtagIUIAnimationTimer = $dtagIUnknown & _
+		"SetTimerUpdateHandler hresult(ptr;dword);" & _
+		"SetTimerEventHandler hresult(ptr);" & _
+		"Enable hresult();" & _
+		"Disable hresult();" & _
+		"IsEnabled hresult();" & _
+		"GetTime hresult(double*);" & _
+		"SetFrameRateThreshold hresult(dword);"
+; List
+Global $ltagIUIAnimationTimer = $ltagIUnknown & _
+		"SetTimerUpdateHandler;" & _
+		"SetTimerEventHandler;" & _
+		"Enable;" & _
+		"Disable;" & _
+		"IsEnabled;" & _
+		"GetTime;" & _
+		"SetFrameRateThreshold;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationTimerClientEventHandler"
+Global Const $sIID_IUIAnimationTimerClientEventHandler = "{BEDB4DB6-94FA-4bfb-A47F-EF2D9E408C25}"
+; Definition
+Global $dtagIUIAnimationTimerClientEventHandler = $dtagIUnknown & _
+		"OnTimerClientStatusChanged hresult(dword;dword);"
+; List
+Global $ltagIUIAnimationTimerClientEventHandler = $ltagIUnknown & _
+		"OnTimerClientStatusChanged;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationTimerEventHandler"
+Global Const $sIUIAnimationTimerEventHandler = "{274A7DEA-D771-4095-ABBD-8DF7ABD23CE3}"
+; Definition
+Global $dtagIUIAnimationTimerEventHandler = $dtagIUnknown & _
+		"OnPreUpdate hresult();" & _
+		"OnPostUpdate hresult();" & _
+		"OnRenderingTooSlow hresult(dword);"
+; List
+Global $ltagIUIAnimationTimerEventHandler = $ltagIUnknown & _
+		"OnPreUpdate;" & _
+		"OnPostUpdate;" & _
+		"OnRenderingTooSlow;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationTimerUpdateHandler"
+Global Const $sIID_IUIAnimationTimerUpdateHandler = "{195509B7-5D5E-4e3e-B278-EE3759B367AD}"
+; Definition
+Global $dtagIUIAnimationTimerUpdateHandler = $dtagIUnknown & _
+		"OnUpdate hresult(double;dword*);" & _
+		"SetTimerClientEventHandler hresult(ptr);" & _
+		"ClearTimerClientEventHandler hresult();"
+; List
+Global $ltagIUIAnimationTimerUpdateHandler = $ltagIUnknown & _
+		"OnUpdate;" & _
+		"SetTimerClientEventHandler;" & _
+		"ClearTimerClientEventHandler;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationTransition"
+Global Const $sIID_IUIAnimationTransition = "{DC6CE252-F731-41cf-B610-614B6CA049AD}"
+; Definition
+Global $dtagIUIAnimationTransition = $dtagIUnknown & _
+		"SetInitialValue hresult(double);" & _
+		"SetInitialVelocity hresult(double);" & _
+		"IsDurationKnown hresult();" & _
+		"GetDuration hresult(double*);"
+; List
+Global $ltagIUIAnimationTransition = $ltagIUnknown & _
+		"SetInitialValue;" & _
+		"SetInitialVelocity;" & _
+		"IsDurationKnown;" & _
+		"GetDuration;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationTransitionFactory"
+Global Const $sCLSID_UIAnimationTransitionFactory = "{8A9B1CDD-FCD7-419c-8B44-42FD17DB1887}"
+Global Const $sIID_IUIAnimationTransitionFactory = "{FCD91E03-3E3B-45ad-BBB1-6DFC8153743D}"
+; Definition
+Global $dtagIUIAnimationTransitionFactory = $dtagIUnknown & _
+		"CreateTransition hresult(ptr;ptr*);"
+; List
+Global $ltagIUIAnimationTransitionFactory = $ltagIUnknown & _
+		"CreateTransition;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationTransitionLibrary"
+Global Const $sCLSID_UIAnimationTransitionLibrary = "{1D6322AD-AA85-4EF5-A828-86D71067D145}"
+Global Const $sIID_IUIAnimationTransitionLibrary = "{CA5A14B1-D24F-48b8-8FE4-C78169BA954E}"
+; Definition
+Global $dtagIUIAnimationTransitionLibrary = $dtagIUnknown & _
+		"CreateInstantaneousTransition hresult(double;ptr*);" & _
+		"CreateConstantTransition hresult(double;ptr*);" & _
+		"CreateDiscreteTransition hresult(double;double;double;ptr*);" & _
+		"CreateLinearTransition hresult(double;double;ptr*);" & _
+		"CreateLinearTransitionFromSpeed hresult(double;double;ptr*);" & _
+		"CreateSinusoidalTransitionFromVelocity hresult(double;double;ptr*);" & _
+		"CreateSinusoidalTransitionFromRange hresult(double;double;double;double;double;ptr*);" & _
+		"CreateAccelerateDecelerateTransition hresult(double;double;double;double;ptr*);" & _
+		"CreateReversalTransition hresult(double;ptr*);" & _
+		"CreateCubicTransition hresult(double;double;double;ptr*);" & _
+		"CreateSmoothStopTransition hresult(double;double;ptr*);" & _
+		"CreateParabolicTransitionFromAcceleration hresult(double;double;double;ptr*);"
+
+; List
+Global $ltagIUIAnimationTransitionLibrary = $ltagIUnknown & _
+		"CreateInstantaneousTransition;" & _
+		"CreateConstantTransition;" & _
+		"CreateDiscreteTransition;" & _
+		"CreateLinearTransition;" & _
+		"CreateLinearTransitionFromSpeed;" & _
+		"CreateSinusoidalTransitionFromVelocity;" & _
+		"CreateSinusoidalTransitionFromRange;" & _
+		"CreateAccelerateDecelerateTransition;" & _
+		"CreateReversalTransition;" & _
+		"CreateCubicTransition;" & _
+		"CreateSmoothStopTransition;" & _
+		"CreateParabolicTransitionFromAcceleration;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationVariable"
+Global Const $sIID_IUIAnimationVariable = "{8CEEB155-2849-4ce5-9448-91FF70E1E4D9}"
+; Definition
+Global $dtagIUIAnimationVariable = $dtagIUnknown & _
+		"GetValue hresult(double*);" & _
+		"GetFinalValue hresult(double*);" & _
+		"GetPreviousValue hresult(double*);" & _
+		"GetIntegerValue hresult(int*);" & _
+		"GetFinalIntegerValue hresult(int*);" & _
+		"GetPreviousIntegerValue hresult(int*);" & _
+		"GetCurrentStoryboard hresult(ptr*);" & _
+		"SetLowerBound hresult(double);" & _
+		"SetUpperBound hresult(double);" & _
+		"SetRoundingMode hresult(dword);" & _
+		"SetTag hresult(ptr;dword);" & _
+		"GetTag hresult(ptr*;dword*);" & _
+		"SetVariableChangeHandler hresult(ptr);" & _
+		"SetVariableIntegerChangeHandler hresult(ptr);"
+; List
+Global $ltagIUIAnimationVariable = $ltagIUnknown & _
+		"GetValue;" & _
+		"GetFinalValue;" & _
+		"GetPreviousValue;" & _
+		"GetIntegerValue;" & _
+		"GetFinalIntegerValue;" & _
+		"GetPreviousIntegerValue;" & _
+		"GetCurrentStoryboard;" & _
+		"SetLowerBound;" & _
+		"SetUpperBound;" & _
+		"SetRoundingMode;" & _
+		"SetTag;" & _
+		"GetTag;" & _
+		"SetVariableChangeHandler;" & _
+		"SetVariableIntegerChangeHandler;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationVariableChangeHandler"
+Global Const $sIID_IUIAnimationVariableChangeHandler = "{6358B7BA-87D2-42d5-BF71-82E919DD5862}"
+; Definition
+Global $dtagIUIAnimationVariableChangeHandler = $dtagIUnknown & _
+		"OnValueChanged hresult(ptr;ptr;double;double);"
+; List
+Global $ltagIUIAnimationVariableChangeHandler = $ltagIUnknown & _
+		"OnValueChanged;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IUIAnimationVariableIntegerChangeHandler"
+Global Const $sIID_IUIAnimationVariableIntegerChangeHandler = "{BB3E1550-356E-44b0-99DA-85AC6017865E}"
+; Definition
+Global $dtagIUIAnimationVariableIntegerChangeHandler = $dtagIUnknown & _
+		"OnValueChanged hresult(ptr;ptr;int;int);"
+; List
+Global $ltagIUIAnimationVariableIntegerChangeHandler = $ltagIUnknown & _
+		"OnValueChanged;"
+;===============================================================================

@@ -1,0 +1,25 @@
+    ==========================
+    |\\\\\\•IMPORTANT!•//////|
+    ==========================
+
+    Version 1.2.0.0 introduced script breaking change(s):
+        • Wrapped objects' methods on successful call no longer return method pointer as array[1].
+          This array looks the same as with DllCall() function; array[0] is returned value by the method
+          and parameters are array[1], array[2], ... (if there are any).
+
+
+    Version 1.2.2.0 introduced script breaking change(s):
+        • _AutoItObject_ObjCreate function no longer takes 3+1 parameters. It takes three.
+        • _AutoItObject_ObjCreateEx function interprets differently last parameter. Purpose of this param
+          is to force creation of "wrapped" object.
+
+
+
+      {_                 {__            {__  {__      {____     {__                               {__
+     {_ __               {__            {__  {__    {__    {__  {__         {__                   {__
+    {_  {__    {__  {__{_{_ {_   {__    {__{_{_ {_{__        {__{__               {__       {___{_{_ {_
+   {__   {__   {__  {__  {__   {__  {__ {__  {__  {__        {__{__ {__     {__ {_   {__  {__     {__
+  {______ {__  {__  {__  {__  {__    {__{__  {__  {__        {__{__   {__   {__{_____ {__{__      {__
+ {__       {__ {__  {__  {__   {__  {__ {__  {__    {__     {__ {__   {__   {__{_         {__     {__
+{__         {__  {__{__   {__    {__    {__   {__     {____     {__ {__     {__  {____      {___   {__
+                                                                         {___

@@ -1,0 +1,616 @@
+#include-once
+;===============================================================================
+#API "DirectWrite"
+; IDWriteBitmapRenderTarget
+; IDWriteFactory
+; IDWriteFont
+; IDWriteFontCollection
+; IDWriteFontCollectionLoader
+; IDWriteFontFace
+; IDWriteFontFamily
+; IDWriteFontFile
+; IDWriteFontFileEnumerator
+; IDWriteFontFileLoader
+; IDWriteFontFileStream
+; IDWriteFontList
+; IDWriteGdiInterop
+; IDWriteGeometrySink
+; IDWriteGlyphRunAnalysis
+; IDWriteInlineObject
+; IDWriteLocalFontFileLoader
+; IDWriteLocalizedStrings
+; IDWriteNumberSubstitution
+; IDWritePixelSnapping
+; IDWriteRenderingParams
+; IDWriteTextAnalysisSink
+; IDWriteTextAnalysisSource
+; IDWriteTextAnalyzer
+; IDWriteTextFormat
+; IDWriteTextLayout
+; IDWriteTextRenderer
+; IDWriteTypography
+;===============================================================================
+
+;.......written by trancexx (trancexx at yahoo dot com)
+
+;===============================================================================
+#interface "IDWriteBitmapRenderTarget"
+Global Const $sIID_IDWriteBitmapRenderTarget = "{5e5a32a3-8dff-4773-9ff6-0696eab77267}"
+; Definition
+Global $dtagIDWriteBitmapRenderTarget = $dtagIUnknown & _
+		"DrawGlyphRun hresult(float;float;dword;ptr;ptr;dword;ptr*);" & _
+		"GetMemoryDC handle();" & _
+		"GetPixelsPerDip float();" & _
+		"SetPixelsPerDip hresult(float);" & _
+		"GetCurrentTransform hresult(ptr*);" & _
+		"SetCurrentTransform hresult(ptr);" & _
+		"GetSize hresult(ptr*);" & _
+		"Resize hresult(dword;dword);"
+; List
+Global $ltagIDWriteBitmapRenderTarget = $ltagIUnknown & _
+		"DrawGlyphRun;" & _
+		"GetMemoryDC;" & _
+		"GetPixelsPerDip;" & _
+		"SetPixelsPerDip;" & _
+		"GetCurrentTransform;" & _
+		"SetCurrentTransform;" & _
+		"GetSize;" & _
+		"Resize;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteFactory"
+Global Const $sIID_IDWriteFactory = "{b859ee5a-d838-4b5b-a2e8-1adc7d93db48}"
+; Definition
+Global $dtagIDWriteFactory = $dtagIUnknown & _
+		"GetSystemFontCollection hresult(ptr*;bool);" & _
+		"CreateCustomFontCollection hresult(ptr;ptr;dword;ptr*);" & _
+		"RegisterFontCollectionLoader hresult(ptr);" & _
+		"UnregisterFontCollectionLoader hresult(ptr);" & _
+		"CreateFontFileReference hresult(wstr;ptr;ptr*);" & _
+		"CreateCustomFontFileReference hresult(ptr;dword;ptr;ptr*);" & _
+		"CreateFontFace hresult(dword;dword;ptr;dword;dword;ptr*);" & _
+		"CreateRenderingParams hresult(ptr*);" & _
+		"CreateMonitorRenderingParams hresult(handle;ptr*);" & _
+		"CreateCustomRenderingParams hresult(float;float;float;dword;dword;ptr*);" & _
+		"RegisterFontFileLoader hresult(ptr);" & _
+		"UnregisterFontFileLoader hresult(ptr);" & _
+		"CreateTextFormat hresult(wstr;ptr;dword;dword;dword;float;wstr;ptr*);" & _
+		"CreateTypography hresult(ptr*);" & _
+		"GetGdiInterop hresult(ptr*);" & _
+		"CreateTextLayout hresult(wstr;dword;ptr;float;float;ptr*);" & _
+		"CreateGdiCompatibleTextLayout hresult(wstr;dword;ptr;float;float;float;ptr;bool;ptr*);" & _
+		"CreateEllipsisTrimmingSign hresult(ptr;ptr*);" & _
+		"CreateTextAnalyzer hresult(ptr*);" & _
+		"CreateNumberSubstitution hresult(dword;wstr;bool;ptr*);" & _
+		"CreateGlyphRunAnalysis hresult(ptr;float;ptr;dword;dword;float;float;ptr*);"
+; List
+Global $ltagIDWriteFactory = $ltagIUnknown & _
+		"GetSystemFontCollection;" & _
+		"CreateCustomFontCollection;" & _
+		"RegisterFontCollectionLoader;" & _
+		"UnregisterFontCollectionLoader;" & _
+		"CreateFontFileReference;" & _
+		"CreateCustomFontFileReference;" & _
+		"CreateFontFace;" & _
+		"CreateRenderingParams;" & _
+		"CreateMonitorRenderingParams;" & _
+		"CreateCustomRenderingParams;" & _
+		"RegisterFontFileLoader;" & _
+		"UnregisterFontFileLoader;" & _
+		"CreateTextFormat;" & _
+		"CreateTypography;" & _
+		"GetGdiInterop;" & _
+		"CreateTextLayout;" & _
+		"CreateGdiCompatibleTextLayout;" & _
+		"CreateEllipsisTrimmingSign;" & _
+		"CreateTextAnalyzer;" & _
+		"CreateNumberSubstitution;" & _
+		"CreateGlyphRunAnalysis;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteFont"
+Global Const $sIID_IDWriteFont = "{acd16696-8c14-4f5d-877e-fe3fc1d32737}"
+; Definition
+Global $dtagIDWriteFont = $dtagIUnknown & _
+		"GetFontFamily hresult(ptr*);" & _
+		"GetWeight dword();" & _
+		"GetStretch dword();" & _
+		"GetStyle dword();" & _
+		"IsSymbolFont bool();" & _
+		"GetFaceNames hresult(ptr*);" & _
+		"GetInformationalStrings hresult(dword;ptr;bool*);" & _
+		"GetSimulations dword();" & _
+		"GetMetrics none(ptr);" & _
+		"HasCharacter hresult(dword;bool*);" & _
+		"CreateFontFace hresult(ptr*);"
+; List
+Global $ltagIDWriteFont = $ltagIUnknown & _
+		"GetFontFamily;" & _
+		"GetWeight;" & _
+		"GetStretch;" & _
+		"GetStyle;" & _
+		"IsSymbolFont;" & _
+		"GetFaceNames;" & _
+		"GetInformationalStrings;" & _
+		"GetSimulations;" & _
+		"GetMetrics;" & _
+		"HasCharacter;" & _
+		"CreateFontFace;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteFontCollection"
+Global Const $sIID_IDWriteFontCollection = "{a84cee02-3eea-4eee-a827-87c1a02a0fcc}"
+; Definition
+Global $dtagIDWriteFontCollection = $dtagIUnknown & _
+		"GetFontFamilyCount dword();" & _
+		"GetFontFamily hresult(dword;ptr*);" & _
+		"FindFamilyName hresult(wstr;dword;bool*);" & _
+		"GetFontFromFontFace hresult(ptr;ptr*);"
+; List
+Global $ltagIDWriteFontCollection = $ltagIUnknown & _
+		"GetFontFamilyCount;" & _
+		"GetFontFamily;" & _
+		"FindFamilyName;" & _
+		"GetFontFromFontFace;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteFontCollectionLoader"
+Global Const $sIID_IDWriteFontCollectionLoader = "{cca920e4-52f0-492b-bfa8-29c72ee0a468}"
+; Definition
+Global $dtagIDWriteFontCollectionLoader = $dtagIUnknown & _
+		"CreateEnumeratorFromKey hresult(ptr;ptr;dword;ptr*);"
+; List
+Global $ltagIDWriteFontCollectionLoader = $ltagIUnknown & _
+		"CreateEnumeratorFromKey;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteFontFace"
+Global Const $sIID_IDWriteFontFace = "{5f49804d-7024-4d43-bfa9-d25984f53849}"
+; Definition
+Global $dtagIDWriteFontFace = $dtagIUnknown & _
+		"GetType dword();" & _
+		"GetFiles hresult(dword*;ptr*);" & _
+		"GetIndex dword();" & _
+		"GetSimulations dword();" & _
+		"IsSymbolFont bool();" & _
+		"GetMetrics none(ptr*);" & _
+		"GetGlyphCount word();" & _
+		"GetDesignGlyphMetrics hresult(ptr;dword;ptr*;bool);" & _
+		"GetGlyphIndices hresult(ptr;dword;ptr*);" & _
+		"TryGetFontTable hresult(dword;ptr;dword*;ptr*;bool*);" & _
+		"ReleaseFontTable none(ptr);" & _
+		"GetGlyphRunOutline hresult(float;ptr;ptr;ptr;dword;bool;bool;ptr*);" & _
+		"GetRecommendedRenderingMode hresult(float;float;dword;ptr;dword*);" & _
+		"GetGdiCompatibleMetrics hresult(float;float;ptr;ptr);" & _
+		"GetGdiCompatibleGlyphMetrics hresult(float;float;ptr;bool;ptr;dword;ptr;bool);"
+; List
+Global $ltagIDWriteFontFace = $ltagIUnknown & _
+		"GetType;" & _
+		"GetFiles;" & _
+		"GetIndex;" & _
+		"GetSimulations;" & _
+		"IsSymbolFont;" & _
+		"GetMetrics;" & _
+		"GetGlyphCount;" & _
+		"GetDesignGlyphMetrics;" & _
+		"GetGlyphIndices;" & _
+		"TryGetFontTable;" & _
+		"ReleaseFontTable;" & _
+		"GetGlyphRunOutline;" & _
+		"GetRecommendedRenderingMode;" & _
+		"GetGdiCompatibleMetrics;" & _
+		"GetGdiCompatibleGlyphMetrics;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteFontList"
+Global Const $sIID_IDWriteFontList = "{1a0d8438-1d97-4ec1-aef9-a2fb86ed6acb}"
+; Definition
+Global $dtagIDWriteFontList = $dtagIUnknown & _
+		"GetFontCollection hresult(ptr*);" & _
+		"GetFontCount dword();" & _
+		"GetFont hresult(dword;ptr*);"
+; List
+Global $ltagIDWriteFontList = $ltagIUnknown & _
+		"GetFontCollection;" & _
+		"GetFontCount;" & _
+		"GetFont;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteFontFamily"
+Global Const $sIID_IDWriteFontFamily = "{da20d8ef-812a-4c43-9802-62ec4abd7add}"
+; Definition
+Global $dtagIDWriteFontFamily = $dtagIDWriteFontList & _
+		"GetFamilyNames hresult(ptr*);" & _
+		"GetFirstMatchingFont hresult(dword;dword;dword;ptr*);" & _
+		"GetMatchingFonts hresult(dword;dword;dword;ptr*);"
+; List
+Global $ltagIDWriteFontFamily = $ltagIDWriteFontList & _
+		"GetFamilyNames;" & _
+		"GetFirstMatchingFont;" & _
+		"GetMatchingFonts;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteFontFile"
+Global Const $sIID_IDWriteFontFile = "{739d886a-cef5-47dc-8769-1a8b41bebbb0}"
+; Definition
+Global $dtagIDWriteFontFile = $dtagIUnknown & _
+		"GetReferenceKey hresult(ptr*;dword*);" & _
+		"GetLoader hresult(ptr*);" & _
+		"Analyze hresult(bool*;dword*;dword*;dword*);"
+; List
+Global $ltagIDWriteFontFile = $ltagIUnknown & _
+		"GetReferenceKey;" & _
+		"GetLoader;" & _
+		"Analyze;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteFontFileEnumerator"
+Global Const $sIID_IDWriteFontFileEnumerator = "{72755049-5ff7-435d-8348-4be97cfa6c7c}"
+; Definition
+Global $dtagIDWriteFontFileEnumerator = $dtagIUnknown & _
+		"MoveNext hresult(bool*);" & _
+		"GetCurrentFontFile hresult(ptr*);"
+; List
+Global $ltagIDWriteFontFileEnumerator = $ltagIUnknown & _
+		"MoveNext;" & _
+		"GetCurrentFontFile;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteFontFileLoader"
+Global Const $sIID_IDWriteFontFileLoader = "{727cad4e-d6af-4c9e-8a08-d695b11caa49}"
+; Definition
+Global $dtagIDWriteFontFileLoader = $dtagIUnknown & _
+		"CreateStreamFromKey hresult(ptr;dword;ptr*);"
+; List
+Global $ltagIDWriteFontFileLoader = $ltagIUnknown & _
+		"CreateStreamFromKey;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteFontFileStream"
+Global Const $sIID_IDWriteFontFileStream = "{6d4865fe-0ab8-4d91-8f62-5dd6be34a3e0}"
+; Definition
+Global $dtagIDWriteFontFileStream = $dtagIUnknown & _
+		"ReadFileFragment hresult(ptr*;uint64;uint64;ptr*);" & _
+		"ReleaseFileFragment none(ptr);" & _
+		"GetFileSize hresult(uint64*);" & _
+		"GetLastWriteTime hresult(uint64*);"
+; List
+Global $ltagIDWriteFontFileStream = $ltagIUnknown & _
+		"ReadFileFragment;" & _
+		"ReleaseFileFragment;" & _
+		"GetFileSize;" & _
+		"GetLastWriteTime;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteGdiInterop"
+Global Const $sIID_IDWriteGdiInterop = "{1edd9491-9853-4299-898f-6432983b6f3a}"
+; Definition
+Global $dtagIDWriteGdiInterop = $dtagIUnknown & _
+		"CreateFontFromLOGFONT hresult(ptr;ptr*);" & _
+		"ConvertFontToLOGFONT hresult(ptr;ptr;bool*;);" & _
+		"ConvertFontFaceToLOGFONT hresult(ptr;ptr*);" & _
+		"CreateFontFaceFromHdc hresult(handle;ptr*);" & _
+		"CreateBitmapRenderTarget hresult(handle;dword;dword;ptr*);"
+; List
+Global $ltagIDWriteGdiInterop = $ltagIUnknown & _
+		"CreateFontFromLOGFONT;" & _
+		"ConvertFontToLOGFONT;" & _
+		"ConvertFontFaceToLOGFONT;" & _
+		"CreateFontFaceFromHdc;" & _
+		"CreateBitmapRenderTarget;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteGlyphRunAnalysis"
+Global Const $sIID_IDWriteGlyphRunAnalysis = "{7d97dbf7-e085-42d4-81e3-6a883bded118}"
+; Definition
+Global $dtagIDWriteGlyphRunAnalysis = $dtagIUnknown & _
+		"GetAlphaTextureBounds hresult(dword;ptr*);" & _
+		"CreateAlphaTexture hresult(dword;ptr;ptr;dword);" & _
+		"GetAlphaBlendParams hresult(ptr;float*;float*;float*);"
+; List
+Global $ltagIDWriteGlyphRunAnalysis = $ltagIUnknown & _
+		"GetAlphaTextureBounds;" & _
+		"CreateAlphaTexture;" & _
+		"GetAlphaBlendParams;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteInlineObject"
+Global Const $sIID_IDWriteInlineObject = "{8339FDE3-106F-47ab-8373-1C6295EB10B3}"
+; Definition
+Global $dtagIDWriteInlineObject = $dtagIUnknown & _
+		"Draw hresult(ptr;ptr;float;float;bool;bool;ptr);" & _
+		"GetMetrics hresult(ptr);" & _
+		"GetOverhangMetrics hresult(ptr);" & _
+		"GetBreakConditions hresult(dword*;dword*);"
+; List
+Global $ltagIDWriteInlineObject = $ltagIUnknown & _
+		"Draw;" & _
+		"GetMetrics;" & _
+		"GetOverhangMetrics;" & _
+		"GetBreakConditions;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteLocalFontFileLoader"
+Global Const $sIID_IDWriteLocalFontFileLoader = "{b2d9f3ec-c9fe-4a11-a2ec-d86208f7c0a2}"
+; Definition
+Global $dtagIDWriteLocalFontFileLoader = $dtagIDWriteFontFileLoader & _
+		"GetFilePathLengthFromKey hresult(ptr;dword;dword*);" & _
+		"GetFilePathFromKey hresult(ptr;dword;wstr;dword);" & _
+		"GetLastWriteTimeFromKey hresult(ptr;dword;ptr);"
+; List
+Global $ltagIDWriteLocalFontFileLoader = $ltagIDWriteFontFileLoader & _
+		"GetFilePathLengthFromKey;" & _
+		"GetFilePathFromKey;" & _
+		"GetLastWriteTimeFromKey;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteLocalizedStrings"
+Global Const $sIID_IDWriteLocalizedStrings = "{08256209-099a-4b34-b86d-c22b110e7771}"
+; Definition
+Global $dtagIDWriteLocalizedStrings = $dtagIUnknown & _
+		"GetCount dword();" & _
+		"FindLocaleName hresult(wstr;dword*;bool*);" & _
+		"GetLocaleNameLength hresult(dword;dword*);" & _
+		"GetLocaleName hresult(dword;wstr;dword);" & _
+		"GetStringLength hresult(dword;dword*);" & _
+		"GetString hresult(dword;wstr;dword);"
+; List
+Global $ltagIDWriteLocalizedStrings = $ltagIUnknown & _
+		"GetCount;" & _
+		"FindLocaleName;" & _
+		"GetLocaleNameLength;" & _
+		"GetLocaleName;" & _
+		"GetStringLength;" & _
+		"GetString;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWritePixelSnapping"
+Global Const $sIID_IDWritePixelSnapping = "{eaf3a2da-ecf4-4d24-b644-b34f6842024b}"
+; Definition
+Global $dtagIDWritePixelSnapping = $dtagIUnknown & _
+		"IsPixelSnappingDisabled hresult(ptr;bool*);" & _
+		"GetCurrentTransform hresult(ptr;ptr);" & _
+		"GetPixelsPerDip hresult(ptr;float*);"
+; List
+Global $ltagIDWritePixelSnapping = $ltagIUnknown & _
+		"IsPixelSnappingDisabled;" & _
+		"GetCurrentTransform;" & _
+		"GetPixelsPerDip;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteRenderingParams"
+Global Const $sIID_IDWriteRenderingParams = "{2f0da53a-2add-47cd-82ee-d9ec34688e75}"
+; Definition
+Global $dtagIDWriteRenderingParams = $dtagIUnknown & _
+		"GetGamma float();" & _
+		"GetEnhancedContrast float();" & _
+		"GetClearTypeLevel float();" & _
+		"GetPixelGeometry dword();" & _
+		"GetRenderingMode dword();"
+; List
+Global $ltagIDWriteRenderingParams = $ltagIUnknown & _
+		"GetGamma;" & _
+		"GetEnhancedContrast;" & _
+		"GetClearTypeLevel;" & _
+		"GetPixelGeometry;" & _
+		"GetRenderingMode;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteTextAnalyzer"
+Global Const $sIID_IDWriteTextAnalyzer = "{b7e6163e-7f46-43b4-84b3-e4e6249c365d}"
+; Definition
+Global $dtagIDWriteTextAnalyzer = $dtagIUnknown & _
+		"AnalyzeScript hresult(ptr;dword;dword;ptr);" & _
+		"AnalyzeBidi hresult(ptr;dword;dword;ptr);" & _
+		"AnalyzeNumberSubstitution hresult(ptr;dword;dword;ptr);" & _
+		"AnalyzeLineBreakpoints hresult(ptr;dword;dword;ptr);" & _
+		"GetGlyphs hresult(wstr;dword;ptr;bool;bool;ptr;wstr;ptr;ptr;dword;dword;ptr;ptr;ptr;ptr;dword*);" & _
+		"GetGlyphPlacements hresult(wstr;ptr;ptr;dword;ptr;ptr;dword;ptr;float;bool;bool;ptr;wstr;ptr;ptr;dword;ptr;ptr);" & _
+		"GetGdiCompatibleGlyphPlacements hresult(wstr;ptr;ptr;dword;ptr;ptr;dword;ptr;float;float;ptr;bool;bool;bool;ptr;wstr;ptr;ptr;dword;ptr;ptr);"
+; List
+Global $ltagIDWriteTextAnalyzer = $ltagIUnknown & _
+		"AnalyzeScript;" & _
+		"AnalyzeBidi;" & _
+		"AnalyzeNumberSubstitution;" & _
+		"AnalyzeLineBreakpoints;" & _
+		"GetGlyphs;" & _
+		"GetGlyphPlacements;" & _
+		"GetGdiCompatibleGlyphPlacements;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteTextFormat"
+Global Const $sIID_IDWriteTextFormat = "{9c906818-31d7-4fd3-a151-7c5e225db55a}"
+; Definition
+Global $dtagIDWriteTextFormat = $dtagIUnknown & _
+		"SetTextAlignment hresult(dword);" & _
+		"SetParagraphAlignment hresult(dword);" & _
+		"SetWordWrapping hresult(dword);" & _
+		"SetReadingDirection hresult(dword);" & _
+		"SetFlowDirection hresult(dword);" & _
+		"SetIncrementalTabStop hresult(float);" & _
+		"SetTrimming hresult(ptr;ptr*);" & _
+		"SetLineSpacing hresult(dword;float;float);" & _
+		"GetTextAlignment dword();" & _
+		"GetParagraphAlignment dword();" & _
+		"GetWordWrapping dword();" & _
+		"GetReadingDirection dword();" & _
+		"GetFlowDirection dword();" & _
+		"GetIncrementalTabStop float();" & _
+		"GetTrimming hresult(ptr;ptr*);" & _
+		"GetLineSpacing hresult(dword*;float*float*);" & _
+		"GetFontCollection hresult(ptr*);" & _
+		"GetFontFamilyNameLength dword(wstr;dword);" & _
+		"GetFontFamilyName hresult();" & _
+		"GetFontWeight dword();" & _
+		"GetFontStyle dword();" & _
+		"GetFontStretch dword();" & _
+		"GetFontSize float();" & _
+		"GetLocaleNameLength dword();" & _
+		"GetLocaleName hresult(wstr;dword);"
+; List
+Global $ltagIDWriteTextFormat = $ltagIUnknown & _
+		"SetTextAlignment;" & _
+		"SetParagraphAlignment;" & _
+		"SetWordWrapping;" & _
+		"SetReadingDirection;" & _
+		"SetFlowDirection;" & _
+		"SetIncrementalTabStop;" & _
+		"SetTrimming;" & _
+		"SetLineSpacing;" & _
+		"GetTextAlignment;" & _
+		"GetParagraphAlignment;" & _
+		"GetWordWrapping;" & _
+		"GetReadingDirection;" & _
+		"GetFlowDirection;" & _
+		"GetIncrementalTabStop;" & _
+		"GetTrimming;" & _
+		"GetLineSpacing;" & _
+		"GetFontCollection;" & _
+		"GetFontFamilyNameLength;" & _
+		"GetFontFamilyName;" & _
+		"GetFontWeight;" & _
+		"GetFontStyle;" & _
+		"GetFontStretch;" & _
+		"GetFontSize;" & _
+		"GetLocaleNameLength;" & _
+		"GetLocaleName;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteTextLayout"
+Global Const $sIID_IDWriteTextLayout = "{53737037-6d14-410b-9bfe-0b182bb70961}"
+; Definition
+Global $dtagIDWriteTextLayout = $dtagIDWriteTextFormat & _
+		"SetMaxWidth hresult(float);" & _
+		"SetMaxHeight hresult(float);" & _
+		"SetFontCollection hresult(ptr;ptr);" & _
+		"SetFontFamilyName hresult(wstr;dword;dword);" & _
+		"SetFontWeight hresult(dword;dword;dword);" & _
+		"SetFontStyle hresult(dword;dword;dword);" & _
+		"SetFontStretch hresult(dword;dword;dword);" & _
+		"SetFontSize hresult(float;dword;dword);" & _
+		"SetUnderline hresult(bool;dword;dword);" & _
+		"SetStrikethrough hresult(bool;dword;dword);" & _
+		"SetDrawingEffect hresult(ptr;dword;dword);" & _
+		"SetInlineObject hresult(ptr;dword;dword);" & _
+		"SetTypography hresult(ptr;dword;dword);" & _
+		"SetLocaleName hresult(wstr;dword;dword);" & _
+		"GetMaxWidth float();" & _
+		"GetMaxHeight float();" & _
+		"GetFontCollection hresult(dword;ptr*;dword*;dword*);" & _
+		"GetFontFamilyNameLength hresult(dword;dword*;dword*;dword*);" & _
+		"GetFontFamilyName hresult(dword;wstr;dword;dword*;dword*);" & _
+		"GetFontWeight hresult(dword;dword*;dword*;dword*);" & _
+		"GetFontStyle hresult(dword;dword*;dword*;dword*);" & _
+		"GetFontStretch hresult(dword;dword*;dword*;dword*);" & _
+		"GetFontSize hresult(dword;float*;dword*;dword*);" & _
+		"GetUnderline hresult(dword;bool*;dword*;dword*);" & _
+		"GetStrikethrough hresult(dword;bool*;dword*;dword*);" & _
+		"GetDrawingEffect hresult(dword;ptr*;dword*;dword*);" & _
+		"GetInlineObject hresult(dword;ptr*;dword*;dword*);" & _
+		"GetTypography hresult(dword;ptr*;dword*;dword*);" & _
+		"GetLocaleNameLength hresult(dword;dword*;dword*;dword*);" & _
+		"GetLocaleName hresult(dword;wstr;dword;dword*;dword*);" & _
+		"Draw hresult(ptr;ptr;float;float);" & _
+		"GetLineMetrics hresult(ptr;dword;dword*);" & _
+		"GetMetrics hresult(ptr);" & _
+		"GetOverhangMetrics hresult(ptr);" & _
+		"GetClusterMetrics hresult(ptr;dword;dword*);" & _
+		"DetermineMinWidth hresult(float*);" & _
+		"HitTestPoint hresult(float;float;bool*;bool*;ptr);" & _
+		"HitTestTextPosition hresult(dword;bool;float*;float*;ptr);" & _
+		"HitTestTextRange hresult(dword;dword;float;float;ptr;dword;dword*);"
+; List
+Global $ltagIDWriteTextLayout = $ltagIDWriteTextFormat & _
+		"SetMaxWidth;" & _
+		"SetMaxHeight;" & _
+		"SetFontCollection;" & _
+		"SetFontFamilyName;" & _
+		"SetFontWeight;" & _
+		"SetFontStyle;" & _
+		"SetFontStretch;" & _
+		"SetFontSize;" & _
+		"SetUnderline;" & _
+		"SetStrikethrough;" & _
+		"SetDrawingEffect;" & _
+		"SetInlineObject;" & _
+		"SetTypography;" & _
+		"SetLocaleName;" & _
+		"GetMaxWidth;" & _
+		"GetMaxHeight;" & _
+		"GetFontCollection;" & _
+		"GetFontFamilyNameLength;" & _
+		"GetFontFamilyName;" & _
+		"GetFontWeight;" & _
+		"GetFontStyle;" & _
+		"GetFontStretch;" & _
+		"GetFontSize;" & _
+		"GetUnderline;" & _
+		"GetStrikethrough;" & _
+		"GetDrawingEffect;" & _
+		"GetInlineObject;" & _
+		"GetTypography;" & _
+		"GetLocaleNameLength;" & _
+		"GetLocaleName;" & _
+		"Draw;" & _
+		"GetLineMetrics;" & _
+		"GetMetrics;" & _
+		"GetOverhangMetrics;" & _
+		"GetClusterMetrics;" & _
+		"DetermineMinWidth;" & _
+		"HitTestPoint;" & _
+		"HitTestTextPosition;" & _
+		"HitTestTextRange;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteTextRenderer"
+Global Const $sIID_IDWriteTextRenderer = "{ef8a8135-5cc6-45fe-8825-c5a0724eb819}"
+; Definition
+Global $dtagIDWriteTextRenderer = $dtagIDWritePixelSnapping & _
+		"DrawGlyphRun hresult(ptr;float;float;dword;ptr;ptr;ptr);" & _
+		"DrawUnderline hresult(ptr;float;float;ptr;ptr);" & _
+		"DrawStrikethrough hresult(ptr;float;float;ptr;ptr);" & _
+		"DrawInlineObject hresult(ptr;float;float;ptr;bool;bool;ptr);"
+; List
+Global $ltagIDWriteTextRenderer = $ltagIDWritePixelSnapping & _
+		"DrawGlyphRun;" & _
+		"DrawUnderline;" & _
+		"DrawStrikethrough;" & _
+		"DrawInlineObject;"
+;===============================================================================
+
+;===============================================================================
+#interface "IDWriteTypography"
+Global Const $sIID_IDWriteTypography = "{55f1112b-1dc2-4b3c-9541-f46894ed85b6}"
+; Definition
+Global $dtagIDWriteTypography = $dtagIUnknown & _
+		"AddFontFeature hresult(dword;dword);" & _
+		"GetFontFeatureCount dword();" & _
+		"GetFontFeature hresult(dword;dword*;dword*);"
+; List
+Global $ltagIDWriteTypography = $ltagIUnknown & _
+		"AddFontFeature;" & _
+		"GetFontFeatureCount;" & _
+		"GetFontFeature;"
+;===============================================================================

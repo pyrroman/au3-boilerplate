@@ -1,0 +1,31 @@
+#define WINVER 1280
+#define _WIN32_IE 1280
+#define IDR_VERSION1 1
+
+LANGUAGE 9,1
+
+IDR_VERSION1 VERSIONINFO
+FILEVERSION 1,2,8,3
+PRODUCTVERSION 1,2,8,3
+FILEOS 0x00000004
+FILETYPE 0x00000002
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904B0"
+    BEGIN
+      VALUE "FileVersion", "1.2.8.3\0"
+      VALUE "ProductVersion", "1.2.8.3\0"
+      VALUE "FileDescription", "Provides object functionality for AutoIt\0"
+      VALUE "ProductName", "AutoItObject\0"
+	  VALUE "LegalCopyright", "(C) The AutoItObject-Team\0"
+      VALUE "OriginalFilename", "AutoItObject.dll\0"
+	  VALUE "The AutoItObject-Team", "monoceres, trancexx, Kip, ProgAndy\0"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x0409, 0x04B0
+  END
+END
+

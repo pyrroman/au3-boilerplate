@@ -1,0 +1,940 @@
+#include-once
+#include "COMFundamentals.intfc"
+#include "StructuredStorage.intfc"
+;===============================================================================
+#API "Windows Imaging Component"
+; IWICBitmapSource
+; IWICBitmap
+; IWICBitmapDecoder
+; IWICFormatConverter
+; IWICStream
+; IWICImagingFactory
+; IWICBitmapClipper
+; IWICBitmapCodecInfo
+; IWICBitmapCodecProgressNotification
+; IWICBitmapDecoderInfo
+; IWICBitmapEncoder
+; IWICBitmapEncoderInfo
+; IWICBitmapFlipRotator
+; IWICBitmapFrameDecode
+; IWICBitmapFrameEncode
+; IWICBitmapLock
+; IWICBitmapScaler
+; IWICBitmapSource
+; IWICBitmapSourceTransform
+; IWICColorContext
+; IWICColorTransform
+; IWICComponentFactory
+; IWICComponentInfo
+; IWICDevelopRaw
+; IWICDevelopRawNotificationCallback
+; IWICEnumMetadataItem
+; IWICFastMetadataEncoder
+; IWICFormatConverterInfo
+; IWICMetadataBlockReader
+; IWICMetadataBlockWriter
+; IWICMetadataHandlerInfo
+; IWICMetadataQueryReader
+; IWICMetadataQueryWriter
+; IWICMetadataReader
+; IWICMetadataReaderInfo
+; IWICMetadataWriter
+; IWICMetadataWriterInfo
+; IWICPalette
+; IWICPersistStream
+; IWICPixelFormatInfo
+; IWICPixelFormatInfo2
+; IWICProgressCallback
+; IWICProgressiveLevelControl
+; IWICStreamProvider
+;===============================================================================
+
+;.......written by trancexx (trancexx at yahoo dot com)
+
+;===============================================================================
+#interface "IWICStreamProvider"
+Global Const $sIID_IWICStreamProvider = "{449494BC-B468-4927-96D7-BA90D31AB505}"
+; Definition
+Global $dtagIWICStreamProvider = $dtagIUnknown & _
+		"GetStream hresult(ptr*);" & _
+		"GetPersistOptions hresult(dword*);" & _
+		"GetPreferredVendorGUID hresult(ptr*);" & _
+		"RefreshStream hresult();"
+; List
+Global $ltagIWICStreamProvider = $ltagIUnknown & _
+		"GetStream;" & _
+		"GetPersistOptions;" & _
+		"GetPreferredVendorGUID;" & _
+		"RefreshStream;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICProgressiveLevelControl"
+Global Const $sIID_IWICProgressiveLevelControl = "{DAAC296F-7AA5-4dbf-8D15-225C5976F891}"
+; Definition
+Global $dtagIWICProgressiveLevelControl = $dtagIUnknown & _
+		"GetLevelCount hresult(dword*);" & _
+		"GetCurrentLevel hresult(dword*);" & _
+		"SetCurrentLevel hresult(dword);"
+; List
+Global $ltagIWICProgressiveLevelControl = $ltagIUnknown & _
+		"GetLevelCount;" & _
+		"GetCurrentLevel;" & _
+		"SetCurrentLevel;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICProgressCallback"
+Global Const $sIID_IWICProgressCallback = "{4776F9CD-9517-45FA-BF24-E89C5EC5C60C}"
+; Definition
+Global $dtagIWICProgressCallback = $dtagIUnknown & _
+		"Notify hresult(dword;dword;double);"
+; List
+Global $ltagIWICProgressCallback = $ltagIUnknown & _
+		"Notify;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICComponentInfo"
+Global Const $sIID_IWICComponentInfo = "{23BC3F0A-698B-4357-886B-F24D50671334}"
+; Definition
+Global $dtagIWICComponentInfo = $dtagIUnknown & _
+		"GetComponentType hresult(ptr*);" & _
+		"GetCLSID hresult(ptr*);" & _
+		"GetSigningStatus hresult(ptr*);" & _
+		"GetAuthor hresult(dword;wstr;dword*);" & _
+		"GetVendorGUID hresult(ptr*);" & _
+		"GetVersion hresult(dword;wstr;dword*);" & _
+		"GetSpecVersion hresult(dword;wstr;dword*);" & _
+		"GetFriendlyName hresult(dword;wstr;dword*);"
+; List
+Global $ltagIWICComponentInfo = $ltagIUnknown & _
+		"GetComponentType;" & _
+		"GetCLSID;" & _
+		"GetSigningStatus;" & _
+		"GetAuthor;" & _
+		"GetVendorGUID;" & _
+		"GetVersion;" & _
+		"GetSpecVersion;" & _
+		"GetFriendlyName;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICPixelFormatInfo"
+Global Const $sIID_IWICPixelFormatInfo = "{E8EDA601-3D48-431a-AB44-69059BE88BBE}"
+; Definition
+Global $dtagIWICPixelFormatInfo = $dtagIWICComponentInfo & _
+		"GetFormatGUID hresult(ptr*);" & _
+		"GetColorContext hresult(ptr*);" & _
+		"GetBitsPerPixel hresult(dword*);" & _
+		"GetChannelCount hresult(dword*);" & _
+		"GetChannelMask hresult(dword;dword;ptr;dword*);"
+; List
+Global $ltagIWICPixelFormatInfo = $ltagIWICComponentInfo & _
+		"GetFormatGUID;" & _
+		"GetColorContext;" & _
+		"GetBitsPerPixel;" & _
+		"GetChannelCount;" & _
+		"GetChannelMask;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICPixelFormatInfo2"
+Global Const $sIID_IWICPixelFormatInfo2 = "{A9DB33A2-AF5F-43C7-B679-74F5984B5AA4}"
+; Definition
+Global $dtagIWICPixelFormatInfo2 = $dtagIWICPixelFormatInfo & _
+		"SupportsTransparency hresult(bool*);" & _
+		"GetNumericRepresentation hresult(dword*);"
+; List
+Global $ltagIWICPixelFormatInfo2 = $ltagIWICPixelFormatInfo & _
+		"SupportsTransparency;" & _
+		"GetNumericRepresentation;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICPersistStream"
+Global Const $sIID_IWICPersistStream = "{00675040-6908-45F8-86A3-49C7DFD6D9AD}"
+; Definition
+Global $dtagIWICPersistStream = $dtagIPersistStream & _
+		"LoadEx hresult(ptr;ptr;dword);" & _
+		"SaveEx hresult(ptr;dword;bool);"
+; List
+Global $ltagIWICPersistStream = $ltagIPersistStream & _
+		"LoadEx;" & _
+		"SaveEx;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICPalette"
+Global Const $sIID_IWICPalette = "{00000040-a8f2-4877-ba0a-fd2b6645fb94}"
+; Definition
+Global $dtagIWICPalette = $dtagIUnknown & _
+		"InitializePredefined hresult(ptr;bool);" & _
+		"InitializeCustom hresult(ptr;dword);" & _
+		"InitializeFromBitmap hresult(ptr;dword;bool);" & _
+		"InitializeFromPalette hresult(ptr);" & _
+		"GetType hresult(ptr*);" & _
+		"GetColorCount hresult(dword*);" & _
+		"GetColors hresult(dword;ptr;dword*);" & _
+		"IsBlackWhite hresult(bool*);" & _
+		"IsGrayscale hresult(bool*);" & _
+		"HasAlpha hresult(bool*);"
+; List
+Global $ltagIWICPalette = $ltagIUnknown & _
+		"InitializePredefined;" & _
+		"InitializeCustom;" & _
+		"InitializeFromBitmap;" & _
+		"InitializeFromPalette;" & _
+		"GetType;" & _
+		"GetColorCount;" & _
+		"GetColors;" & _
+		"IsBlackWhite;" & _
+		"IsGrayscale;" & _
+		"HasAlpha;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICMetadataHandlerInfo"
+Global Const $sIID_IWICMetadataHandlerInfo = "{ABA958BF-C672-44D1-8D61-CE6DF2E682C2}"
+; Definition
+Global $dtagIWICMetadataHandlerInfo = $dtagIWICComponentInfo & _
+		"GetMetadataFormat hresult(ptr*);" & _
+		"GetContainerFormats hresult(dword;ptr;dword*);" & _
+		"GetDeviceManufacturer hresult(dword;wstr;dword*);" & _
+		"GetDeviceModels hresult(dword;wstr;dword*);" & _
+		"DoesRequireFullStream hresult(bool*);" & _
+		"DoesSupportPadding hresult(bool*);" & _
+		"DoesRequireFixedSize hresult(bool*);"
+; List
+Global $ltagIWICMetadataHandlerInfo = $ltagIWICComponentInfo & _
+		"GetMetadataFormat;" & _
+		"GetContainerFormats;" & _
+		"GetDeviceManufacturer;" & _
+		"GetDeviceModels;" & _
+		"DoesRequireFullStream;" & _
+		"DoesSupportPadding;" & _
+		"DoesRequireFixedSize;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICMetadataWriterInfo"
+Global Const $sIID_IWICMetadataWriterInfo = "{B22E3FBA-3925-4323-B5C1-9EBFC430F236}"
+; Definition
+Global $dtagIWICMetadataWriterInfo = $dtagIWICMetadataHandlerInfo & _
+		"GetHeader hresult(ptr;dword;ptr;dword*);" & _
+		"CreateInstance hresult(ptr*);"
+; List
+Global $ltagIWICMetadataWriterInfo = $ltagIWICMetadataHandlerInfo & _
+		"GetHeader;" & _
+		"CreateInstance;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICMetadataReader"
+Global Const $sIID_IWICMetadataReader = "{9204FE99-D8FC-4FD5-A001-9536B067A899}"
+; Definition
+Global $dtagIWICMetadataReader = $dtagIUnknown & _
+		"GetMetadataFormat hresult(ptr*);" & _
+		"GetMetadataHandlerInfo hresult(ptr*);" & _
+		"GetCount hresult(dword*);" & _
+		"GetValueByIndex hresult(dword;variant*;variant*;variant*);" & _
+		"GetValue hresult(variant*;variant*;variant*);" & _
+		"GetEnumerator hresult(ptr*);"
+; List
+Global $ltagIWICMetadataReader = $ltagIUnknown & _
+		"GetMetadataFormat;" & _
+		"GetMetadataHandlerInfo;" & _
+		"GetCount;" & _
+		"GetValueByIndex;" & _
+		"GetValue;" & _
+		"GetEnumerator;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICMetadataWriter"
+Global Const $sIID_IWICMetadataWriter = "{F7836E16-3BE0-470B-86BB-160D0AECD7DE}"
+; Definition
+Global $dtagIWICMetadataWriter = $dtagIWICMetadataReader & _
+		"SetValue hresult(variant*;variant*;variant*);" & _
+		"SetValueByIndex hresult(dword;variant*;variant*;variant*);" & _
+		"RemoveValue hresult(variant*;variant*);" & _
+		"RemoveValueByIndex hresult(dword);"
+; List
+Global $ltagIWICMetadataWriter = $ltagIWICMetadataReader & _
+		"SetValue;" & _
+		"SetValueByIndex;" & _
+		"RemoveValue;" & _
+		"RemoveValueByIndex;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICMetadataReaderInfo"
+Global Const $sIID_IWICMetadataReaderInfo = "{EEBF1F5B-07C1-4447-A3AB-22ACAF78A804}"
+; Definition
+Global $dtagIWICMetadataReaderInfo = $dtagIWICMetadataHandlerInfo & _
+		"GetPatterns hresult(ptr;dword;ptr;dword*;dword*);" & _
+		"MatchesPattern hresult(ptr;ptr;bool*);" & _
+		"CreateInstance hresult(ptr*);"
+; List
+Global $ltagIWICMetadataReaderInfo = $ltagIWICMetadataHandlerInfo & _
+		"GetPatterns;" & _
+		"MatchesPattern;" & _
+		"CreateInstance;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICMetadataQueryReader"
+Global Const $sIID_IWICMetadataQueryReader = "{30989668-E1C9-4597-B395-458EEDB808DF}"
+; Definition
+Global $dtagIWICMetadataQueryReader = $dtagIUnknown & _
+		"GetContainerFormat hresult(ptr*);" & _
+		"GetLocation hresult(dword;wstr;dword*);" & _
+		"GetMetadataByName hresult(wstr;variant*);" & _
+		"GetEnumerator hresult(ptr*);"
+; List
+Global $ltagIWICMetadataQueryReader = $ltagIUnknown & _
+		"GetContainerFormat;" & _
+		"GetLocation;" & _
+		"GetMetadataByName;" & _
+		"GetEnumerator;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICMetadataQueryWriter"
+Global Const $sIID_IWICMetadataQueryWriter = "{A721791A-0DEF-4d06-BD91-2118BF1DB10B}"
+; Definition
+Global $dtagIWICMetadataQueryWriter = $dtagIWICMetadataQueryReader & _
+		"SetMetadataByName hresult(wstr;variant*);" & _
+		"RemoveMetadataByName hresult(wstr);"
+; List
+Global $ltagIWICMetadataQueryWriter = $ltagIWICMetadataQueryReader & _
+		"SetMetadataByName;" & _
+		"RemoveMetadataByName;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICMetadataBlockReader"
+Global Const $sIID_IWICMetadataBlockReader = "{FEAA2A8D-B3F3-43E4-B25C-D1DE990A1AE1}"
+; Definition
+Global $dtagIWICMetadataBlockReader = $dtagIUnknown & _
+		"GetContainerFormat hresult(ptr*);" & _
+		"GetCount hresult(dword*);" & _
+		"GetReaderByIndex hresult(dword;ptr*);" & _
+		"GetEnumerator hresult(ptr*);"
+; List
+Global $ltagIWICMetadataBlockReader = $ltagIUnknown & _
+		"GetContainerFormat;" & _
+		"GetCount;" & _
+		"GetReaderByIndex;" & _
+		"GetEnumerator;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICFormatConverterInfo"
+Global Const $sIID_IWICFormatConverterInfo = "{9F34FB65-13F4-4f15-BC57-3726B5E53D9F}"
+; Definition
+Global $dtagIWICFormatConverterInfo = $dtagIWICComponentInfo & _
+		"GetPixelFormats hresult(dword;ptr;dword*);" & _
+		"CreateInstance hresult(ptr*);"
+; List
+Global $ltagIWICFormatConverterInfo = $ltagIWICComponentInfo & _
+		"GetPixelFormats;" & _
+		"CreateInstance;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICMetadataBlockWriter"
+Global Const $sIID_IWICMetadataBlockWriter = "{08FB9676-B444-41E8-8DBE-6A53A542BFF1}"
+; Definition
+Global $dtagIWICMetadataBlockWriter = $dtagIWICMetadataBlockReader & _
+		"InitializeFromBlockReader hresult(ptr);" & _
+		"GetWriterByIndex hresult(dword;ptr*);" & _
+		"AddWriter hresult(ptr);" & _
+		"SetWriterByIndex hresult(dword;ptr);" & _
+		"RemoveWriterByIndex hresult(dword);"
+; List
+Global $ltagIWICMetadataBlockWriter = $ltagIWICMetadataBlockReader & _
+		"InitializeFromBlockReader;" & _
+		"GetWriterByIndex;" & _
+		"AddWriter;" & _
+		"SetWriterByIndex;" & _
+		"RemoveWriterByIndex;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICFastMetadataEncoder"
+Global Const $sIID_IWICFastMetadataEncoder = "{B84E2C09-78C9-4AC4-8BD3-524AE1663A2F}"
+; Definition
+Global $dtagIWICFastMetadataEncoder = $dtagIUnknown & _
+		"Commit hresult();" & _
+		"GetMetadataQueryWriter hresult(ptr*);"
+; List
+Global $ltagIWICFastMetadataEncoder = $ltagIUnknown & _
+		"Commit;" & _
+		"GetMetadataQueryWriter;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICEnumMetadataItem"
+Global Const $sIID_IWICEnumMetadataItem = "{DC2BB46D-3F07-481E-8625-220C4AEDBB33}"
+; Definition
+Global $dtagIWICEnumMetadataItem = $dtagIUnknown & _
+		"Next hresult(dword;ptr;ptr;ptr;dword*);" & _
+		"Skip hresult(dword);" & _
+		"Reset hresult();" & _
+		"Clone hresult(ptr*);"
+; List
+Global $ltagIWICEnumMetadataItem = $ltagIUnknown & _
+		"Next;" & _
+		"Skip;" & _
+		"Reset;" & _
+		"Clone;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICDevelopRawNotificationCallback"
+Global Const $sIID_IWICDevelopRawNotificationCallback = "{95c75a6e-3e8c-4ec2-85a8-aebcc551e59b}"
+; Definition
+Global $dtagIWICDevelopRawNotificationCallback = $dtagIUnknown & _
+		"Notify hresult(dword);"
+; List
+Global $ltagIWICDevelopRawNotificationCallback = $ltagIUnknown & _
+		"Notify;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapSource"
+Global Const $sIID_IWICBitmapSource = "{00000120-a8f2-4877-ba0a-fd2b6645fb94}"
+; Definition
+Global $dtagIWICBitmapSource = $dtagIUnknown & _
+		"GetSize hresult(dword*;dword*);" & _
+		"GetPixelFormat hresult(ptr*);" & _
+		"GetResolution hresult(double*;double);" & _
+		"CopyPalette hresult(ptr);" & _
+		"CopyPixels hresult(ptr;dword;dword;ptr*);"
+; List
+Global $ltagIWICBitmapSource = $ltagIUnknown & _
+		"GetSize;" & _
+		"GetPixelFormat;" & _
+		"GetResolution;" & _
+		"CopyPalette;" & _
+		"CopyPixels;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapFrameDecode"
+Global Const $sIID_IWICBitmapFrameDecode = "{3B16811B-6A43-4ec9-A813-3D930C13B940}"
+; Definition
+Global $dtagIWICBitmapFrameDecode = $dtagIWICBitmapSource & _
+		"GetMetadataQueryReader hresult(ptr*);" & _
+		"GetColorContexts hresult(dword;ptr;dword);" & _
+		"GetThumbnail hresult(ptr*);"
+; List
+Global $ltagIWICBitmapFrameDecode = $ltagIWICBitmapSource & _
+		"GetMetadataQueryReader;" & _
+		"GetColorContexts;" & _
+		"GetThumbnail;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICDevelopRaw"
+Global Const $sIID_IWICDevelopRaw = "{fbec5e44-f7be-4b65-b7f8-c0c81fef026d}"
+; Definition
+Global $dtagIWICDevelopRaw = $dtagIWICBitmapFrameDecode & _
+		"QueryRawCapabilitiesInfo hresult(ptr*);" & _
+		"LoadParameterSet hresult(dword);" & _
+		"GetCurrentParameterSet hresult(ptr*);" & _
+		"SetExposureCompensation hresult(double);" & _
+		"GetExposureCompensation hresult(double*);" & _
+		"SetWhitePointRGB hresult(dword;dword;dword);" & _
+		"GetWhitePointRGB hresult(dword*;dword*;dword*);" & _
+		"SetNamedWhitePoint hresult(dword);" & _
+		"GetNamedWhitePoint hresult(dword*);" & _
+		"SetWhitePointKelvin hresult(dword);" & _
+		"GetWhitePointKelvin hresult(dword*);" & _
+		"GetKelvinRangeInfo hresult(dword*;dword*;dword*);" & _
+		"SetContrast hresult(double);" & _
+		"GetContrast hresult(double*);" & _
+		"SetGamma hresult(double);" & _
+		"GetGamma hresult(double*);" & _
+		"SetSharpness hresult(double);" & _
+		"GetSharpness hresult(double*);" & _
+		"SetSaturation hresult(double);" & _
+		"GetSaturation hresult(double*);" & _
+		"SetTint hresult(double);" & _
+		"GetTint hresult(double*);" & _
+		"SetNoiseReduction hresult(double);" & _
+		"GetNoiseReduction hresult(double*);" & _
+		"SetDestinationColorContext hresult(ptr);" & _
+        "SetToneCurve hresult(dword;ptr);" & _
+		"GetToneCurve hresult(dword;ptr*;dword*);" & _
+		"SetRotation hresult(double);" & _
+		"GetRotation hresult(double*);" & _
+		"SetRenderMode hresult(dword);" & _
+		"GetRenderMode hresult(ptr*);" & _
+		"SetNotificationCallback hresult(ptr);"
+; List
+Global $ltagIWICDevelopRaw = $ltagIWICBitmapFrameDecode & _
+		"QueryRawCapabilitiesInfo;" & _
+		"LoadParameterSet;" & _
+		"GetCurrentParameterSet;" & _
+		"SetExposureCompensation;" & _
+		"GetExposureCompensation;" & _
+		"SetWhitePointRGB;" & _
+		"GetWhitePointRGB;" & _
+		"SetNamedWhitePoint;" & _
+		"GetNamedWhitePoint;" & _
+		"SetWhitePointKelvin;" & _
+		"GetWhitePointKelvin;" & _
+		"GetKelvinRangeInfo;" & _
+		"SetContrast;" & _
+		"GetContrast;" & _
+		"SetGamma;" & _
+		"GetGamma;" & _
+		"SetSharpness;" & _
+		"GetSharpness;" & _
+		"SetSaturation;" & _
+		"GetSaturation;" & _
+		"SetTint;" & _
+		"GetTint;" & _
+		"SetNoiseReduction;" & _
+		"GetNoiseReduction;" & _
+		"SetDestinationColorContext;" & _
+        "SetToneCurve;" & _
+		"GetToneCurve;" & _
+		"SetRotation;" & _
+		"GetRotation;" & _
+		"SetRenderMode;" & _
+		"GetRenderMode;" & _
+		"SetNotificationCallback;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICImagingFactory"
+Global Const $sCLSID_WICImagingFactory = "{cacaf262-9370-4615-a13b-9f5539da4c0a}"
+Global Const $sIID_IWICImagingFactory = "{ec5ec8a9-c395-4314-9c77-54d7a935ff70}"
+; Definition
+Global $dtagIWICImagingFactory = $dtagIUnknown & _
+		"CreateDecoderFromFilename hresult(wstr;ptr;dword;dword;ptr*);" & _
+		"CreateDecoderFromStream hresult(ptr;ptr;dword;ptr*);" & _
+		"CreateDecoderFromFileHandle hresult(handle;ptr;dword;ptr*);" & _
+		"CreateComponentInfo hresult(ptr;ptr*);" & _
+		"CreateDecoder hresult(ptr;ptr;ptr*);" & _
+		"CreateEncoder hresult(ptr;ptr;ptr*);" & _
+		"CreatePalette hresult(ptr*);" & _
+		"CreateFormatConverter hresult(ptr*);" & _
+		"CreateBitmapScaler hresult(ptr*);" & _
+		"CreateBitmapClipper hresult(ptr*);" & _
+		"CreateBitmapFlipRotator hresult(ptr*);" & _
+		"CreateStream hresult(ptr*);" & _
+		"CreateColorContext hresult(ptr*);" & _
+		"CreateColorTransformer hresult(ptr*);" & _
+		"CreateBitmap hresult(dword;dword;ptr;dword;ptr*);" & _
+		"CreateBitmapFromSource hresult(ptr;dword;ptr*);" & _
+		"CreateBitmapFromSourceRect hresult(ptr;dword;dword;dword;dword;ptr*);" & _
+		"CreateBitmapFromMemory hresult(dword;dword;ptr;dword;dword;ptr;ptr*);" & _
+		"CreateBitmapFromHBITMAP hresult(handle;handle;dword;ptr*);" & _
+		"CreateBitmapFromHICON hresult(handle;ptr*);" & _
+		"CreateComponentEnumerator hresult(dword;dword;ptr*);" & _
+		"CreateFastMetadataEncoderFromDecoder hresult(ptr;ptr*);" & _
+		"CreateFastMetadataEncoderFromFrameDecode hresult(ptr;ptr*);" & _
+		"CreateQueryWriter hresult(ptr;ptr;ptr*);" & _
+		"CreateQueryWriterFromReader hresult(ptr;ptr;ptr*);"
+; List
+Global $ltagIWICImagingFactory = $ltagIUnknown & _
+		"CreateDecoderFromFilename;" & _
+		"CreateDecoderFromStream;" & _
+		"CreateDecoderFromFileHandle;" & _
+		"CreateComponentInfo;" & _
+		"CreateDecoder;" & _
+		"CreateEncoder;" & _
+		"CreatePalette;" & _
+		"CreateFormatConverter;" & _
+		"CreateBitmapScaler;" & _
+		"CreateBitmapClipper;" & _
+		"CreateBitmapFlipRotator;" & _
+		"CreateStream;" & _
+		"CreateColorContext;" & _
+		"CreateColorTransformer;" & _
+		"CreateBitmap;" & _
+		"CreateBitmapFromSource;" & _
+		"CreateBitmapFromSourceRect;" & _
+		"CreateBitmapFromMemory;" & _
+		"CreateBitmapFromHBITMAP;" & _
+		"CreateBitmapFromHICON;" & _
+		"CreateComponentEnumerator;" & _
+		"CreateFastMetadataEncoderFromDecoder;" & _
+		"CreateFastMetadataEncoderFromFrameDecode;" & _
+		"CreateQueryWriter;" & _
+		"CreateQueryWriterFromReader;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICComponentFactory"
+Global Const $sIID_IWICComponentFactory = "{412D0C3A-9650-44FA-AF5B-DD2A06C8E8FB}"
+; Definition
+Global $dtagIWICComponentFactory = $dtagIWICImagingFactory & _
+		"CreateMetadataReader hresult(ptr;ptr;dword;ptr;ptr*);" & _
+		"CreateMetadataReaderFromContainer hresult(ptr;ptr;dword;ptr;ptr*);" & _
+		"CreateMetadataWriter hresult(ptr;ptr;dword;ptr*);" & _
+		"CreateMetadataWriterFromReader hresult(ptr;ptr;ptr*);" & _
+		"CreateQueryReaderFromBlockReader hresult(ptr;ptr*);" & _
+		"CreateQueryWriterFromBlockWriter hresult(ptr;ptr*);" & _
+		"CreateEncoderPropertyBag hresult(ptr;dword;ptr*);"
+; List
+Global $ltagIWICComponentFactory = $ltagIWICImagingFactory & _
+		"CreateMetadataReader;" & _
+		"CreateMetadataReaderFromContainer;" & _
+		"CreateMetadataWriter;" & _
+		"CreateMetadataWriterFromReader;" & _
+		"CreateQueryReaderFromBlockReader;" & _
+		"CreateQueryWriterFromBlockWriter;" & _
+		"CreateEncoderPropertyBag;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICColorTransform"
+Global Const $sIID_IWICColorTransform = "{B66F034F-D0E2-40ab-B436-6DE39E321A94}"
+; Definition
+Global $dtagIWICColorTransform = $dtagIWICBitmapSource & _
+		"Initialize hresult(ptr;ptr;ptr;ptr);"
+; List
+Global $ltagIWICColorTransform = $ltagIWICBitmapSource & _
+		"Initialize;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICColorContext"
+Global Const $sIID_IWICColorContext = "{3C613A02-34B2-44ea-9A7C-45AEA9C6FD6D}"
+; Definition
+Global $dtagIWICColorContext = $dtagIUnknown & _
+		"InitializeFromFilename hresult(wstr);" & _
+		"InitializeFromMemory hresult(ptr;dword);" & _
+		"InitializeFromExifColorSpace hresult(dword);" & _
+		"GetType hresult(ptr*);" & _
+		"GetProfileBytes hresult(dword;ptr;dword*);" & _
+		"GetExifColorSpace hresult(dword*);"
+; List
+Global $ltagIWICColorContext = $ltagIUnknown & _
+		"InitializeFromFilename;" & _
+		"InitializeFromMemory;" & _
+		"InitializeFromExifColorSpace;" & _
+		"GetType;" & _
+		"GetProfileBytes;" & _
+		"GetExifColorSpace;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapSourceTransform"
+Global Const $sIID_IWICBitmapSourceTransform = "{3B16811B-6A43-4ec9-B713-3D5A0C13B940}"
+; Definition
+Global $dtagIWICBitmapSourceTransform = $dtagIUnknown & _
+		"CopyPixels hresult(ptr;dword;dword;ptr;dword;dword;dword;ptr*);" & _
+		"GetClosestSize hresult(dword*;dword*);" & _
+		"GetClosestPixelFormat hresult(ptr*);" & _
+		"DoesSupportTransform hresult(dword;bool*);"
+; List
+Global $ltagIWICBitmapSourceTransform = $ltagIUnknown & _
+		"CopyPixels;" & _
+		"GetClosestSize;" & _
+		"GetClosestPixelFormat;" & _
+		"DoesSupportTransform;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapCodecInfo"
+Global Const $sIID_IWICBitmapCodecInfo = "{E87A44C4-B76E-4c47-8B09-298EB12A2714}"
+; Definition
+Global $dtagIWICBitmapCodecInfo = $dtagIWICComponentInfo & _
+		"GetContainerFormat hresult(ptr*);" & _
+		"GetPixelFormats hresult(dword;ptr;dword*);" & _
+		"GetColorManagementVersion hresult(dword;wstr;dword*);" & _
+		"GetDeviceManufacturer hresult(dword;wstr;dword*);" & _
+		"GetDeviceModels hresult(dword;wstr;dword*);" & _
+		"GetMimeTypes hresult(dword;wstr;dword*);" & _
+		"GetFileExtensions hresult(dword;wstr;dword*);" & _
+		"DoesSupportAnimation hresult(bool*);" & _
+		"DoesSupportChromakey hresult(bool*);" & _
+		"DoesSupportLossless hresult(bool*);" & _
+		"DoesSupportMultiframe hresult(bool*);" & _
+		"MatchesMimeType hresult(wstr;bool*);"
+; List
+Global $ltagIWICBitmapCodecInfo = $ltagIWICComponentInfo & _
+		"GetContainerFormat;" & _
+		"GetPixelFormats;" & _
+		"GetColorManagementVersion;" & _
+		"GetDeviceManufacturer;" & _
+		"GetDeviceModels;" & _
+		"GetMimeTypes;" & _
+		"GetFileExtensions;" & _
+		"DoesSupportAnimation;" & _
+		"DoesSupportChromakey;" & _
+		"DoesSupportLossless;" & _
+		"DoesSupportMultiframe;" & _
+		"MatchesMimeType;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapScaler"
+Global Const $sIID_IWICBitmapScaler = "{00000302-a8f2-4877-ba0a-fd2b6645fb94}"
+; Definition
+Global $dtagIWICBitmapScaler = $dtagIWICBitmapSource & _
+		"Initialize hresult(ptr;dword;dword;dword);"
+; List
+Global $ltagIWICBitmapScaler = $ltagIWICBitmapSource & _
+		"Initialize;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapLock"
+Global Const $sIID_IWICBitmapLock = "{00000123-a8f2-4877-ba0a-fd2b6645fb94}"
+; Definition
+Global $dtagIWICBitmapLock = $dtagIUnknown & _
+		"GetSize hresult(dword*;dword*);" & _
+		"GetStride hresult(dword*);" & _
+		"GetDataPointer hresult(dword*;ptr*);" & _
+		"GetPixelFormat hresult(ptr*);"
+; List
+Global $ltagIWICBitmapLock = $ltagIUnknown & _
+		"GetSize;" & _
+		"GetStride;" & _
+		"GetDataPointer;" & _
+		"GetPixelFormat"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapFrameEncode"
+Global Const $sIID_IWICBitmapFrameEncode = "{00000105-a8f2-4877-ba0a-fd2b6645fb94}"
+; Definition
+Global $dtagIWICBitmapFrameEncode = $dtagIUnknown & _
+		"Initialize hresult(ptr;dword);" & _
+		"SetSize hresult(dword;dword);" & _
+		"SetResolution hresult(double;double);" & _
+		"SetPixelFormat hresult(ptr*);" & _
+		"SetColorContexts hresult(dword;ptr);" & _
+		"SetPalette hresult(ptr);" & _
+		"SetThumbnail hresult(ptr);" & _
+		"WritePixels hresult(dword;dword;dword;ptr);" & _
+		"WriteSource hresult(ptr;ptr);" & _
+		"Commit hresult();" & _
+		"GetMetadataQueryWriter hresult(ptr*);"
+; List
+Global $ltagIWICBitmapFrameEncode = $ltagIUnknown & _
+		"Initialize;" & _
+		"SetSize;" & _
+		"SetResolution;" & _
+		"SetPixelFormat;" & _
+		"SetColorContexts;" & _
+		"SetPalette;" & _
+		"SetThumbnail;" & _
+		"WritePixels;" & _
+		"WriteSource;" & _
+		"Commit;" & _
+		"GetMetadataQueryWriter"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapFlipRotator"
+Global Const $sIID_IWICBitmapFlipRotator = "{5009834F-2D6A-41ce-9E1B-17C5AFF7A782}"
+; Definition
+Global $dtagIWICBitmapFlipRotator = $dtagIWICBitmapSource & _
+		"Initialize hresult(ptr;dword);"
+; List
+Global $ltagIWICBitmapFlipRotator = $ltagIWICBitmapSource & _
+		"Initialize;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapEncoderInfo"
+Global Const $sIID_IWICBitmapEncoderInfo = "{94C9B4EE-A09F-4f92-8A1E-4A9BCE7E76FB}"
+; Definition
+Global $dtagIWICBitmapEncoderInfo = $dtagIWICBitmapCodecInfo & _
+		"CreateInstance hresult(ptr*);"
+; List
+Global $ltagIWICBitmapEncoderInfo = $ltagIWICBitmapCodecInfo & _
+		"CreateInstance;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapEncoder"
+Global Const $sIID_IWICBitmapEncoder = "{00000103-a8f2-4877-ba0a-fd2b6645fb94}"
+; Definition
+Global $dtagIWICBitmapEncoder = $dtagIUnknown & _
+		"Initialize hresult(ptr;dword);" & _
+		"GetContainerFormat hresult(ptr*);" & _
+		"GetEncoderInfo hresult(ptr*);" & _
+		"SetColorContexts hresult(dword;ptr);" & _
+		"SetPalette hresult(ptr);" & _
+		"SetThumbnail hresult(ptr);" & _
+		"SetPreview hresult(ptr);" & _
+		"CreateNewFrame hresult(ptr*;ptr*);" & _
+		"Commit hresult();" & _
+		"GetMetadataQueryWriter hresult(ptr*);"
+; List
+Global $ltagIWICBitmapEncoder = $ltagIUnknown & _
+		"Initialize;" & _
+		"GetContainerFormat;" & _
+		"GetEncoderInfo;" & _
+		"SetColorContexts;" & _
+		"SetPalette;" & _
+		"SetThumbnail;" & _
+		"SetPreview;" & _
+		"CreateNewFrame;" & _
+		"Commit;" & _
+		"GetMetadataQueryWriter;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapDecoderInfo"
+Global Const $sIID_IWICBitmapDecoderInfo = "{D8CD007F-D08F-4191-9BFC-236EA7F0E4B5}"
+; Definition
+Global $dtagIWICBitmapDecoderInfo = $dtagIWICBitmapCodecInfo & _
+		"GetPatterns hresult(dword;ptr*;dword*;dword*);" & _
+		"MatchesPattern hresult(ptr;bool*);" & _
+		"CreateInstance hresult(ptr*);"
+; List
+Global $ltagIWICBitmapDecoderInfo = $ltagIWICBitmapCodecInfo & _
+		"GetPatterns;" & _
+		"MatchesPattern;" & _
+		"CreateInstance;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapCodecProgressNotification"
+Global Const $sIID_IWICBitmapCodecProgressNotification = "{64C1024E-C3CF-4462-8078-88C2B11C46D9}"
+; Definition
+Global $dtagIWICBitmapCodecProgressNotification = $dtagIUnknown & _
+		"RegisterProgressNotification hresult(ptr;ptr;dword);"
+; List
+Global $ltagIWICBitmapCodecProgressNotification = $ltagIUnknown & _
+		"RegisterProgressNotification;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapClipper"
+Global Const $sIID_IWICBitmapClipper = "{E4FBCF03-223D-4e81-9333-D635556DD1B5}"
+; Definition
+Global $dtagIWICBitmapClipper = $dtagIWICBitmapSource & _
+		"Initialize hresult(ptr;ptr);"
+; List
+Global $ltagIWICBitmapClipper = $ltagIWICBitmapSource & _
+		"Initialize;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmap"
+Global Const $sIID_IWICBitmap = "{00000121-a8f2-4877-ba0a-fd2b6645fb94}"
+; Definition
+Global $dtagIWICBitmap = $dtagIWICBitmapSource & _
+		"Lock hresult(ptr;dword;ptr*);" & _
+		"SetPalette hresult(ptr);" & _
+		"SetResolution hresult(double;double);"
+; List
+Global $ltagIWICBitmap = $ltagIWICBitmapSource & _
+		"Lock;" & _
+		"SetPalette;" & _
+		"SetResolution;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICBitmapDecoder"
+Global Const $sIID_IWICBitmapDecoder = "{9EDDE9E7-8DEE-47ea-99DF-E6FAF2ED44BF}"
+; Definition
+Global $dtagIWICBitmapDecoder = $dtagIUnknown & _
+		"QueryCapability hresult(ptr*;dword);" & _
+		"Initialize hresult(ptr*);" & _
+		"GetContainerFormat hresult(ptr*);" & _
+		"GetDecoderInfo hresult(ptr*);" & _
+		"CopyPalette hresult(ptr);" & _
+		"GetMetadataQueryReader hresult(ptr*);" & _
+		"GetPreview hresult(ptr*);" & _
+		"GetColorContexts hresult(dword;ptr;dword*);" & _
+		"GetThumbnail hresult(ptr*);" & _
+		"GetFrameCount hresult(dword*);" & _
+		"GetFrame hresult(dword;ptr*);"
+; List
+Global $ltagIWICBitmapDecoder = $ltagIUnknown & _
+		"QueryCapability;" & _
+		"Initialize;" & _
+		"GetContainerFormat;" & _
+		"GetDecoderInfo;" & _
+		"CopyPalette;" & _
+		"GetMetadataQueryReader;" & _
+		"GetPreview;" & _
+		"GetColorContexts;" & _
+		"GetThumbnail;" & _
+		"GetFrameCount;" & _
+		"GetFrame;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICFormatConverter"
+Global Const $sIID_IWICFormatConverter = "{00000301-a8f2-4877-ba0a-fd2b6645fb94}"
+; Definition
+Global $dtagIWICFormatConverter = $dtagIWICBitmapSource & _
+		"Initialize hresult(ptr;ptr;dword;ptr;double;dword);" & _
+		"CanConvert hresult(ptr;ptr;bool*);"
+; List
+Global $ltagIWICFormatConverter = $ltagIWICBitmapSource & _
+		"Initialize;" & _
+		"CanConvert;"
+;===============================================================================
+
+
+;===============================================================================
+#interface "IWICStream"
+Global Const $sIID_IWICStream = "{135FF860-22B7-4ddf-B0F6-218F4F299A43}"
+; Definition
+Global $dtagIWICStream = $dtagIStream & _
+		"InitializeFromIStream hresult(ptr*);" & _
+		"InitializeFromFilename hresult(wstr;dword);" & _
+		"InitializeFromMemory hresult(ptr;dword);" & _
+		"InitializeFromIStreamRegion hresult(ptr;uint64;uint64);"
+; List
+Global $ltagIWICStream = $ltagIStream & _
+		"InitializeFromIStream;" & _
+		"InitializeFromFilename;" & _
+		"InitializeFromMemory;" & _
+		"InitializeFromIStreamRegion;"
+;===============================================================================
