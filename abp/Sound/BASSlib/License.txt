@@ -1,0 +1,44 @@
+I just ask that you credit me in the following format (if your program is open source) or
+add the following information in your program...
+
+;BASS-
+;Author		- Brett 'BrettF' Francis (brett[at]signa5[dot]com)
+;Source		- http://www.autoitscript.com/forum/index.php?showtopic=83481
+
+;BASSENC/BASSASIO/BASSFX-
+;Author		- eukalyptus
+;Source		- http://www.autoitscript.com/forum/index.php?showtopic=83481
+
+;BASSSCB/Bass_Ext
+;Author		- ProgAndy
+;Source		- http://www.autoitscript.com/forum/index.php?showtopic=83481
+
+
+BASS.DLL has a different license, which you must adhere to.  
+
+The licensing prices was correct at time of release.  This may change without notice.  
+Please see un4seen's website for more. 
+	http://un4seen.com/bass.html#license
+
+BASS is free for non-commercial use. If you are a non-commercial entity (eg. an individual) 
+and you are not charging for your product, and the product has no other commercial purpose,
+then you can use BASS in it for free. Otherwise, you will require one of the following 
+licences.
+
+Shareware licence: €100
+The "shareware" licence allows the usage of BASS in an unlimited number of your shareware 
+products, which must sell for no more than 40 Euros each. If you're an individual (not a 
+corporation) making and selling your own software (and its price is within the limit), this 
+is the licence for you.
+
+Single Commercial licence: €950
+The "single commercial" licence allows the usage of BASS in a single commercial product.
+
+Unlimited Commercial licence: €2450
+The "unlimited commercial" licence allows the usage of BASS in an unlimited number of 
+your commercial products. This licence applies to a single site/location.
+
+In all cases there are no royalties to pay and you can use future BASS updates without 
+further cost. Reselling/sublicensing is not permitted. Your products must be end-user 
+products, eg. not components used by other products. Please note that these licences only 
+cover your own software, not the publishing of other's software.

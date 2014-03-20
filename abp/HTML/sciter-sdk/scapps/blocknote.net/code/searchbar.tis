@@ -1,0 +1,121 @@
+include "decorators.tis";
+
+class SearchBar: Behavior
+{
+  function attached()
+  {
+    gSearchBar = this; // store it for the global use
+    this.view = null;
+    this.toggler = self.$("widget#toggle-search-n-replace");
+    var me = this;
+    if( !this.toggler)
+      return;
+    this.toggler.onClick = :: me.toggle();
+  }
+  
+  function show()
+  {
+    this.state.expanded = true;   
+    this.toggler.state.checked = true; 
+  }
+  function hide()
+  {
+    this.state.collapsed = true;  
+    this.toggler.state.checked = false; 
+  }
+  function toggle()
+  {
+    if( this.isVisible ) this.hide(); else this.show();
+  }
+  
+  function activate(forReplace = false)
+  {
+    this.show();
+    var text = this.view.selectionText();
+    var textCtl = this.$(#search-text);
+    textCtl.value = text;
+    textCtl.state.focus = true;
+    this.$(#replace-text).enabled = forReplace; 
+    this.$(#do-replace).enabled = forReplace; 
+    this.$(#do-replace-all).enabled = forReplace;
+  }
+
+  @when Event.BUTTON_CLICK @on "button#replace-with": evt
+  {
+    var onOff = evt.target.value;
+    this.$(#replace-text).enabled = onOff; 
+    this.$(#do-replace).enabled = onOff; 
+    this.$(#do-replace-all).enabled = onOff;
+    return true;
+  }
+  
+  @when Event.BUTTON_CLICK @on "button#do-search-next": 
+  {
+    this.doSearchNext();
+    return true;
+  }
+  @when Event.BUTTON_CLICK @on "button#do-replace": 
+  {
+    this.doReplace();
+    return true;
+  }
+  
+  @key Event.VK_RETURN: evt
+  {
+    if(evt.target.match("input#search-text") )
+    {
+      this.doSearchNext();
+      return true;
+    }
+    else if(evt.target.match("input#replace-text") )
+    {
+      this.doReplace();
+      return true;
+    }
+  }
+  
+  function doSearchNext()
+  {
+    if(!this.view)
+      return false;
+    var text = this.$(#search-text).value;
+    if(!text)
+      return false;
+    var caseSensitive = this.$(#search-ignore-case).value;
+    if(this.view.searchNext(text, !caseSensitive ))
+      return true;
+    this.$(#search-result).show("No more text found");
+    return false;
+  }
+  
+  function doReplace()
+  {
+    if(!this.view)
+      return;
+    var replaceBy = this.$(#replace-text).value;
+    if(this.view.selectionText().length || this.doSearchNext() ) 
+    {
+      this.view.replaceBy(replaceBy);
+      this.doSearchNext();
+    }
+  }
+ 
+  
+}
+
+class StatusMessage: Behavior
+{
+  function show(msg)
+  {
+    var opacity = 2.0;
+    var me = this; me.text = msg; me.style#visibility = "visible";
+    function fa()
+    {
+      if( opacity <= 0.0 ) { me.style#visibility = "hidden";  return 0; }
+      me.style#opacity = Float.min(opacity,1.0);  
+      opacity -= 0.05;
+      return 100;
+    }
+    this.animate(fa);
+  }
+}

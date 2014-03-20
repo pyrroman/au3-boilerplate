@@ -1,0 +1,752 @@
+
+// Scintilla wrapper/behavior 
+
+class Scintilla: Behavior
+{
+  var lexers = {};
+  function attached()
+  {
+    this.changed = false;
+    this.fileType = "";
+    this.fileExt = "";
+    var lx = this.attributes#lexer || "hypertext"; 
+    this.setLexer(lx);
+    this.tab = null;
+    this.autoindent = true;
+    this.driver = null; // driver of the file type, provided by lexer cfg table, see: scintilla/schemas/tiscript.tis as an example
+  }
+  /*
+    Three generic interface functions that allow to send messages to the Scintilla WinProc:
+      this.call_ii( msg:int, wparam:int, lparam:int) : int
+      this.call_is( msg:int, wparam:int, lparam:string) : int
+      this.call_ss( msg:int, wparam:string, lparam:string) : int
+    Paramaters of these functions are passed direcly to 
+      ScintillaWinProc(hwnd,UINT msg, WPARAM wParam, LPARAM lParam)
+    As Scintilla API is exposed by set of messages then pretty much all functionality is
+    available through these two methods.
+  */
+  
+  function call_ii( code, wParam = 0, lParam = 0 ) { return this.xcall(#mII_I, code, wParam, lParam); }
+  function call_is( code, wParam, lParamString ) { return this.xcall(#mIS_I, code, wParam, lParamString); }
+  function call_ss( code, wParamString, lParamString ) { return this.xcall(#mSS_I, code, wParamString, lParamString); }
+  
+  property caretPosition(v)   {  get return this.call_ii( 2008 /*SCI_GETCURRENTPOS*/, 0,0); set this.call_ii( 2141 /*SCI_SETCURRENTPOS*/, v); return v;}
+  property anchorPosition(v)  {  get return this.call_ii( 2009 /*SCI_GETANCHOR*/, 0,0); set this.call_ii( 2026 /*SCI_SETANCHOR*/, v); return v; }
+
+  function charAt(pos)        {  return this.call_ii( 2007 /*SCI_GETCHARAT*/, pos); }
+  property textLength(v)      {  get return this.call_ii( 2006 /*SCI_GETLENGTH*/); }
+  property value(v)           {  get return this.xcall(#getText,0,-1); set this.call_is(2181 /*SCI_SETTEXT*/,0,v); }  
+  property selection(v)       {  get return this.xcall(#getText, this.anchorPosition, this.caretPosition ); 
+                                 set this.call_is(2170 /*SCI_REPLACESEL*/,0,v); }  
+  property hasSelection(v)    {  return this.caretPosition != this.anchorPosition; }
+  function setSelection(anchorPos, caretPos) // sets selection and dows scroll into the view.
+                              {  this.call_ii( 2160 /*SCI_SETSEL*/, anchorPos, caretPos); }
+    
+  
+  function lineNo(pos)        { return this.call_ii( 2166 /*SCI_LINEFROMPOSITION*/, pos,0); }
+  function lineLength(line)   { return this.call_ii( 2350 /*SCI_LINELENGTH*/, line, 0); }
+  function linePos(line)      { return this.call_ii( 2167 /*SCI_POSITIONFROMLINE*/, line, 0); }
+
+  property currentLine(v)     { get return this.lineNo(this.caretPosition); }
+  function getLine(lineno)    { return this.xcall(#getLineText, lineno); }
+  
+  function gotoLine(lineNo)   { this.call_ii( 2024 /*SCI_GOTOLINE*/, lineNo,0); }
+  function gotoPos(pos)       { this.call_ii( 2025 /*SCI_GOTOPOS*/, pos,0);  }
+
+  property targetStart(v) { get return this.call_ii( 2191 /* SCI_GETTARGETSTART */, 0, 0);
+                            set return this.call_ii( 2190 /*SCI_SETTARGETSTART*/, v, 0); }
+
+  property targetEnd(v) { get return this.call_ii( 2193 /* SCI_GETTARGETEND */, 0, 0);
+                          set return this.call_ii( 2192 /*SCI_SETTARGETEND*/, v, 0); }
+
+  function replaceTarget(v) { return this.call_is( 2194 /*SCI_REPLACETARGET*/, v.length, v); }
+
+  property codePage(v) { get return this.call_ii(2137 /*SCI_GETCODEPAGE*/, 0); set this.call_ii(2037 /*SCI_SETCODEPAGE*/, v); }
+
+  function set_utf8() { this.codePage = 65001 /* SC_CP_UTF8 */ };
+  
+  property currentLineBackColor(v)      { get return this.call_ii(2097 /*SCI_GETCARETLINEBACK*/); set this.call_ii(2098 /*SCI_SETCARETLINEBACK*/, v); }
+  property currentLineStylingEnabled(v) { get return this.call_ii(2095 /*SCI_GETCARETLINEVISIBLE*/) != 0; set this.call_ii(2096 /*SCI_SETCARETLINEVISIBLE*/, v?1:0); }
+  
+  property readonly(v) { get return this.call_ii(2140 /*SCI_GETREADONLY*/); set return this.call_ii(2171 /*SCI_SETREADONLY*/, v?1:0); }
+
+  // set lexer and corresonded styles from lexers collection   
+  function setLexer(lexerName)
+  {
+    var def = Scintilla.lexers[lexerName];
+    if( def ) 
+    {
+      lexerName = def.base || lexerName;
+      this.call_is( 4006 /*SCI_SETLEXERLANGUAGE*/, 0, lexerName);
+      this.loadStyleDef(def);
+      this.fileType = lexerName;
+    }
+    this.setupTabs(TABS_USE_TAB, TABS_WIDTH);
+    this.setupMargins(true, #folding-classic);
+  }
+  
+  function newFile()
+  {
+    this.call_ii( 2004 /*SCI_CLEARALL*/, 0, 0);
+    this.call_ii( 2175 /*SCI_EMPTYUNDOBUFFER*/, 0,0);
+    this.call_ii( 2014 /*SCI_SETSAVEPOINT*/, 0,0);
+    this.changed = false;
+    this.fileType = "";
+    this.fileExt = "";
+  }
+
+  function fileToOpen()
+  {
+    var filter = fileSelectFilter();
+    return view.selectFile(#open, filter,"",this.@#filename);
+  }
+  
+  function openFile(path)
+  {
+    if(!path)
+      return this.newFile();
+    
+    var ext = path %~ "."; // strip extension
+    if( !ext )  
+      throw "wrong file name:" + path;
+      
+    this.newFile(); // clear view
+    
+    var me = this;
+    me.driver = null;
+    
+    this.loading = true;
+   
+    // load lexer for the file
+    function extcb(registered_ext, lxn, lx)
+    {
+      //stdout << registered_ext << "=" << lxn << "\n";
+      if( registered_ext == ext )
+      {
+        me.driver = lx.driver;
+        me.call_is( 4006 /*SCI_SETLEXERLANGUAGE*/, 0, lx.base || lxn );
+        me.loadStyleDef(lx);
+        return true; //stop
+      }
+    }
+    foreach_extension(extcb);
+    
+    // load file itself
+    if(this.xcall(#loadFile, path))
+    {
+      this.@#filename = path;
+      this.fileExt = ext;
+      this.loading = false;
+      return true;
+    }
+    this.loading = false;
+    return false;
+  }
+
+  function activate() // this scintilla view is made active
+  {  
+    if(this.driver) 
+      this.driver.attach(this);
+  }
+  function deactivate() // this scintilla view is made inactive
+  {  
+    if(this.driver) 
+      this.driver.detach(this);
+  }
+  
+
+  function close()  
+  {
+    if( this.changed )
+    {
+      var v = view.msgbox( #question, "Document was changed.<br/>Do you want to save it?", "Close document:", 
+        [ 
+          { id:#yes, text:"Save and close" }, 
+          { id:#no, text:"Just close" },
+          { id:#cancel, text:"Cancel closing" }
+        ]
+      );
+      if( v == #cancel )
+        return false;
+      else if( v == #yes )
+      {
+        return this.save();
+      }
+      //else if( v == #no )
+      //  return true;
+    }
+    return true;
+  }
+
+  function save()
+  {
+    if(this.changed && !this.saveFile())
+    {
+      var msg = String.printf("Error while saving document:<br/>%s",this.@#filename);
+      view.msgbox( #alert, msg);
+      return false;
+    }  
+    return true;
+  } 
+
+  function saveFile()
+  {
+    if(!this.@#filename)
+      return this.saveFileAs() && this.updateToolbar();
+    else 
+      return this.xcall(#saveFile, this.@#filename) != 0 && this.updateToolbar();
+  }
+  
+  function saveFileAs()
+  {
+    var filter = fileSelectFilter();
+    var ext = "";
+    /*var ext = "";
+    var definedLX = this.attributes#lexer;
+    if( definedLX )
+    {
+      var lx = Scintilla.lexers[definedLX];
+      filter = lx.files.filter;
+      ext = lx.files.ext[0];
+    }
+    else // otherwise build full list from filters of all registered lexers
+      for( var lxn in Scintilla.lexers )
+        filter += Scintilla.lexers[lxn].files.filter;*/
+        
+    var filename = view.selectFile(#save, filter, ext);
+    if( !filename ) return true;
+    
+    if(this.xcall(#saveFile, filename) != 0)
+    {
+      this.@#filename = filename;
+      this.tab.text = getFileLabel(filename);
+      this.tab.@#filename = filename;
+      return true;
+    }
+    return false;
+  }   
+  
+  function doUndo()       { this.call_ii(2176/*SCI_UNDO*/); }
+  function doCut()        { this.call_ii(2177/*SCI_CUT*/); }
+  function doCopy()       { this.call_ii(2178/*SCI_COPY*/); }
+  function doPaste()      { this.call_ii(2179/*SCI_PASTE*/); }
+  function doSelectAll()  { this.call_ii(2013/*SCI_SELECTALL*/); }
+
+  function canUndo()      { return this.call_ii(2174/*SCI_CANUNDO*/) != 0; }
+  function canCut()       { return this.hasSelection && !this.readonly; }
+  function canCopy()      { return this.hasSelection; }
+  function canPaste()     { return this.call_ii(2173/*SCI_CANPASTE*/) != 0; }
+  function canSelectAll() { return this.textLength != 0; }
+  
+  function bindToolbar(tb)
+  {
+    var me = this;
+    function bind( selector, func, event_sym = #onClick)
+    {
+      var btn = tb.select(selector); if(!btn) return;
+      btn[event_sym] = func;
+      return btn;
+    }
+    bind( #undo,  ::me.doUndo() );
+    bind( #copy,  ::me.doCopy() );
+    bind( #cut,   ::me.doCut() );
+    bind( #paste, ::me.doPaste() );
+    bind( #save,  ::me.saveFile() );
+    this.toolbar = tb;
+    this.updateToolbar();
+  }
+  
+  function updateToolbar()
+  {
+    var toolbar = this.toolbar;
+    if( !toolbar )
+      return;
+    function enable( selector, onOff )
+    {
+      var btn = toolbar.select(selector); if(!btn) return;
+      btn.enabled = onOff;
+    }
+    enable( #undo,  this.canUndo() );
+    enable( #copy,  this.canCopy() );
+    enable( #cut,   this.canCut() );
+    enable( #paste, this.canPaste() );
+    enable( #save,  this.changed );
+    return true;
+  }
+
+  property wrapMode(v)
+  {
+    var c = [#none,#word,#char];
+    get 
+      return c[ this.call_ii(2269 /*SCI_GETWRAPMODE*/) ];
+    set
+      this.call_ii(2268 /*SCI_SETWRAPMODE*/, c.indexOf(v));
+    return v;  
+  }
+  
+  function doSearch(text, forward = true, matchCase = false, wholeWord = false)
+  {
+    const SCFIND_WHOLEWORD = 2;
+    const SCFIND_MATCHCASE = 4;
+    const SCFIND_WORDSTART = 0x00100000;
+    const SCFIND_REGEXP = 0x00200000;
+    const SCFIND_POSIX = 0x00400000; // what a heck is that?
+    var mode = 0;
+    if( matchCase ) mode |= SCFIND_MATCHCASE;
+    if( wholeWord ) mode |= SCFIND_WHOLEWORD;
+    var code = forward? 2367 /*SCI_SEARCHNEXT*/ : 2368 /*SCI_SEARCHPREV*/ ;
+    if( forward )
+      this.caretPosition = this.anchorPosition = Integer.max(this.caretPosition,this.anchorPosition);
+    else 
+      this.caretPosition = this.anchorPosition = Integer.min(this.caretPosition,this.anchorPosition);
+    this.caretPosition = this.anchorPosition;
+    this.call_ii(2366 /*SCI_SEARCHANCHOR*/, 0, 0); 
+    var r = this.call_is(code, mode, text); 
+    if(r >= 0)
+    {
+      this.call_ii(2169 /*SCI_SCROLLCARET*/, 0, 0); 
+      return true;
+    }
+    return false;
+  }
+  
+  //+ User events. 
+  //  Overridable methods.
+  function onFileOpenRequest() {} // ctrl+'O' pressed
+  function onFileNewRequest() {}  // ctrl+'N' pressed
+  function onFilePrintRequest() {}  // ctrl+'P' pressed
+  function onShortcutKey(keyCode, shiftPressed, ctrlPressed, altPressed) {} // return true if handled
+  function onStatusChanged(changed) // changed == true - document is getting state "changed", false - otherwise
+  { 
+    if(this.tab)
+      this.tab.checked = changed; 
+  } 
+
+  function onCharAdded( charCode ) 
+  {
+     if( this.autoindent && (charCode == '}' || charCode == ']'))
+     {
+        var currLineNo = this.currentLine;
+        var currLine = this.getLine(currLineNo);
+        if( currLine.length >= (TABS_WIDTH+1) && currLine.match(/^\s*[}\]]/) )
+        {
+           var pos = this.linePos(currLineNo);
+           this.targetStart = pos;
+           this.targetEnd = pos + TABS_WIDTH;
+           this.replaceTarget("");
+        }
+     } else
+     if( this.autoindent && charCode == '\n')
+     {
+        var currLine = this.currentLine;
+        if( currLine > 0 )
+        {
+          var prevLineLength = this.lineLength(currLine - 1);
+          var prevLine = this.getLine(currLine - 1);
+          var n = prevLine.search("[^\b ]");
+          var insert = "";
+          if( n > 0 )
+            insert = prevLine.substr(0, n);
+
+          // add spaces at the beginning of block
+          var c = "";
+          if( prevLine.length > 2 && ((c = prevLine[prevLine.length - 3]) == '{' || c == '[') )
+          {
+            for(var i = 0; i < TABS_WIDTH; i++)
+              insert += " ";
+          }
+          this.selection = insert; 
+        }
+     }
+  }
+   
+  function onDoubleClick( lineNo, position /*from doc start*/, shiftPressed, ctrlPressed, altPressed ) {}  
+  function onUpdateUI() // something was changed, time to update toolbars, etc.
+  { 
+    this.post(this.updateToolbar,true); 
+  } 
+  function onSearchRequest() { showSearchReplace(false); }
+  function onReplaceRequest() { showSearchReplace(true); }
+  
+  function onGotFocus() 
+  {
+    var tb = self.select("#toolbar");
+    if( tb )
+      this.bindToolbar(tb);
+  }
+  function onLostFocus() {}
+  function onChangedStatus(changed) {}  // changed == true - document was changed by the user
+  
+  function onDocumentChange() {}        // some change happen in the document
+  //- User events.
+    
+}
+
+include "schemas/html.tis";
+include "schemas/tiscript.tis";
+include "schemas/css.tis";
+include "schemas/cpp.tis";
+
+// Internal methods that not supposed to be called directly.
+
+function Scintilla.gotoToBracket()
+{
+  var pos = this.call_ii(2353/*SCI_BRACEMATCH*/, this.caretPosition );
+  if( pos >= 0 )
+    this.gotoPos(pos);
+  return true; // consumed
+}
+
+Scintilla.shortcuts = 
+[
+  { code: ']', ctrl:true, shift:false, alt:false, handler: #gotoToBracket }, // ctrl+']' - moves caret to closing bracket (a la VS)
+  { code: 'S', ctrl:true, shift:false, alt:false, handler: #saveFile },
+  { code: 'S', ctrl:true, shift:true,  alt:false, handler: #saveFileAs },
+  { code: 'O', ctrl:true, shift:false, alt:false, handler: #onFileOpenRequest },
+  { code: 'N', ctrl:true, shift:false, alt:false, handler: #onFileNewRequest },
+  { code: 'P', ctrl:true, shift:false, alt:false, handler: #onFilePrintRequest },
+  { code: 'F', ctrl:true, shift:false, alt:false, handler: #onSearchRequest },
+  { code: 'H', ctrl:true, shift:false, alt:false, handler: #onReplaceRequest },
+  { code: 'C', ctrl:true, shift:false, alt:false, handler: #doCopy },
+  { code: 'X', ctrl:true, shift:false, alt:false, handler: #doCut },
+  { code: 'V', ctrl:true, shift:false, alt:false, handler: #doPaste },
+  { code: 'A', ctrl:true, shift:false, alt:false, handler: #doSelectAll },
+];
+
+function Scintilla.prepareContextMenu(menu, position)
+{
+  function enable( itemSelector, onOff )
+  {
+    var item = menu.select(itemSelector);
+    if(item) item.enabled = onOff; 
+  }
+  enable("[command='behavior:scintilla:undo']", this.canUndo() );
+  enable("[command='behavior:scintilla:cut']", this.canCut() );
+  enable("[command='behavior:scintilla:copy']", this.canCopy() );
+  enable("[command='behavior:scintilla:paste']",  this.canPaste() );
+  enable("[command='behavior:scintilla:selectall']",  this.canSelectAll() );
+  // setup menu click handler
+  var me = this;
+  this.onMenuItemClick = function(item) 
+  {
+    switch(item.@#command)  // short form of item.attributes["command"]
+    {
+      case "behavior:scintilla:undo": me.doUndo(); break;
+      case "behavior:scintilla:cut":  me.doCut(); break;
+      case "behavior:scintilla:copy": me.doCopy(); break;
+      case "behavior:scintilla:paste": me.doPaste(); break;
+      case "behavior:scintilla:selectall": me.doSelectAll(); break;
+    }
+    return true;
+  }
+}
+
+function Scintilla.onControlEvent(evt)
+{
+  if(evt.type == Event.MENU_ITEM_CLICK && typeof this.onMenuItemClick == #function)  
+    return this.onMenuItemClick( evt.target );
+}
+
+//+ Lexer and styles support 
+  
+function Scintilla.setStyle(styleDef)
+{
+  var id = styleDef.id || 0;
+  var t ;
+  t = styleDef.fore;      if( t !== undefined ) this.call_ii( 2051 /*SCI_STYLESETFORE*/,   id, t);
+  t = styleDef.back;      if( t !== undefined ) this.call_ii( 2052 /*SCI_STYLESETBACK*/,   id, t);
+  t = styleDef.bold;      if( t !== undefined ) this.call_ii( 2053 /*SCI_STYLESETBOLD*/,   id, t?1:0);
+  t = styleDef.italic;    if( t !== undefined ) this.call_ii( 2054 /*SCI_STYLESETITALIC*/, id, t?1:0);
+  t = styleDef.size;      if( t !== undefined ) this.call_ii( 2055 /*SCI_STYLESETSIZE*/,   id, t);
+  t = styleDef.font;      if( t !== undefined ) this.call_is( 2056 /*SCI_STYLESETFONT*/,   id, t); 
+  t = styleDef.wholeLine; if( t !== undefined ) this.call_ii( 2057 /*SCI_STYLESETEOLFILLED*/,   id, t?1:0);
+  t = styleDef.underline; if( t !== undefined ) this.call_ii( 2059 /*SCI_STYLESETUNDERLINE*/,   id, t?1:0);
+}
+function Scintilla.setKeywords(id, sKeywords) {  this.call_is( 4005 /*SCI_SETKEYWORDS*/, id, sKeywords); }
+function Scintilla.setStyleBits(n)            {  this.call_ii( 2090 /*SCI_SETSTYLEBITS*/, n, 0); }
+function Scintilla.setDefaultStyle(sd)        {  sd.id = 32; /*STYLE_DEFAULT*/; this.setStyle(sd); } 
+function Scintilla.initAllStyles()            {  this.call_ii( 2050 /*SCI_STYLECLEARALL*/, 0, 0); } // Copies global style to all others  
+function Scintilla.setProperty(propName, propValue)
+{
+  this.call_ss( 4004 /*SCI_SETPROPERTY*/, propName, propValue.toString());
+}
+  
+function Scintilla.loadStyleDef(sd)
+{
+  this.setStyleBits(0x7);
+  
+  this.setDefaultStyle(defaultStyle);
+  this.initAllStyles();
+  
+  for(var pn in sd.properties)   this.setProperty(pn,sd.properties[pn]);
+
+  for( var kwgn in sd.keywords ) { var kwg = sd.keywords[kwgn];  this.setKeywords(kwg.id, kwg.list);  }
+  for( var stn in sd.styles )    { var st = sd.styles[stn];      this.setStyle(st);  }
+  
+  this.wrapMode = sd.wrapMode || #none;
+  
+  this.call_ii(4003/*SCI_COLOURISE*/, 0, this.textLength);
+}
+  
+function Scintilla.setupTabs(useTab, tabWidth)
+{
+  this.call_ii( 2036 /*SCI_SETTABWIDTH*/,tabWidth);
+  this.call_ii( 2124 /*SCI_SETUSETABS*/,useTab?1:0);
+}
+  
+function Scintilla.setupMargins(lineNumbers, foldingType)
+{
+  var n = 0;
+  
+  const SCI_SETMARGINTYPEN = 2240;
+  const SCI_GETMARGINTYPEN = 2241;
+  const SCI_SETMARGINWIDTHN = 2242;
+  const SCI_GETMARGINWIDTHN = 2243;
+  const SCI_SETMARGINMASKN = 2244;
+  const SCI_GETMARGINMASKN = 2245;
+  const SCI_SETMARGINSENSITIVEN = 2246;
+  const SCI_GETMARGINSENSITIVEN = 2247;
+  
+  const SCI_SETFOLDFLAGS = 2233;
+  
+  const SC_MARGIN_SYMBOL = 0;
+  const SC_MARGIN_NUMBER = 1;
+  const SC_MARGIN_BACK = 2;
+  const SC_MARGIN_FORE = 3;
+  const SC_MASK_FOLDERS = 0xFE000000;
+    
+  if(lineNumbers)
+  {
+    this.call_ii( SCI_SETMARGINTYPEN, 0, SC_MARGIN_NUMBER);
+    this.call_ii( SCI_SETMARGINWIDTHN, 0, 30);
+  }
+  else
+  {
+    this.call_ii( SCI_SETMARGINTYPEN, 0, 0);
+    this.call_ii( SCI_SETMARGINWIDTHN, 0, 0);
+  }
+  
+  if(foldingType)
+  {
+    this.call_ii( SCI_SETMARGINTYPEN, 1, SC_MARGIN_SYMBOL);
+    this.call_ii( SCI_SETMARGINMASKN, 1, SC_MASK_FOLDERS);
+    this.call_ii( SCI_SETMARGINWIDTHN, 1, 12);
+    this.call_ii( SCI_SETMARGINSENSITIVEN, 1, 1);
+  }
+  else 
+    return;
+
+  var me = this;
+  function defineMarker(marker, markerType, fore, back)
+  {
+    me.call_ii( 2040 /*SCI_MARKERDEFINE*/, marker, markerType);
+    me.call_ii( 2041 /*SCI_MARKERSETFORE*/, marker, fore);
+    me.call_ii( 2042 /*SCI_MARKERSETBACK*/, marker, back);
+  }
+ 
+  const SC_MARKNUM_FOLDEREND = 25;
+  const SC_MARKNUM_FOLDEROPENMID = 26;
+  const SC_MARKNUM_FOLDERMIDTAIL = 27;
+  const SC_MARKNUM_FOLDERTAIL = 28;
+  const SC_MARKNUM_FOLDERSUB = 29;
+  const SC_MARKNUM_FOLDER = 30;
+  const SC_MARKNUM_FOLDEROPEN = 31;
+
+  const SC_MARK_CIRCLE = 0;
+  const SC_MARK_ROUNDRECT = 1;
+  const SC_MARK_ARROW = 2;
+  const SC_MARK_SMALLRECT = 3;
+  const SC_MARK_SHORTARROW = 4;
+  const SC_MARK_EMPTY = 5;
+  const SC_MARK_ARROWDOWN = 6;
+  const SC_MARK_MINUS = 7;
+  const SC_MARK_PLUS = 8;
+  const SC_MARK_VLINE = 9;
+  const SC_MARK_LCORNER = 10;
+  const SC_MARK_TCORNER = 11;
+  const SC_MARK_BOXPLUS = 12;
+  const SC_MARK_BOXPLUSCONNECTED = 13;
+  const SC_MARK_BOXMINUS = 14;
+  const SC_MARK_BOXMINUSCONNECTED = 15;
+  const SC_MARK_LCORNERCURVE = 16;
+  const SC_MARK_TCORNERCURVE = 17;
+  const SC_MARK_CIRCLEPLUS = 18;
+  const SC_MARK_CIRCLEPLUSCONNECTED = 19;
+  const SC_MARK_CIRCLEMINUS = 20;
+  const SC_MARK_CIRCLEMINUSCONNECTED = 21;
+  const SC_MARK_BACKGROUND = 22;
+  const SC_MARK_DOTDOTDOT = 23;
+  const SC_MARK_ARROWS = 24;
+  const SC_MARK_PIXMAP = 25;
+  const SC_MARK_FULLRECT = 26;
+  const SC_MARK_LEFTRECT = 27;
+  const SC_MARK_CHARACTER = 10000;
+  
+ 	switch (foldingType)
+	{
+    case #folding-classic:
+      defineMarker(SC_MARKNUM_FOLDEROPEN, SC_MARK_BOXMINUS, RGB(0xff, 0xff, 0xff), RGB(0x80, 0x80, 0x80));
+      defineMarker(SC_MARKNUM_FOLDER, SC_MARK_BOXPLUS, RGB(0xff, 0xff, 0xff), RGB(0x80, 0x80, 0x80));
+      defineMarker(SC_MARKNUM_FOLDERSUB, SC_MARK_VLINE, RGB(0xff, 0xff, 0xff), RGB(0x80, 0x80, 0x80));
+      defineMarker(SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNER, RGB(0xff, 0xff, 0xff), RGB(0x80, 0x80, 0x80));
+      defineMarker(SC_MARKNUM_FOLDEREND, SC_MARK_BOXPLUSCONNECTED, RGB(0xff, 0xff, 0xff), RGB(0x80, 0x80, 0x80));
+      defineMarker(SC_MARKNUM_FOLDEROPENMID, SC_MARK_BOXMINUSCONNECTED, RGB(0xff, 0xff, 0xff), RGB(0x80, 0x80, 0x80));
+      defineMarker(SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNER, RGB(0xff, 0xff, 0xff), RGB(0x80, 0x80, 0x80));
+      break;
+    case #folding-rounded:
+ 			defineMarker(SC_MARKNUM_FOLDEROPEN, SC_MARK_CIRCLEMINUS, RGB(0xff, 0xff, 0xff), RGB(0x40, 0x40, 0x40));
+			defineMarker(SC_MARKNUM_FOLDER, SC_MARK_CIRCLEPLUS, RGB(0xff, 0xff, 0xff), RGB(0x40, 0x40, 0x40));
+			defineMarker(SC_MARKNUM_FOLDERSUB, SC_MARK_VLINE, RGB(0xff, 0xff, 0xff), RGB(0x40, 0x40, 0x40));
+			defineMarker(SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNERCURVE, RGB(0xff, 0xff, 0xff), RGB(0x40, 0x40, 0x40));
+			defineMarker(SC_MARKNUM_FOLDEREND, SC_MARK_CIRCLEPLUSCONNECTED, RGB(0xff, 0xff, 0xff), RGB(0x40, 0x40, 0x40));
+			defineMarker(SC_MARKNUM_FOLDEROPENMID, SC_MARK_CIRCLEMINUSCONNECTED, RGB(0xff, 0xff, 0xff), RGB(0x40, 0x40, 0x40));
+			defineMarker(SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNERCURVE, RGB(0xff, 0xff, 0xff), RGB(0x40, 0x40, 0x40));
+      break;
+    case #folding-plus:      
+			defineMarker(SC_MARKNUM_FOLDEROPEN, SC_MARK_MINUS, RGB(0xff, 0xff, 0xff), RGB(0, 0, 0));
+			defineMarker(SC_MARKNUM_FOLDER, SC_MARK_PLUS, RGB(0xff, 0xff, 0xff), RGB(0, 0, 0));
+			defineMarker(SC_MARKNUM_FOLDERSUB, SC_MARK_EMPTY, RGB(0xff, 0xff, 0xff), RGB(0, 0, 0));
+			defineMarker(SC_MARKNUM_FOLDERTAIL, SC_MARK_EMPTY, RGB(0xff, 0xff, 0xff), RGB(0, 0, 0));
+			defineMarker(SC_MARKNUM_FOLDEREND, SC_MARK_EMPTY, RGB(0xff, 0xff, 0xff), RGB(0, 0, 0));
+			defineMarker(SC_MARKNUM_FOLDEROPENMID, SC_MARK_EMPTY, RGB(0xff, 0xff, 0xff), RGB(0, 0, 0));
+			defineMarker(SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_EMPTY, RGB(0xff, 0xff, 0xff), RGB(0, 0, 0));
+      break;
+    case #folding-arrow:            
+			defineMarker(SC_MARKNUM_FOLDEROPEN, SC_MARK_ARROWDOWN, RGB(0, 0, 0), RGB(0, 0, 0));
+			defineMarker(SC_MARKNUM_FOLDER, SC_MARK_ARROW, RGB(0, 0, 0), RGB(0, 0, 0));
+			defineMarker(SC_MARKNUM_FOLDERSUB, SC_MARK_EMPTY, RGB(0, 0, 0), RGB(0, 0, 0));
+			defineMarker(SC_MARKNUM_FOLDERTAIL, SC_MARK_EMPTY, RGB(0, 0, 0), RGB(0, 0, 0));
+			defineMarker(SC_MARKNUM_FOLDEREND, SC_MARK_EMPTY, RGB(0xff, 0xff, 0xff), RGB(0, 0, 0));
+			defineMarker(SC_MARKNUM_FOLDEROPENMID, SC_MARK_EMPTY, RGB(0xff, 0xff, 0xff), RGB(0, 0, 0));
+			defineMarker(SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_EMPTY, RGB(0xff, 0xff, 0xff), RGB(0, 0, 0));
+      break;
+      
+  }
+ 
+}
+//- Lexer and styles  
+
+//+ Scintilla "primordial" events. 
+
+  // raised when document is getting/loosing "changed" state.
+function Scintilla.handleChangedStatus(changed) 
+  { 
+    this.changed = changed; 
+    this.onStatusChanged(changed); 
+  }
+  // raised when character has been added.
+function Scintilla.handleCharAdded(charCode) 
+  { 
+    this.onCharAdded(charCode);  
+  }
+  // raised when user attempts to modify RO document.
+function Scintilla.handleModifyAttempt() {}
+  // double click
+function Scintilla.handleDoubleClick( lineNo, position /*from doc start*/, shiftPressed, ctrlPressed, altPressed ) 
+{
+  this.onDoubleClick(lineNo, position /*from doc start*/, shiftPressed, ctrlPressed, altPressed);  
+}
+  // something was changed, time to update toolbars, etc.
+function Scintilla.handleUpdateUI() 
+{
+  this.onUpdateUI();
+}
+  // mofification notification
+function Scintilla.handleModified 
+  (
+    lineNo, // at line
+    position, // at char (from doc start)
+    modificationType, // see SC_MOD_INSERTTEXT .. SC_MOD_CHANGELINESTATE
+    linesAdded,
+    foldLevelNow,
+    foldLevelPrev
+    //text,   // modified text, can be undefined
+  ) 
+  { 
+    if(this.loading)
+      return;
+    //stdout << "changed! " << String.printf("%X",modificationType) << " " << modificationType << "\n";
+    //const SC_MOD_INSERTTEXT = 0x1;
+    //const SC_MOD_DELETETEXT = 0x2;
+    //const SC_MOD_CHANGESTYLE = 0x4;
+    //const SC_MOD_CHANGEINDICATOR = 0x4000;
+    //const SC_MOD_CHANGELINESTATE = 0x8000; 
+    var mod = (modificationType & 3) != 0; // either inserted or deleted
+    if( mod && this.onDocumentChange)
+      this.onDocumentChange();
+  }
+  // click on margin
+function Scintilla.handleMarginClick
+  (
+    lineNo, // at line
+    position, // at char (from doc start)
+    marginNo, 
+    shiftPressed, ctrlPressed, altPressed 
+  ) {}
+  // hot spot click, no idea what is a heck that hot spot
+function Scintilla.handleHotSpotClick( position /*from doc start*/, shiftPressed, ctrlPressed, altPressed ) {}
+  // same thing but twice.
+function Scintilla.handleHotSpotDoubleClick( position /*from doc start*/, shiftPressed, ctrlPressed, altPressed ) {}
+  // indicator press
+function Scintilla.handleIndicatorPress( position /*from doc start*/, shiftPressed, ctrlPressed, altPressed ) {}
+  // indicator release
+function Scintilla.handleIndicatorRelease( position /*from doc start*/, shiftPressed, ctrlPressed, altPressed ) {}
+  // key pressed
+function Scintilla.handleKeyPressed( keyCode, shiftPressed, ctrlPressed, altPressed  )
+  {
+    function eq(v1, v2) { return (v1 == undefined) || (v1 == v2); }
+
+    function getMemberOf(obj, member) { return obj[member] || !obj.prototype || getMemberOf(obj.prototype, member); }
+
+   // stdout.printf("keyCode %V, shift %V, alt %V, ctrl %V\n", keyCode, shiftPressed, altPressed, ctrlPressed);
+
+   // as this keyboard event is delivered directly to windowed Scintilla ask first the DOM to handle it:
+   if( this.sendKeyEvent 
+            { type: Event.KEY_DOWN, 
+              altKey: altPressed, 
+              ctrlKey: ctrlPressed, 
+              shiftKey:shiftPressed, 
+              keyCode:keyCode } ) 
+                return true; // ok it was handled by someone else above, nothing to do with it here.
+
+    if(ctrlPressed || altPressed)
+    {
+      for(var skd in Scintilla.shortcuts)
+      {
+        if( skd.code == keyCode && 
+            eq(skd.ctrl,ctrlPressed) &&
+            eq(skd.shift,shiftPressed) &&
+            eq(skd.alt,altPressed)) 
+            {
+              var handler = getMemberOf(this, skd.handler);
+
+              if(typeof handler == #function)
+              {
+                this.post(handler);
+              }
+              return true;
+            }
+      }
+      return this.onShortcutKey(keyCode, shiftPressed, ctrlPressed, altPressed);
+    }
+  }
+  // on context menu called, return true if you will handle it on your side
+function Scintilla.handleContextMenu( position, x,y ) 
+  {
+    var cmenu = self.select("menu.scintilla.context");
+    if( cmenu )
+    {
+      this.prepareContextMenu(cmenu, position);
+      this.popup(cmenu, x, y);
+      return true;
+    }
+  }
+
+  // scintilla got focus
+function Scintilla.handleGotFocus() { this.onGotFocus(); }
+  // scintilla lost focus
+function Scintilla.handleLostFocus() { this.onLostFocus(); }
+  
+   
+//- Scintilla "primordial" events.
+

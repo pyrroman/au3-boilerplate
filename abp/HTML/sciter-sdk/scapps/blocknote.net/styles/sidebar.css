@@ -1,0 +1,171 @@
+
+widget#sidebar
+{
+  width:*;
+  height:*;
+  style-set: "side-bar";
+}
+
+@set side-bar 
+{
+  :root
+  {
+    prototype: FoldersPanel;    
+    background:window;
+    padding:0;
+    margin:0;
+    height:*;
+    overflow:hidden; /* or auto? */
+  }
+
+  div.caption
+  {
+    flow:horizontal;
+  }
+  widget#select-folder 
+  {  
+    behavior:clickable;
+    display:inline-block;
+    height:*;
+    width:max-intrinsic;
+    margin-right:*;
+    padding:* 2px;
+    vertical-align:center;
+    background: @TB_BUTTON_BACK_NORMAL;
+  }
+  widget#select-folder:hover 
+  {  
+    background: @TB_BUTTON_BACK_HOVER;
+  }
+  widget#select-folder:active 
+  {  
+    background: @TB_BUTTON_BACK_ACTIVE;
+  }
+  
+  widget.ctl
+  {
+    behavior: clickable;  
+    width:max-intrinsic;
+    height:*;
+    background: @TB_BUTTON_BACK_NORMAL;
+    padding:0 2px;
+    vertical-align:middle;
+    color: @TB_BUTTON_TEXT_COLOR;
+  }
+  
+  widget.ctl > text
+  {
+    font: 10pt Marlett;
+  }
+  
+  widget.ctl:disabled
+  {
+    color: threedface;
+    background: @TB_BUTTON_BACK_DISBALED;
+  }
+  widget.ctl:hover
+  {
+    background: @TB_BUTTON_BACK_HOVER;
+  }
+  widget.ctl:active
+  {
+    background: @TB_BUTTON_BACK_ACTIVE;
+  }
+  
+  div.content 
+  {
+    border:1px solid;
+    border-color: @VIEW_BORDER;
+    width:*;
+    height:*;
+  }
+  
+  ul#folder-list
+  {
+    background-color:window window infobackground infobackground;
+    margin:0;
+    padding: 3px 3px 3px 16px;
+    min-height:3em;
+  }
+  ul#folder-list:rtl 
+  {
+    padding: 3px 16px 3px 3px;
+  }
+  
+  ul#folder-list > li
+  {
+    behavior: hyperlink;
+    border-top: 1px dashed threedshadow;
+    list-style-image: url("stock:arrow-right");
+    padding:10px 0;
+  }
+  ul#folder-list > li:rtl
+  {
+    list-style-image: url("stock:arrow-left");
+  }
+  
+  ul#folder-list > li:first-child
+  {
+    list-marker-color: tomato;
+    list-style-image: url("stock:arrow-up");
+  }
+  
+  ul#folder-list > li:hover
+  {
+    text-decoration:underline;
+  }
+  
+  widget#folder-view
+  {
+    prototype: FolderView; 
+    width:*;
+    height:*;
+    margin:3px;        
+    background-image:none;
+    background-color:window;
+  }
+  
+  widget#folder-view options > :first-child /* caption */
+  {
+    padding-top:2px;
+    padding-bottom:2px;
+    font-weight:bold;
+    margin:0;
+  }
+      
+  /* all options with more than one child (that is caption) 
+     uncomment this if you need tree lines.
+  widget#folder-view options:has-children > * 
+  {
+    display: list-item;
+    list-style-type: tree-line;
+    outline-color:threedshadow;
+  } */ 
+  
+  widget#folder-view options
+	{
+		padding-left:16px;
+	}
+	widget#folder-view options:rtl
+	{
+    padding-right:16px;
+		padding-left:0;
+	}  
+  widget#folder-view option
+  {
+    //behavior: shell-icon; /* see: behavior_shell_icon.cpp  */
+    margin-left:16px;
+    line-height:1.4em;
+    //padding-top:1px;
+    //padding-bottom:2px;
+    //display:list-item;
+    //list-style-type: disc;    
+  }
+  widget#folder-view option:rtl
+  {
+    margin-right:20px;
+		margin-left:0;
+  }
+  
+  
+}

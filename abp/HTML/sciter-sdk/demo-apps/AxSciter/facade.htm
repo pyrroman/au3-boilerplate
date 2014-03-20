@@ -1,0 +1,23 @@
+<html>
+<head>
+  <style>
+    body 
+    { 
+      margin:0; 
+      padding:0; 
+      background-color: yellow red blue green; 
+      flow:vertical;
+      size:*;
+    }
+    body > text { white-space:nowrap; width:max-intrinsic; margin:*; color:white; }
+  </style>
+  <script type="text/tiscript">
+     $(#version).text = String.printf("%d.%d.%d.%d", 
+		  (Sciter.VERSION >> 16) & 0xffff, Sciter.VERSION & 0xffff,
+		  (Sciter.REVISION >> 16) & 0xffff, Sciter.REVISION & 0xffff);
+  </script>
+</head>
+<body>
+  <text #logo>Sciter <span #version /></text>
+</body>
+</html>

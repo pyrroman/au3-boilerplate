@@ -1,0 +1,93 @@
+
+//|
+//| The Sequence function allows to define set of "timing triggers" on elements (given by selectors in params).
+//|
+
+function sequence(name, duration, params..)
+{
+  var now = Date.ticks();    // start time
+  var end = now + duration;  // end time of the sequence.
+  var n_animations = 0; // number of animations triggered by the sequencer.
+  
+  var items = params;
+  if( items.length == 1 && typeof items[0] == #array)
+    items = items[0];
+  
+  // fill elements and times arrays and init items:
+  for( var item in items )
+  {
+    var start = (duration * (item.start || 0)) / 100; // cvt start from percentage to milliseconds
+    var end = (duration * (item.end || item.start || 0)) / 100; // cvt end from percentage to milliseconds (if any)
+    var timeToStart = now + start;
+    var selector = item.selector;
+    if( !selector ) continue;
+
+    item.elements = self.selectAll(selector); // gather all elements matching the selector.
+    item.times = []; // make times array
+      
+    if(item.elements.length == 0)
+      continue;
+
+    var step = 0;
+    if( start < end && item.elements.length > 1) 
+      step = (end - start) / (item.elements.length - 1);
+    
+    for(var el in item.elements) 
+    {                                   // for each matching element set @sequence="name" 
+      el.attributes["sequence"] = name; // this should turn elements in their initial pre-transition states
+      el.attributes["sequence-state"] = "initial";
+      item.times.push(timeToStart);
+      timeToStart += step;
+    }
+  }
+
+  // used for counting running CSS animation
+  function onAnimationEvent(evt) 
+  { 
+    if(evt.reason) ++n_animations; // started
+    else           --n_animations; // stopped
+  }
+
+  function finishSequence()
+  {
+    for( var item in items )
+    {
+      for( var element in item.elements )
+      {
+        // remove everything we have set for sequencing
+        element.unsubscribe(onAnimationEvent,Event.BEHAVIOR_EVENT, Event.ANIMATION);
+        element.attributes["sequence"] = undefined;
+        element.attributes["sequence-state"] = undefined;
+      }
+      item.elements = null;
+      item.times = null;
+    }
+  }
+
+  function step()
+  {
+    var currentTime = Date.ticks();
+    for( var item in items )
+    {
+      for( var (i,element) in item.elements) 
+      {
+        var timeToStart = item.times[i];
+        if( timeToStart == 0 ) continue;
+        if( timeToStart <= currentTime )
+        {
+          element.subscribe(onAnimationEvent,Event.BEHAVIOR_EVENT, Event.ANIMATION); // we need animation-end notifications
+          element.attributes["sequence-state"] = "started";
+          item.times[i] = 0; // mark it as done (started)
+        }
+      }
+    }
+    if(currentTime > end && n_animations <= 0) // if total time is elapsed and all animations are finished:
+    { 
+      finishSequence(); 
+      return false; 
+    }
+    return true;
+  }
+  self.timer(20,step);
+ 
+}

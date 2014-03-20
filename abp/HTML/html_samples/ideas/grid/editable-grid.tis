@@ -1,0 +1,31 @@
+include "grid.tis";
+
+class EditableGrid : Grid
+{
+  function attached()
+  {
+    this.template = this.$(:root > tr.template);
+    super.attached();
+    stdout.println(this.template);
+  }
+  
+  function onRowClick( row )
+  {
+    var n = 0;
+    var editableRow = this.editableRow || this.template;
+    for( var cell in row )
+    {
+      var editableCell = editableRow[n++];
+      var editableCellValue = (editableCell[0].value || "").toString();
+      var value = cell.text;
+      cell.clear();
+      cell.insert( editableCell[0] );
+      cell[0].value = value;
+      editableCell.text = editableCellValue;
+    }
+    editableRow.@.removeClass("editable");
+    this.editableRow = row;
+    row.@.addClass("editable");
+  }
+
+}

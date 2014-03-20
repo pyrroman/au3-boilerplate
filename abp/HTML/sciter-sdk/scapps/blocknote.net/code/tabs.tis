@@ -1,0 +1,335 @@
+
+include "xdom.tis";
+
+/* tab view model:
+  widget#tab-view 
+    -> widget.tab-strip 
+       -> widget.tabs
+          -> option #0 (tab per se)
+          -> option #1 
+          -> option #2 
+          ...
+       -> widget.ctls
+    -> widget.view #0
+    -> widget.view #1
+    -> widget.view #2
+    ...
+*/
+
+function LabelFromFileName(filename)
+{
+  return filename? filename.substr(filename.lastIndexOf("/")+1) : "(new)";
+}
+
+class TabStrip: Behavior // widget.tab-strip ctl
+{
+  function attached()
+  {
+    var tabs = Element.create { widget, class: "tabs" };
+    var ctls = Element.create { widget, class: "ctls",
+        [
+          { widget, class:"prev", "3" /* see Marlett font */ },
+          { widget, class:"next", "4" },
+          { widget, class:"close", "r" }
+        ]
+      };
+    this.insert(tabs);
+    this.insert(ctls);
+  }
+
+  function onSize()
+  {
+    // make sure that currentTab is always in the view
+    var currentTab = this.select("option:current");
+    if(currentTab)
+      currentTab.scrollToView(false,false);
+  }
+  function onControlEvent(evt)
+  {
+    if(evt.type == Event.BUTTON_PRESS)
+    {
+      var tab = evt.target;
+      if( tab.tag == "option" )
+      {
+        this.switchTab(tab); 
+        return true;
+      }
+    }
+    if(evt.type == Event.BUTTON_CLICK)
+    {
+      var ctab = this.select("widget.tabs>option:current");
+      var cls = evt.target.attributes#class;
+      switch(cls)
+      {
+        case "prev": if( ctab.prior ) this.switchTab( ctab.prior ); return true;
+        case "next": if( ctab.next ) this.switchTab( ctab.next ); return true;
+        case "close": this.closeTab( ctab ); return true;
+      }
+    }
+    return false;
+  }
+  
+  function addTab( label, filename ) 
+  {
+    var tab = this.select("option[value='%s']", filename);
+    if( !tab )
+    {
+        // create new one 
+      tab = Element.create { option, value: filename, [label] };
+      this[0].insert(tab); // add this tab to the tabs snadbox   
+    }
+    return tab;   
+  }
+  function removeTab( tab ) 
+  {
+    var n = tab.prior || tab.next; 
+    tab.detach();
+    return n;
+  }
+
+  function closeTab( tab, mode = undefined ) 
+  {
+    if( tab.view.close() )
+    {
+      var next = this.removeTab(tab);
+      if(next)
+        this.switchTab(next);
+      else if( mode != #closingAll )
+        this.parent.addView();
+      return true;
+    }
+    return false;
+  }
+  
+  function switchTab(tab)
+  {
+    var prevCurrent = this.select("widget.tabs>option:current");
+    if( prevCurrent )
+    {
+      if( prevCurrent === tab )
+        return;
+      prevCurrent.clearState(Element.STATE_CURRENT);
+      prevCurrent.view.clearState(Element.STATE_CURRENT);
+    }
+    tab.setState(Element.STATE_CURRENT);
+    tab.view.setState(Element.STATE_CURRENT);
+    this.select("widget.next").enabled = tab.next;
+    this.select("widget.prev").enabled = tab.prior;
+    //this.parent.update();
+    tab.view.activate(tab);
+    
+  }
+  
+  function getAll()
+  {
+    return this.selectAll("widget.tabs>option");
+  }
+  
+}
+
+// widget#tab-view, Tabbed View, container of widget.view elements
+// widget.view:current is visible, all others are hidden 
+// Contains: 
+//     item[0] - the TabStrip
+//     item[1] ... item[N] - views of documents, DocView
+//     item[N+1 ...] status bars for current view
+
+class TabView: Behavior
+{
+  function attached()
+  {
+    gTabbedView = this; // store it global use
+  }
+
+  property tabStrip(v) { get return this[0]; }
+
+  function addView(filename = null) // returns added view.
+  {
+    var label = LabelFromFileName(filename);
+    var tab = this.tabStrip.addTab(label, filename);
+    
+    if( !tab.view ) // so is brand new tab
+    {
+      var view = Element.create {widget, class:"view", mode:"wysiwyg" };
+      this.insert(view,1); // insert the view just after the strip.    
+      tab.view = view;   
+      view.tab = tab;
+      //this.update(); // attach styles and behaviors
+      this.switchTab(tab);
+      if( filename )
+        view.openFile(filename); 
+    }
+    else
+      this.switchTab(tab);
+    
+    return tab.view;
+  }
+  
+  function switchTab(tab)
+  {
+    this.tabStrip.switchTab(tab); // delegate it to the tab-strip
+  }
+
+  function closeTab(tab, mode = undefined)
+  {
+    return this.tabStrip.closeTab(tab, mode);
+  }
+  
+  function closeAll()
+  {
+    var all = this.tabStrip.getAll();
+    for(var t in all)
+      if( !this.closeTab(t, #closingAll) )
+        return false;
+    return true;
+  }
+  
+  property currentDoc(v)
+  {
+    get return this.select("widget.view:current");
+  }
+ 
+}
+
+class DocView: Behavior
+{
+  function attached()
+  {
+    //this.attributes#mode = "wysiwyg"; // initial mode "wysiwyg"
+    if( !this.select("widget.wysiwyg") )
+    {
+      var wysiwyg = new Element("widget"); // our richtext editor
+          wysiwyg.attributes#toolbar = "widget#toolbar";
+          wysiwyg.attributes#class = "wysiwyg";        
+          wysiwyg.attributes#content-style = "config/richtext-editing.css";        
+      this.insert(wysiwyg);
+    }
+    // and widget.source view will be created on demand
+  }
+  function activate(tab)
+  {
+    var v = this.currentView;
+    function onChanged( yes ) // updates tab @doc-changed if document was changed 
+    {
+      if(yes) 
+      {
+        if( !tab.attributes#doc-changed ) 
+        { 
+          tab.attributes#doc-changed = true; tab.update(); 
+          self.select("widget#file-save").enabled = true;
+        }
+      }
+      else // no
+      {
+        if( tab.attributes#doc-changed ) 
+        { 
+          tab.attributes.remove(#doc-changed); tab.update(); 
+          self.select("widget#file-save").enabled = false;
+        }
+      }
+    }
+    v.onDocumentChanged = onChanged;
+    
+    function updateUI(currentObjects)
+    {
+      self.select("#status").showCurrentObjects(currentObjects);
+    }
+    v.onUpdateUI = updateUI;
+    
+    v.bindToolbar( self.select(#toolbar) );
+   
+    v.setFocus();
+    self.select("widget#file-save").enabled = this.isChanged;
+    
+  }
+  
+  property currentView(v)
+  {
+    get 
+    {
+      var el = (this.attributes#mode != "wysiwyg")? this[1] : this[0];
+      return el || this[0];
+    }
+  }
+  
+  property isChanged(v)
+  {
+    get
+    {
+      return this.tab.attributes.exists("doc-changed");
+    }
+  }
+ 
+  function setMode(str_mode /*"wysiwyg" | "source"*/)
+  {
+    if( this.attributes#mode != str_mode)
+    {
+      this.attributes#mode = mode; 
+      if( str_mode == "source")
+      {
+        if( this.length == 1 ) // 
+        {
+          var srcview = new Element("widget");
+          srcview.attributes#class = "source";
+          this.insert(srcview);
+        }
+      }
+      else
+      {
+        
+      }
+      this.update(true);
+    }
+  }
+  
+  function openFile(filename)
+  {
+    this.setMode("wysiwyg");
+    this[0].openFile(filename); 
+    this.filename = filename;
+  }
+  
+  function saveFile(saveAs = false)
+  {
+    var newfn;
+    if(saveAs || !this.filename)
+    {
+      newfn = this.filename = view.selectFile(#save, gFileFilter, "htm", this.filename || "");
+      if(!newfn) return false;
+    }
+    if(this.currentView.saveFile(this.filename) && newfn)
+      this.tab.value = LabelFromFileName(newfn);
+    return true;
+  }
+  
+  function close()
+  {
+    if( this.isChanged )
+    {
+      var v = view.msgbox( #question, "Document was changed.<br/>Do you want to save it?", "Close document:", 
+        [ 
+          { id:#yes,    text:"Save and close" }, 
+          { id:#no,     text:"Just close" },
+          { id:#cancel, text:"Cancel" }
+        ]
+      );
+      if( v == #cancel )
+      {
+        return false;
+      }
+      if( v == #yes )
+      {
+        if(!this.saveFile())
+        {
+          var msg = String.format("Error while saving document in<br/>%s",this.filename);
+          view.msgbox( #alert, msg);
+          return false;
+        }  
+      }
+    }
+    this.detach();
+    return true;
+  }
+
+  
+}

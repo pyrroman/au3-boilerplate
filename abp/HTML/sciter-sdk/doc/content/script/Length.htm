@@ -1,0 +1,117 @@
+<html>
+  <head>
+    <title>TIScript - Date object</title>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>Length value type and object</h1>
+  <div align="left">
+    <table border="0" cellpadding="4" cellspacing="0" width="100%">
+      <tr>
+        <td colspan="2">
+          <div>Length type reperesents length (distance) values such as mm, cm, px, in, pt, etc.</div>
+          <p>Length values are constructed by following</p>
+          <h2>Constructor functions</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right" colspan="2"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em><strong>em</strong></em></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>(<strong> v</strong>: int | float ) : length, these functions constructs length values of correspondent type.</div></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>ex</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>(<strong> v</strong>: int | float ) : length</div></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>pr</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>(<strong> v</strong>: int | float ) : length</div></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>flex</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>(<strong> v</strong>: int | float ) : length</div></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>px</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>(<strong> v</strong>: int | float ) : length</div></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>in</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>(<strong> v</strong>: int | float ) : length</div></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>cm</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>(<strong> v</strong>: int | float ) : length</div></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>mm</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>(<strong> v</strong>: int | float ) : length</div></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>pt</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>(<strong> v</strong>: int | float ) : length</div></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>pc</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>(<strong> v</strong>: int | float ) : length</div></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>dip</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>(<strong> v</strong>: int | float ) : length</div></td></tr>
+      <tr>
+        <td colspan="2">
+          <h2>Constants</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"></td>
+        <td bgcolor="#fffff0" valign="middle"><strong>N/A</strong></td></tr>
+      <tr>
+        <td colspan="2">
+          <h2>Properties</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>units</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">read-only, <em>symbol</em>, one of:
+          <ul>
+            <li>#em - em font units;</li>
+            <li>#ex - ex font units;</li>
+            <li>#pr - percents '%';</li>
+            <li>#flex - flex units '%%' (in h-smile core);</li>
+            <li>#px - pixels, usually device dependent;</li>
+            <li>#in - inches;</li>
+            <li>#cm - centimeters;</li>
+            <li>#mm - millimeters;</li>
+            <li>#pt - typographical point (1/72 of inch)</li>
+            <li>#pc - typographical pica (1/12 of point)</li>
+            <li>#dip - device independent pixels ( 1/96 of inch )</li></ul></td></tr>
+      <tr>
+        <td colspan="2" valign="top">
+          <h2>Methods</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>parse</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p>( <strong>text</strong>: string [, defval: undefined ) : length | defval</p>
+          <p>static method (method of the class), parses text for the length value. In case of parsing failure returns value defined by defval.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>make</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>(<strong> v</strong>: int | float, <strong>units</strong>: symbol ) : length</div>
+          <p>static function, constructs length of correspondent value and the unit symbol (above).</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toString</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p>( ) : string</p>
+          <p>Returns string representation of the value, e.g. &quot;12.5pt&quot;, &nbsp;&quot;1px&quot;, etc.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toInteger</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p>( ) : int</p>
+          <p>Converts the length to integer.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toFloat</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p>( ) : float</p>
+          <p>Converts the length to float.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr></table></div>
+</body>
+</html>

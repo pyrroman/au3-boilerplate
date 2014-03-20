@@ -1,0 +1,8 @@
+ /*marker of pinned element*/
+ [pinned-by-inspector]
+ {
+    outline-offset:-3px;
+    outline-color:blue;
+    outline-width:3px;
+    outline-style:dashed;
+ }

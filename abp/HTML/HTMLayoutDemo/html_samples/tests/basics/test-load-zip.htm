@@ -1,0 +1,38 @@
+<html>
+<head>
+<style> 
+
+  html { background-color: #fff #e9e8f3 #e9e8f3 #fff; }
+    
+</style>
+  <script src="sciter:lib/root-extender.tis" type="text/tiscript"/> 
+  <script type="text/tiscript">
+  
+    function on_LoadDoc1_click(btn)
+    {
+      var sandbox = self.select("#sandbox");
+      var status = self.select("#status");
+      var url = self.url("test-load-zip.zip#test-load-html.htm");
+      sandbox.load( url ); // load test_load_zip.zip and test_load_html.htm there as a root.
+      status.value = url;
+    }
+    function on_LoadDoc2_click(btn)
+    {
+      var sandbox = self.select("#sandbox");
+      var status = self.select("#status");
+      var url = self.url("test-load-zip.zip#test-emit-html.htm");
+      sandbox.load( url ); // load test_load_zip.zip and test_emit_html.htm there as a root.
+      status.value = url;
+    }
+    </script>
+
+</head>
+
+<body>
+<button id="LoadDoc1">Load <u>test-load-html.htm</u> from test-load-zip.zip</button>
+<button id="LoadDoc2">Load <u>test-emit-html.htm</u> from test-load-zip.zip</button>
+<p id="status">&nbsp;</p>
+<frame id="sandbox" style="width:100%%; height:100%%; background-color: #ffe" />
+</body>
+
+</html>

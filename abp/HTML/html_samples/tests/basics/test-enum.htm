@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <style>
+      body { height:100%%; }
+      dialog { display:block; display-model:block-inside; max-width: max-intrinsic; border:1px solid; }
+    </style>
+    <script type="text/tiscript">
+    
+    function showContent(el)
+    {
+      for(var c in el)
+      {
+        if( c instanceof Element )
+        {
+          stdout << "[" << c.tag << "]";
+          showContent(c);
+          stdout << "[/" << c.tag << "]\n";
+        }
+        else
+          stdout << "\"" << c << "\"";
+      }
+    }
+    showContent(self);
+   
+    </script>
+  </head>
+  <body>
+    Here we go! 
+    <p>one<em>two</em>three</p>
+    <div>status</div>
+    <!-- test of unknown tag parsing -->
+    <dialog>
+      <caption>Some caption here</caption>
+      Some text here!
+      <p>one <two>two</two>three</p>
+    </dialog>
+  </body>
+</html>
+  

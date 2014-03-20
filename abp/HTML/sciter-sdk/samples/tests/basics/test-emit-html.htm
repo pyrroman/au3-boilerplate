@@ -1,0 +1,67 @@
+<html>
+<head>
+<style> 
+
+  html { background-color: #fff #e9e8f3 #e9e8f3 #fff; }
+    
+</style>
+  <script src="sciter:lib/root-extender.tis" type="text/tiscript"/> 
+  <script type="text/tiscript">
+    var sandbox = self.select("#sandbox");
+    if(!sandbox) throw "sandbox not found";
+    
+    var testStream = Stream.openString();
+    testStream << "one";
+  
+    function on_LoadDoc1_click(btn)
+    {
+      // create in-memory stream
+      var output_stream = Stream.openString();
+      // process terra script page file
+      emit("samples/sample1.tsp",output_stream);
+      // load the stream into our sandbox
+      sandbox.load( output_stream );
+    }
+    function on_LoadDoc2_click(btn)
+    {
+      // create in-memory stream
+      var output_stream = Stream.openString();
+      
+      var hello = "Hello world";
+            
+      var environment = 
+      { 
+         params:[ "One", "Two", "Three" ],
+         someFunc: function() { return hello; },
+         result: ""
+      }
+      
+      // process stream transformation script file with additonal environment object
+      // passed to the processing script.
+      
+      emit("samples/sample2.tsp",output_stream, environment);
+      
+      // stream transformation script will set environment.result value, report it:
+      self.select("#status").value = environment.result;
+      
+      // load the stream into our sandbox, second parameter specifies relative path
+      // to resolve links found in the stream, see that diamond.png image.
+      sandbox.load( output_stream );
+    }
+    </script>
+
+
+</head>
+
+<body>
+<h1>Demo of client side PHP alike processing</h1>
+<button id="LoadDoc1">Load samples/sample1.tsp</button>
+<button id="LoadDoc2">Load samples/sample2.tsp</button>
+
+<frame id="sandbox" style="width:100%%; height:100%%; background-color: #fff" />
+
+<p id="status">.</p>
+
+</body>
+
+</html>

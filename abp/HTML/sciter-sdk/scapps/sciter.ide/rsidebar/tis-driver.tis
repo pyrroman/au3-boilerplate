@@ -1,0 +1,64 @@
+include "outline-driver.tis";
+
+// handler of editing actions specific to TIS files
+namespace TISDriver: Driver 
+{
+
+  // main thing, builds outline in 'outlineWidget' from text of 'scintilla'
+  function buildCodeOutline(scintilla, outlineWidget)
+  {
+    var tree = outlineWidget;
+    if(!tree.isVisible)
+      return false;
+   
+    var text = scintilla.value;
+    tree.clear();      
+    
+    var node = tree;
+    function cb( itemType, name, lineNo, open = true )
+    {
+      //stdout.printf("%s %s (%d) %s\n", itemType, name, lineNo, open );
+      var expand = false;
+      switch(itemType)
+      {
+        case #class: 
+        case #namespace: 
+        case #type:               name = String.printf("%s %s", itemType, name); expand = true; break;
+        case #function:           name = name + "( )"; break;
+        case #property:           name = name + "="; break;
+        case #property-undefined: name = "<undefined>="; 
+          break;
+      }
+      
+      if( open )
+      {
+        var n = new Element( "option",name);
+            n.startLineNo = lineNo;
+            n.@#type = itemType.toString();
+        node.insert(n);
+        if(expand)
+            n.state.expanded = true;
+        else
+            n.state.collapsed = true;
+        node = n;
+      }
+      else
+      {
+        node.endLineNo = lineNo;
+        node = node.parent;
+      }
+    }
+    
+    try
+    {
+      inspectCode( text, cb ); // call of builtin inspectCode() function   
+    }
+    catch(e)
+    {
+      node.endLineNo = node.startLineNo;
+      node.insert( String.printf("<pre .error>%s</pre>",e.toString()))
+    }
+    
+    //stdout << "changed!\n";
+  }
+}

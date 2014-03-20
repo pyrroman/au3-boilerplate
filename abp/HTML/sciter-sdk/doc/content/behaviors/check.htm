@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <meta name="generator" content="h-smile:richtext"/>
+    <meta name="source" content="http://www.terrainformatica.com/wiki/doku.php?id=h-smile:built-in-behaviors:checkbox"/>
+  </head>
+<body>
+  <h1><a name="behaviorradio" id="behaviorradio">behavior: check</a></h1>
+  <p>Standard checkbox button implementation.</p>
+  <h2><a name="elements" id="elements">Elements</a></h2>
+  <p>that have this behavior applied by default:</p>
+  <ul>
+    <li><code>&lt;input type=&quot;checkbox&quot;&gt;</code> - standard HTML inline checkbox button;</li>
+    <li><code>&lt;widget type=&quot;checkbox&quot;&gt;</code> - checkbox button - block;</li>
+    <li><code>&lt;button type=&quot;checkbox&quot;&gt;</code> - Windows like inline radio button, use it as <code>&lt;button type=вЂњradioвЂќ&gt;caption&lt;/button&gt;</code>.</li></ul>
+  <h2><a name="attributes" id="attributes">Attributes</a></h2>
+  <p>that this behavior knows about:</p>
+  <ul>
+    <li><code>checked</code> - if provided will initialize value of runtime state of the flag <em>checked</em>.</li>
+    <li><code>name=&quot;name&quot;</code> - standard attribute <em>name</em> - name of the input element on a form.</li></ul>
+  <h2><a name="events" id="events">Events</a></h2>
+  <p>Together with the standard set of events (mouse, keyboard, focus) <em>behavior: radio</em> generates:</p>
+  <ul>
+    <li>BUTTON_STATE_CHANGED event - the button just changed its state to checked. Asynchronous event.</li>
+    <li>BUTTON_PRESS event - mouse down or <code>spacebar</code> key down when button is in focus. Synchronous event.</li></ul>
+  <h2><a name="value" id="value">Value</a></h2>
+  <p>type <code>json::value::T_BOOL</code>, reflects current status of <code>:checked</code> state flag.</p>
+</body>
+</html>

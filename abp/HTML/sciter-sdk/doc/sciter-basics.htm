@@ -1,0 +1,197 @@
+﻿<html>
+  <head>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>Basics</h1>
+  <p>6 steps you will need to do to integrate Sciter engine into your application:</p>
+  <ol>
+    <li>To create instance of Sciter engine,</li>
+    <li>To load content in it (HTML with CSS and script references);</li>
+    <li>To pass Windows messages to Sciter's window procedure (optional, see below)</li>
+    <li>To handle notifications (callbacks) from Sciter (optional).</li>
+    <li>To change content of the window, call DOM methods, etc.</li>
+    <li>You may want to implement native, your application specific, methods that are callable from script.</li></ol>
+  <p>To create instance of Sciter you will need either to create new Sciter window or to attach (mix-in) Sciter engine to existing window.</p>
+  <p>Handle of the Sciter engine is HWND of its window.</p>
+  <h1>Creation of Sciter instance and content loading</h1>
+  <h2>Method A. Creation of new window</h2>
+  <pre class="brush: cpp;">// Creating the window using standard Windows way:
+HWND hSciter = CreateWindow( SciterClassNameT(), ... );
+
+// loading content from file or from URL:
+SciterLoadFile(hSciter, L&quot;file/path/or/URL/UTF-16&quot;);
+// or loading HTML from memory buffer:
+SciterLoadHtml(hSciter, html_buffer, length_of_buffer_in_bytes,L&quot;base/url&quot;);
+</pre>
+  <h2>Method B. Adding Sciter functionality to existing window (mix-in)</h2>
+  <p>When you use Sciter with existing frameworks like MFC, WTL, WxWidgets, WinForms it is more convenient to add Sciter functionality to existing system of window classes rather than to create full scale Window class for the Sciter from scratch. To do such a mix-in it is enough to modify window procedure (WndProc) of your class by adding call of <code>SciterProcND()</code> function before any other message handlers:</p>
+  <pre class="brush: cpp;">LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+  LRESULT lResult;
+  BOOL    bHandled;
+
+  lResult = SciterProcND(hWnd,message,wParam,lParam, &amp;bHandled);
+  if(bHandled)      // if it was handled by the Sciter
+    return lResult; // then no further processing is required.
+
+  // your own message handlers
+  switch (message)
+  {
+  //...
+    case WM_CREATE:
+    // case WM_INITDIALOG: - when Sciter is attached to some
+    //                       dialog window (a.k.a. HTML dialog)
+    {
+      // SciterProcND has created instance of the engine for the HWND
+      // while handling WM_CREATE thus we can load content:
+      SciterLoadFile(hSciter, L&quot;file/path/or/URL/UTF-16&quot;);
+      // or from memory buffer:
+      SciterLoadHtml(hHtmlayoutWnd, html_bytes, html_bytes_length,L&quot;base/url&quot;);
+      break;
+    }
+  //...
+  }
+  return 0;
+}
+</pre>
+  <p>This way <code>SciterProcND()</code> function will handle WM_PAINT and all low level input messages translating them into DOM events like MOUSE_DOWN, KEY_UP, etc.</p>
+  <p><strong>Note</strong>: it is mandatory to pass <code>WM_CREATE</code> (or <code>WM_INITDIALOG</code>) and <code>WM_DESTROY</code> messages to the <code>SciterProcND()</code>. Instance of the engine is created when handling <code>WM_CREATE</code> and is destroyed on <code>WM_DESTROY</code>.</p>
+  <h1>Resource handling and custom resource loader</h1>
+  <p>HTML loaded into Sciter may contain external resources: CSS (Cascading Style Sheets), images, fonts, cursors and scripts. To get any of such resources Sciter will first send SC_LOAD_DATA notification to your application using callback function defined in code of your application. Your application can</p>
+  <ol>
+    <li>provide your own data for such resources (for example from resource section, DB or other storage of your choice)</li>
+    <li>or delegate resource loading to built-in HTTP client and file loader</li>
+    <li>or discard loading at all.</li></ol>
+  <p>In order to receive SC_LOAD_DATA notification (and others like SC_CREATE_BEHAVIOR, SC_DATA_LOADED, etc.) you will need to define your own callback function and call <code>SciterSetCallback(hwndSciter, yourCallback, ...)</code>; with it:</p>
+  <pre class="brush: cpp;">UINT CALLBACK HostCallback( LPSCITER_CALLBACK_NOTIFICATION pns,
+                            LPVOID callbackParam )
+  {
+    callbackParam; // we are not using callbackParam in the sample,
+                   // use it when you need this to be a method of some class
+    switch(pns-&gt;code)
+    {
+      case SC_LOAD_DATA: return OnLoadData(LPSCN_LOAD_DATA(pns));
+      case SC_DATA_LOADED: return OnDataLoaded(LPSCN_DATA_LOADED(pns));
+      case SC_CALLBACK_HOST: return OnCallbackHost(LPSCN_CALLBACK_HOST(pns));
+    }
+    return 0;
+  }
+...
+SciterSetCallback(hwnd, HostCallback, 0 /*cbParam is not ised in this sample*/ );
+</pre>
+  <p><strong>Note:</strong> <code>SciterSetCallback()</code> shouls be invoked before any <code>SciterLoadHtml()</code> call in order to send notifications while loading.</p>
+  <h1>DOM access</h1>
+  <p>Let's assume you already integrated Sciter in your application and so you have Sciter window with loaded content (if you did this correct and didn't forget to call &nbsp;<code>ShowWindow(hSciter)</code> ).</p>
+  <p>From Sciter point of view loaded document is a tree of DOM elements ( elements of Document Object Model ). Sciter builds this tree while loading/parsing of input HTML. As a rule each tag in source HTML gets matching DOM element (there are exceptions, see below).</p>
+  <p>You can change text, attributes, state flags of DOM elements; add new or remove existing DOM elements. You also can attach your own DOM event handlers to DOM elements to receive events and notifications.</p>
+  <p>Therefore your UI in Sciter is a collection of uniform DOM elements that can be styled by CSS and manipulated by native or script code.</p>
+  <h2>Basic operations</h2>
+  <p>To access the DOM tree we need to get reference to its root element (root element is an element representing <code>&lt;html&gt;</code> tag in HTML source).</p>
+  <h3>Getting reference to DOM element</h3>
+  <p>Here is how you will get its refence in plain C:</p>
+  <pre class="brush: cpp;">HELEMENT hRoot = NULL;
+SciterGetRootElement(hWnd, &amp;hRoot); // getting root reference per se
+SciterUseElement(hRoot);
+// do something with hRoot...
+SciterUnuseElement(hRoot);
+</pre>
+  <p>Note calls of <code>SciterUse/UnuseElement</code> functions in the code above. Sciter API functions return &quot;weak&quot; DOM handlers (<code>HELEMENT</code>) that are valid until you add/delete DOM elements. To preserve them from destroying (to make strong references) you need to call <code>SciterUseElement</code> when you need to store them and do <code>SciterUnuseElement</code> when references are not needed. This mechanism is very close to the pair of AddRef/Release used in COM.</p>
+  <p>File sciter-x-dom.h contains handy definition of <code>HELEMENT</code> &quot;holder&quot; object - <code>class sciter::dom::element</code> that de facto is a &quot;smart pointer&quot; - wrapper of &nbsp;<code>HELEMENT</code> handle that does <code>SciterUse/UnuseElement</code> calls for you when it is needed.</p>
+  <p>And so in C++ the code above will look simply as:</p>
+  <pre class="brush: cpp;">using namespace sciter;
+dom::element root = dom::element::root_element(hWnd);
+// do something with the root...
+</pre>
+  <p>By having root element reference we are able to access any other element in the tree using various access and search functions like &nbsp;SciterGetNthChild, SciterSelectElements, ... All of them are wrapped into methods of <code>dom::element</code> class in C++. Here is how you would get reference to first &lt;div&gt; element with class &quot;sidebar&quot; using CSS selectors:</p>
+  <pre class="brush: cpp;">using namespace sciter;
+dom::element sidebar = root.find_first(&quot;div.sidebar&quot;);
+</pre>
+  <p>The same in script:</p>
+  <pre class="brush: js;">var sidebar = self.select(&quot;div.sidebar&quot;); // or
+var sidebar = self.$(div.sidebar); // using stringizer select variant
+</pre>
+  <h3>DOM element operations</h3>
+  <p>You can <strong>change text</strong> or HTML of DOM element:</p>
+  <pre class="brush: cpp;">dom::element el = ...;
+el.set_text(L&quot;Hello world&quot;); // text
+el.set_html(html_bytes, html_bytes_length); // inner html
+</pre>
+  <p>The same but in script:</p>
+  <pre class="brush: js;">var el = ...;
+el.text = &quot;Hello world&quot;; // text
+el.html = &quot;Hello &lt;b&gt;wrold&lt;/b&gt;!&quot;; // inner html
+</pre>
+  <p>You can <strong>get or set DOM attributes</strong> of any DOM element:</p>
+  <pre class="brush: cpp;">string val = el.get_attribute(&quot;class&quot;);
+el.set_attribute(&quot;class&quot;, L&quot;new-class&quot;);
+</pre>
+  <p>To <strong>remove existing DOM element</strong> (detach it from the DOM) you will do this:</p>
+  <pre class="brush: cpp;">el.detach();
+</pre>
+  <p>and when code will live scope where the <em>el</em> variable is defined the DOM element will be destroyed.</p>
+  <p><strong>Creation and population of DOM elements</strong> looks like this:</p>
+  <pre class="brush: cpp;">dom::element p = dom::element::create(&quot;p&quot;, L&quot;Hello&quot;); // create &lt;p&gt; element
+el.append(p); // append it to existing element, or insert() ...
+</pre>
+  <p>And in script:</p>
+  <pre class="brush: js;">var p = new Element(&quot;p&quot;, &quot;Hello&quot;);
+el.append(p);
+</pre>
+  <p>To change runtime state flags of DOM element we do something like this:</p>
+  <pre class="brush: cpp;">el.set_state(STATE_VISITED);
+</pre>
+  <p>And in script:</p>
+  <pre class="brush: js;">el.state.visited = true;
+</pre>
+  <p>(after such call the element will match <code>:visited</code> &nbsp;CSS selector)</p>
+  <h4>Getting and setting values of DOM elements.</h4>
+  <p>By default value of DOM element is its text but some DOM elements may have so called behaviors attached to them (see below). All kind of &lt;input&gt;'s elements for example are plain DOM object but each input type has its own behavior assigned to it. The behavior among other things is responsible for providing and setting value of the element. For example value of <code>&lt;input type=checkbox&gt;</code> is boolean - true or false, and value of <code>&lt;form&gt;</code> element is a collection (name/value map) of all inputs on the form.</p>
+  <p>In native code values are represented by <code>json::value</code> objects. According to its name <code>json::value</code> can hold different types of JSON values: numbers, strings, arrays, objects, etc.</p>
+  <p>Here is how to set numeric value of DOM element in native code:</p>
+  <pre class="brush: cpp;">dom::element num = root.find_first(&quot;input[type=number]&quot;);
+num.set_value( json::value(12) );
+</pre>
+  <p>In script the same will look like:</p>
+  <pre class="brush: js;">var num = self.select(&quot;input[type=number]&quot;);
+num.value = 12;
+</pre>
+  <p>And here is an example of setting values of multiple form fields in single call (in script):</p>
+  <pre class="brush: js;">var form = self.select(&quot;form.params&quot;);
+var fields = { &quot;first&quot;: 12,
+               &quot;second&quot;: new Date(2011,12,1) };
+form.value = fields;
+</pre>
+  <h1>Behaviors and event handling.</h1>
+  <p>Primary goal of User Interface (UI) as a subsystem is to present some information to the user and generate some events according to user's actions. Your application handles UI events and acts accordingly executing its functions.</p>
+  <p>To be able to handle events in native code you will need to attach instance of <code>sciter::event_handler</code> class to existing DOM element or to the window itself. In the event_handler you will receive all events dispatched to the element and its children as before children (in SINKING phase) as after them (BUBBLING event phase). event_handler attached to the window will receive all DOM events no matter which element they are targeted to. Event.target field contains reference of target DOM element.</p>
+  <p><code>sciter::event_handler</code> contains various methods - receivers of events of various types. You can override any of these methods in order to receive events you are interested in your implementation of <code>sciter::event_handler</code> class.</p>
+  <p>To attach native event handler to DOM element or to the window you can do one of these:</p>
+  <ol>
+    <li>&quot;Manually&quot;, to Sciter window: <code>sciter::attach_dom_event_handler( hwnd, your_event_handler_ptr )</code></li>
+    <li>&quot;Manually&quot;, to arbitrary DOM element: <code>dom::element::attach_event_handler( your_event_handler_ptr )</code></li>
+    <li>To group of DOM elements by declaration in CSS:<br/><code>selector { behavior:your-behavior-name }</code> <br/>and defining in native code factory class that will create instances of your event handlers for such elements. <br/>See <code>struct sciter::behavior_factory</code> sources. The <code>behavior_factory</code> is designed to work as a default handler of <code>SC_CREATE_BEHAVIOR</code> notification. <code>SC_CREATE_BEHAVIOR</code> is invoked in all cases when the engine discovers that the element has declared behavior. Example sciter/sdk/api/behaviors/behavior_tabs.cpp demonstrates typical implementation of <code>event_handler</code> with <code>behavior_factory</code>.</li></ol>
+  <p>You also can assign events handlers defined in script code:</p>
+  <ol>
+    <li>&quot;Manually&quot;, individual events: if you have reference <code>el</code> of some element then to handle mouse events you can do this for example:<br/><code>el.onMouse = function(evt) { ... }</code></li>
+    <li>&quot;Manually&quot;, by assigning behavior class to the element:<br/><code>class MyEventsHandler: Behavior { ... } &nbsp;// your behavior class</code><br/><code>el.prototype = MyEventsHandler; // &quot;sub-class&quot; the element</code>.</li>
+    <li>By declaration in CSS to all elements satisfying some CSS selector:<br/><code>selector { prototype: MyEventsHandler; }</code><br/>In this case <code>MyEventsHandler</code> class should be defined in one of script files loaded by your HTML.</li></ol>
+  <h1>Script and native code interaction</h1>
+  <p>In Sciter you may want to define native functions that can be called by script. At the same time you may need to call script functions from native code. Sciter supports such interaction providing set of simple API functions:</p>
+  <h2>Evaluating scripts and invoking script functions from native code</h2>
+  <p>You can use one of these methods to call scripts from code of your application:</p>
+  <ul>
+    <li>To evaluate arbitrary script in context of current document loaded into the window:<br/><code>json::value r = sciter::eval(hwnd,L&quot;... script ...&quot;);</code></li>
+    <li>To call global function defined in script using its full name (may include name of namespaces where it resides):<br/><code>json::value r = sciter::call(hwnd,&quot;namespace.name&quot;, p0, p1, ...);</code><br/>parameters - json::value's</li>
+    <li>To call method (function) defined in script for particular DOM element:<br/><code>dom::element el = root.find_first(...);<br/>json::value r = el.call_method(&quot;method_name&quot;, p0, p1, ...);</code></li></ul>
+  <h2>Calling native code from script</h2>
+  <p>If needed your application may expose some [native] functions to be called by script code. Usually this is made by implementing your own event_handler and overriding its <code>on_script_call(helement, name, argc, argv, retval)</code> method. If you will do this then you can invoke this callback from script as:</p>
+  <ul>
+    <li>&quot;global&quot; native functions: <code>var r = view.funcName( p0, p1, ... );</code> &nbsp;- calling &nbsp;<code>on_script_call</code> of event_handler instance attached to the window.</li>
+    <li>As element's methods: <code>var r = el.funcName( p0, p1, ... );</code> - - calling &nbsp;<code>on_script_call</code> of event_handler instance (native behavior) attached to the element.</li></ul>
+  <p>This way you can establish interaction between scipt and native code inside your application.</p>
+  <p>In some cases you may also need to extend script itself by adding native classes and objects specific to your application. This is also possible by using primitives defined in tiscript.hpp file. Sciter SDK contains sources of tiscript-sqlite.dll - <em>SQLite</em> database engine wrapped as native and ready to use classes <code>DB</code> and <code>Recordset</code>.</p>
+  <p>All above is pretty much all that you need to know to start using Sciter in your applications. C/C++ header files in sciter/sdk/api/ folder contain documented specification of all API functions that you can use with you sciter instances.</p>
+  <p>On the right side-bar of this site you can find definitions of scripting classes and objects used in Sciter. SDK contains binary and sources of sciter.exe application - demo &quot;player&quot; with integrated help browser and DOM inspector. There are other integration samples in sciter/sdk/demo-apps/ folder.</p>
+</body>
+</html>

@@ -1,0 +1,70 @@
+
+class Connection
+{
+  // external methods to be called from remote side
+  function foo( param )
+  {
+  }
+  
+  function bar( param1, param2 )
+  {
+  }
+  
+  // functions that are not called from outside.
+  // static function, creates new Connection() object upon successfull login.
+  function login(un,pwd)
+  {
+    //TODO: ... check credentials here ...
+    var c = new Connection();
+    c.user = un;
+    return c;
+  }
+
+  // static function used by the Server.
+  function factory(remotePort,remoteAddress)
+  {
+    var connection = null;
+    function request(rqdata) // request handler
+    {
+      if( typeof rqdata !== #array )
+        return;
+      var fcn = rqdata[0]; // rqdata : [#fcn, [...params...]]
+      if( !connection )
+      {
+        if( fcn !== #login ) return; // first remote call has to be 'login'
+        connection = login.apply(rqdata[1]);
+        if( !connection ) return;
+      }
+      else if(fcn != #factory && fcn != #login)
+      {
+        var fn = connection[fcn];
+        if( typeof fn !== #function )
+          return; // function not found.
+        try 
+        {
+          var r = fn.apply(rqdata[1]);
+          return [true, r]; // response [true|false, retval]
+        }
+        catch(er)
+        {
+          if( er === true )
+            return; // connection forcefully closed
+          // report error to the caller
+          return [false, er.toString()];
+        }
+      }
+    }
+    function closed()
+    {
+    }
+    function error(er)
+    {
+    }
+    return (request,closed,error);
+  }
+}
+
+var srv = new Server(888,Connection.factory);
+
+while(srv.poll());
+

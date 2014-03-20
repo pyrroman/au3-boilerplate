@@ -1,0 +1,67 @@
+<html>
+<head>
+<style> 
+
+  html 
+  { 
+    background-color: threedface; 
+  }
+  #sandbox 
+  { 
+    margin:20px; 
+    padding:20px; 
+    overflow:auto;
+    background-color:window; 
+    border:1px solid threedface; 
+    width:*; height:*;
+  }
+  
+  #sandbox:busy // that small spinning thing...
+  {
+    foreground-image:url(res:activity.gif); 
+    foreground-repeat:no-repeat; 
+    foreground-position:4px 4px; 
+  }
+  
+    
+</style>
+  <script src="sciter:lib/root-extender.tis" type="text/tiscript"/> 
+  <script src="simple-rpc.tis" type="text/tiscript"/> 
+  <script type="text/tiscript">
+    
+    var sandbox = self.select("#sandbox");
+    if(!sandbox) 
+      stderr << "sandbox not found"; 
+    
+
+    function callback(data)
+    {
+      if( data instanceof Error ) // Error parsing received data
+        sandbox.value = "Error:" + data.toString();
+      else if( data instanceof String ) // text ...
+        sandbox.value = "Text:" + data;
+      else if( data instanceof Bytes ) // binary data ...
+        sandbox.value = String.printf("Binary data, length:%d, mime-type=%s, data(base64):\r\n", data.length, data.type ) + data.toString();
+    }
+    
+    function on_GetImageData_click(btn)
+    {
+      if(sandbox.request(callback, #get, "http://www.terrainformatica.com/res/terrainformatica.gif"))
+        return;
+      sandbox.value = "talking...";  
+    }
+    
+    </script>
+
+</head>
+
+<body>
+<h1>Get raw data demo</h1>
+<button id="GetImageData">Get image data</button>
+<pre id="sandbox">
+  ready...
+</pre>
+
+</body>
+
+</html>

@@ -1,0 +1,155 @@
+<html>
+
+<style>
+
+body {
+  margin: 0px;
+  background-color: white;
+}
+
+body, input, button, div {
+  font-family: Tahoma;
+  font-size: 8pt;
+}
+
+.lightbox {
+  position: fixed;
+  display: none;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  //background-image: url(images/tr30.png);
+  background-color:rgba(0,0,0,0.3);
+}
+
+.dialog {
+  width: 300px;
+  margin-left: 50%%;
+  margin-top: 40%%;
+  background-image: url(images/dialog3.png);/* square top / round bottom */
+  background-repeat: expand;
+  background-position: 38px 20px 20px 20px;
+  padding: 0px;
+}
+
+.lightbox .inner {
+  padding: 10px;
+  height: 100%%;
+}
+
+.lightbox .header {
+  font-size: 8pt;
+  font-weight: bold;
+  height: 28px;
+  /**/background-color: threedface threedface threedshadow threedshadow;/* used with dialog 2 and 3 */
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.lightbox .header caption {
+  margin-top: 50%%;
+}
+
+
+.lightbox .body {
+  height: 100%%;
+  padding: 10px;
+}
+
+.dialog input[type="text"] {
+  width: 100%%;
+}
+
+.dialog input[type="button"] {
+  width: 55px;
+  text-align: center;
+  text-align-vertical: middle;
+  padding: 5px 10px;
+}
+
+.dialog .buttons {
+  margin-top: 20px;
+  margin-left: 100%%;
+  width: max-intrinsic;
+  white-space: nowrap;
+  /*
+  border-top: 1px solid threedshadow;
+  padding-top: 10px;
+  */
+}
+
+
+
+</style>
+
+<script type="text/tiscript">
+
+  
+  function showDialog()  // this is so called "document modal loop"
+  { 
+    var dlg = $(#dialog1);  
+    dlg.style#display = "block"; 
+    view.update(); 
+    var sfocus = view.focus;
+    view.eventsRoot = dlg;
+    while (dlg.isVisible) view.doEvent();
+    dlg.style#display = "none"; 
+    view.eventsRoot = null;
+    view.focus = sfocus;
+  }
+
+  function closeDialog()  
+  { 
+    var dlg = $(#dialog1);  
+    dlg.style#display = "none"; 
+    dlg.update(); 
+  }
+  
+
+  $(#button1).onClick = function() 
+  {
+    self.result = undefined; // reset modal result
+    $(#result2).value = "waiting...";
+    showDialog();
+    $(#result2).value = String.printf("result = %v", self.result);
+  }
+  
+  $(#ok).onClick = function()     { self.result = #ok; closeDialog(); $(#result1).value = "result = ok"; }
+  $(#cancel).onClick = function() { self.result = #cancel; closeDialog(); $(#result1).value = "result = cancel";  }
+
+</script>
+
+<body>
+
+<div style="margin: 20px">
+<p>Input: <input type="text" value="text"></p>
+<p>Input: <input type="text" value="text"></p>
+<p><span id="result1">&nbsp;</span></p>
+<p><input type="button" id="button1" value="Open Dialog and Wait Until Closed"> <span id="result2"></span></p>
+</div>
+
+<!-- -->
+<div class="lightbox" id="dialog1">
+  <form class="dialog">
+    <div class="inner">
+      <div class="header"><caption>Window Caption</caption></div>
+
+      <div class="body">
+
+        <caption>Title:</caption>
+        <input type="text">
+
+        <div class="buttons">
+          <input type="button" id="ok" value="OK">
+          <input type="button" id="cancel" value="Cancel" accelerator="^Q">
+        </div>
+      </div>
+      
+    </div>
+  </form>
+</div>
+<!-- -->
+
+</body>
+</html>

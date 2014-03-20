@@ -1,0 +1,231 @@
+
+/** 
+  UI style constants
+  */
+@const COLOR_BASE: threedface;
+@const COLOR_SHADOW: threedshadow;
+@const COLOR_WINDOW: window;
+@const COLOR_LIGHT: threedhighlight;
+@const COLOR_LIGHT_BACKGROUND: scrollbar;
+@const COLOR_GRAY_TEXT: graytext;
+@const BORDER: 1px solid @COLOR_SHADOW;
+
+@const TB_BUTTON_BACK_NORMAL: url(theme:toolbar-button-normal) stretch;	
+@const TB_BUTTON_BACK_HOVER: url(theme:toolbar-button-hover) stretch;
+@const TB_BUTTON_BACK_ACTIVE: url(theme:toolbar-button-pressed) stretch;
+@const TB_BUTTON_BACK_CHECKED: url(theme:toolbar-button-checked) stretch;
+@const TB_BUTTON_BACK_CHECKED_HOVER: url(theme:toolbar-button-checked-hover) stretch;
+@const TB_BUTTON_BACK_DISABLED: url(theme:toolbar-button-disabled) stretch;
+@const TB_BUTTON_TEXT_COLOR: graytext;	
+
+@const CAPTION_BACKGROUND_COLOR: scrollbar;
+@const CAPTION_BORDER: 1px solid;
+@const CAPTION_BORDER_COLORS: @COLOR_SHADOW @COLOR_LIGHT @COLOR_LIGHT @COLOR_SHADOW;
+
+@const INFO_BACKGROUND_COLOR: infobackground;
+
+@const VIEW_BORDER: threeddarkshadow threedhighlight threedhighlight threeddarkshadow;
+@const PANELS_BORDER_SPACING: 3px;
+
+@const HEADER_HEIGHT: 1.6em;
+
+body
+{
+  font:system;
+  padding:0;
+  margin:0;
+}
+
+frameset#main
+{
+  width:*;
+  height:*;
+}
+
+widget#tab-view
+{
+  width:*;
+  height:*;
+  overflow:hidden;
+  prototype:TabView;
+}
+
+widget.tab-strip > widget.tabs,
+widget.tab-strip > widget.ctls,
+
+div.caption
+{
+  background-color: @COLOR_LIGHT_BACKGROUND;
+  border: @CAPTION_BORDER;
+  border-color: @CAPTION_BORDER_COLORS;
+  height: @HEADER_HEIGHT;
+  padding:1px;
+}
+
+hr.caption-bar
+{
+  padding:0; margin:0;
+  height:@PANELS_BORDER_SPACING;
+  border:none;
+  background-color: threedface;
+  margin:0;
+}
+
+widget.view /* contains widget.wysiwyg && widget.plain-text */
+{
+  width:*;
+  height:*;
+  display:none;
+  prototype:DocView;
+  background-image:none;
+  border:1px solid;
+  border-color: @VIEW_BORDER;
+}
+
+widget.view:current
+{
+  display:block;
+}
+
+widget.wysiwyg /* wysiwyg view */
+{
+  background-color:window;
+  overflow-x:auto;
+  overflow-y:scroll;
+  
+  font: 10pt Vardana, Arial, sans-serif; /* its default font */
+  
+  behavior:richtext; /* builtin behavior */
+  prototype:RichText; /* and its scripting extender */
+  
+  width:*;
+  height:*;
+  
+  context-menu:url(../layouts/richtext-menu.htm);
+  
+  display:none;
+}
+
+widget.view[mode="wysiwyg"] > widget.wysiwyg
+{
+  display:block;
+}
+
+widget.view[mode="wysiwyg"] > widget.wysiwyg > input[type="mergecode"]
+{
+  width:64px;
+  height:1.4em;
+  background-color:yellow;
+}
+
+
+widget.source /* source view */
+{
+  font: 10pt monospace;
+  border:@BORDER;
+  
+  background-color:window;
+  overflow-x:auto;
+  overflow-y:scroll;
+  
+  behavior:textarea; /* builtin behavior */
+  //prototype:PlainText; /* and its scripting extender */
+  
+  width:*;
+  height:*;
+  
+  display:none;
+}
+
+widget.view[mode="plain-text"] > widget.plain-text
+{
+  display:block;
+}
+
+widget#status
+{
+  flow:horizontal;
+  margin-top:2px;
+  prototype: Statusbar;
+  border-spacing:2px;  
+  style-set:"status"
+}
+
+@set status
+{
+  div.current-objects
+  {
+    flow:horizontal;
+    height:*;  
+    padding:1px;
+    border-spacing:1px;
+    //min-height:20px;  
+    overflow-x:hidden;
+    background-color: scrollbar;   
+    border-top: 1px solid @COLOR_SHADOW;
+    border-left: 1px solid @COLOR_SHADOW;
+    border-right: 1px solid @COLOR_LIGHT;
+    border-bottom: 1px solid @COLOR_LIGHT;
+  }
+  option
+  {
+    behavior: button;
+    font:10pt monospace;
+    width: max-intrinsic;
+    padding:1px 4px;
+    background-color: @COLOR_LIGHT;   
+    //border-top: 1px solid @COLOR_LIGHT;
+    //border-left: 1px solid @COLOR_LIGHT;
+    //border-right: 1px solid @COLOR_SHADOW;
+    border: 1px solid @COLOR_BASE;
+  }
+  option:hover
+  {
+    color:tomato;
+  }
+
+  widget#status > div.switches
+  {
+    flow:horizontal;
+    height:*;  
+    width:max-intrinsic;
+    border-left: 1px solid @COLOR_SHADOW;
+    padding:* 2px;
+    background-color: scrollbar; 
+    border-top: 1px solid @COLOR_SHADOW;
+    border-left: 1px solid @COLOR_SHADOW;
+    border-right: 1px solid @COLOR_LIGHT;
+    border-bottom: 1px solid @COLOR_LIGHT;
+  }
+}
+
+@set search-n-replace /* search-and-replace bar */
+{
+  :root
+  {
+    display:none;
+    prototype:SearchBar;
+    width:max-intrinsic;
+    margin:2px *;
+  }
+  :root:expanded
+  {
+    display:block;
+  }
+  span#search-result
+  {
+    prototype:StatusMessage; 
+    display:inline-block; 
+    width:10em; 
+    color:red;
+  }
+  input[type="text"]
+  {
+    margin:* 0px;
+  }
+}
+
+div#search-n-replace { style-set:"search-n-replace"; }
+
+
+

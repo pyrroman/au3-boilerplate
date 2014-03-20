@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>Attributes object</h1>
+  <p>Represents attributes of DOM <a href="Element.htm">element</a>.</p>
+  <p>To access attributes collection of the element use its <em>attributes</em> property: element.attributes</p>
+  <table border="0" cellspacing="4" width="100%">
+    <tr>
+      <td colspan="2">
+        <h2>Properties</h2></td></tr>
+    <tr>
+      <td bgcolor="#ffffff" valign="top" align="right"><em>length</em></td>
+      <td bgcolor="#fffff0" valign="middle"><em>integer</em>, number of attributes of the element. Read-only property.</td></tr>
+    <tr>
+      <td width="117" bgcolor="#ffffff" valign="top" align="right"><strong><em>[index]</em></strong></td>
+      <td bgcolor="#fffff0" valign="middle"><em>string</em>, value of attribute at the <em>index</em> position. &nbsp;<em>Index</em> here is either <em>string</em> (name of attribute) or integer (zero-based index of the attribute). Read-write index accessor.</td></tr>
+    <tr>
+      <td colspan="2" valign="top">
+        <h2>Enumeration</h2></td></tr>
+    <tr>
+      <td bgcolor="#ffffff" valign="top" align="right"><em>for ... in</em></td>
+      <td bgcolor="#fffff0" valign="middle">
+        <div>for(var<strong> name</strong> in<strong> <em>element</em></strong>.<strong>attributes</strong>)<strong> { </strong>/* loop body */<strong> }</strong></div>
+        <p>Executes body of the loop for attributes of the element. Value of <em>name</em> variable is text - name of the attribute.</p></td></tr>
+    <tr>
+      <td colspan="2" valign="top">
+        <h2>Methods</h2></td></tr>
+    <tr>
+      <td bgcolor="#ffffff" valign="top" align="right"><strong><em>name</em></strong></td>
+      <td bgcolor="#fffff0" valign="middle">
+        <div><strong>(index)</strong> returns: <em>string</em></div>
+        <p>Returns string - name of the attribute at index position. Index is zero-based integer value here.</p></td></tr>
+    <tr>
+      <td bgcolor="#ffffff" valign="top" align="right"><strong><em>clear</em></strong></td>
+      <td bgcolor="#fffff0" valign="middle">
+        <div><strong>() </strong>returns: <em>N/A</em></div>
+        <p>Clears collection of attributes of the element.</p></td></tr>
+    <tr>
+      <td bgcolor="#ffffff" valign="top" align="right"><strong><em>remove</em></strong></td>
+      <td bgcolor="#fffff0" valign="middle">
+        <div><strong>(attr)</strong> returns: <em>N/A</em></div>
+        <p>Removes attribute from the collection of attributes. <em>Attr</em> here is either <em>string</em> (name of attribute) or integer (zero-based index of the attribute).</p></td></tr>
+    <tr>
+      <td bgcolor="#ffffff" valign="top" align="right"><strong><em>exists</em></strong></td>
+      <td bgcolor="#fffff0" valign="middle">
+        <div><strong>(attr) </strong>returns: <em>true|false</em></div>
+        <p>Returns true if <em>attr</em> exists in the collection of attributes. <em>Attr</em> here is either <em>string</em> (name of attribute) or integer (zero-based index of the attribute).</p></td></tr>
+    <tr>
+      <td bgcolor="#ffffff" valign="top" align="right"><em><strong>addClass</strong></em></td>
+      <td bgcolor="#fffff0" valign="middle">
+        <div>(className1: string [, ... classNameN: string ] )</div>
+        <p>Adds class name[s] to the <em>class</em> attribute of the element.</p></td></tr>
+    <tr>
+      <td bgcolor="#ffffff" valign="top" align="right"><em><strong>removeClass</strong></em></td>
+      <td bgcolor="#fffff0" valign="middle">
+        <div>(className1: string [, ... classNameN: string ] )</div>
+        <p>Removes class name[s] from the <em>class</em> attribute of the element.</p></td></tr></table>
+</body>
+</html>

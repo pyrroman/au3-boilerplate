@@ -1,0 +1,22 @@
+@include "text/tiscript" url(property-sheet.tis);
+
+table.property-sheet
+{
+  prototype: PropertySheet;
+  width:auto;
+  border: 1px solid black;
+}
+
+/* defining style sets for editable cells by deriving from standard ones */
+@set prop-select-cell < std-select-dropdown {}
+@set prop-number-cell < std-number-edit {}
+@set prop-text-cell < std-edit 
+{ 
+  :root { min-width:4em; } 
+}
+/* these definitions below allow us to write something like this:
+   <td type="number" /> to use cells as editors 
+*/
+table.property-sheet td[type="select-dropdown"] { style-set:"prop-select-cell"; }
+table.property-sheet td[type="number"]          { style-set:"prop-number-cell"; }
+table.property-sheet td[type="text"]            { style-set:"prop-text-cell"; }

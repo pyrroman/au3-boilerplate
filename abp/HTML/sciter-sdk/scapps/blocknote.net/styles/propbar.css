@@ -1,0 +1,39 @@
+
+widget#propbar
+{
+  width:*;
+  height:*;
+  style-set: "prop-bar";
+}
+
+@set prop-bar 
+{
+  :root
+  {
+    //prototype: PropPanel;    
+    background:infobackground;
+    padding:0;
+    margin:0;
+    height:*;
+    overflow:hidden; /* or auto? */
+  }
+
+  div.caption
+  {
+    flow:horizontal;
+  }
+  div.caption > *
+  {
+    height:*;
+    padding:* 2px;
+  }
+  
+  div.content 
+  {
+    border:1px solid;
+    border-color: @VIEW_BORDER;
+    width:*;
+    height:*;
+  }
+  
+}

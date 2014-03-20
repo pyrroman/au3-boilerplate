@@ -1,0 +1,28 @@
+// Form handler class
+type Form: Behavior
+{
+  function show(rec)
+  {
+    if(this.shown) this.save(); // save previously shown record.
+    this.shown = rec;
+    function load_value(el)
+    {
+      var name = el.attributes#name;
+      el.value = rec[symbol(name)];
+    }
+    this.select(load_value, "[name]"); 
+    // call load_value for each element having "name" defined.
+    // De facto this means that form content defines structure of the record.
+  }
+  function save()
+  {
+    var shown = this.shown;
+    function store_value(el)
+    {
+      var name = el.attributes#name;
+      shown[symbol(name)] = el.value;
+    }
+    this.select(store_value, "[name]"); 
+    // call store_value for each element having "name" defined.
+  }
+}

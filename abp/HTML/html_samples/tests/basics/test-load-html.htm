@@ -1,0 +1,66 @@
+<html>
+<head>
+<style> 
+
+  html { background-color: #fff #e9e8f3 #e9e8f3 #fff; }
+    
+</style>
+  <script src="sciter:lib/root-extender.tis" type="text/tiscript"/> 
+  <script type="text/tiscript">
+  
+    var sandbox = self.select("#sandbox");
+    if(!sandbox) 
+      stderr << "sandbox not found"; 
+
+    function on_LoadDoc1_click(btn)
+    {
+      sandbox.load( "samples/sample1.htm" );
+    }
+    function on_LoadDoc2_click(btn)
+    {
+      sandbox.dataForScriptInFrame = { first: "hello"; second:"world" };
+      sandbox.load( "samples/sample2.htm" );
+    }
+    
+    function on_LoadDoc3_click(btn)
+    {
+      var s = Stream.openString();
+      s << 
+ `<html>
+  <head>
+    <style>
+      p#status { border:1px solid red; }
+    </style>
+    <script type="text/tiscript">
+      var status = self.select("#status");
+      status.text = String.printf("self.parent.dataForScriptInFrame=%v", self.parent.dataForScriptInFrame );
+      status.update();
+    <\/script>
+
+  </head>
+  <body>
+  Sample 3
+  <p id="status">&nbsp;</p>
+  </body>
+  </html>`;
+    
+      sandbox.dataForScriptInFrame = { first: "sample"; second:"another one" };
+      sandbox.load( s );
+      s.close();
+    }
+    
+    </script>
+
+</head>
+
+<body>
+
+<button id="LoadDoc1">Load doc #1</button>
+<button id="LoadDoc2">Load doc #2</button>
+<button id="LoadDoc3">Load doc from in memory stream</button>
+
+<frame id="sandbox" style="width:100%%; height:100%%; background-color: #fff" />
+
+</body>
+
+</html>

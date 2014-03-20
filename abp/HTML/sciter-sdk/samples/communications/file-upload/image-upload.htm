@@ -1,0 +1,75 @@
+<html>
+<head>
+  <style>
+  
+    html { background-color:antiquewhite antiquewhite burlywood burlywood; }
+  
+    picture#pic[src]
+    {
+      background:white;
+      outline: 8px glow #444 3px;
+      outline-shift: 2px;
+      margin:8px;
+    }
+  
+  </style>  
+  <script type="text/tiscript">
+
+  var pic = self.$(picture#pic);
+  var dim = self.$(span#dimension);
+  var image = null;
+  
+  function showDimensions()
+  {
+    var (width,height) = pic.box(#dimension);
+    dim.html = String.printf("%d &times; %d",width,height);
+  }
+
+  self.$(button#select-image).onClick 
+    = function()
+      {
+        var fn = view.selectFile( #open, "Image Files (*.png,*.gif,*.jpg)|*.jpg;*.jpeg;*.png;*.gif|All Files (*.*)|*.*", "jpg" );
+        if(!fn) return;
+        pic.attributes["src"] = fn;
+        image = pic.loadImage(fn);
+        view.update();
+        showDimensions();
+      };
+      
+  self.$(input#scale).onValueChanged 
+    = function()
+      {
+        var scale = this.value / 100.0;
+        pic.attributes["width"] = (image.width * scale).toInteger();
+        pic.attributes["height"] = (image.height * scale).toInteger();
+        view.update();
+        showDimensions();
+      };
+  
+  self.$(button#upload).onClick 
+    = function()
+      {
+        var (width,height) = pic.box(#dimension); 
+        var imageToUpload = new Image(width,height);
+        imageToUpload.graphics.drawImage(image,0,0,width,height,0,0,image.width,image.height);
+        var bytes = imageToUpload.toBytes(85); // to JPEG bytes
+        bytes.name = "test.jpg";
+        stdout.$n(bytes length={bytes.length} mimetype={bytes.type});
+        var tosend = { "uploadedfile": bytes };
+        var rv = this.request(20000,#post-data,"http://localhost:8080/uploader.php",tosend);
+        stdout.$n(result{rv.toString()});
+        imageToUpload.destroy();
+      };
+  
+  </script>  
+</head>
+<body>
+  <h1>Image upload demo</h1>
+  <button #select-image>Select Image</button>
+  scale:<input #scale type="number" value=100 min=10 max=200 step=10 />
+  <span #dimension>(dimension)</span>
+  <picture #pic />
+  <button #upload>Upload</button>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<html>
+<head>
+  <style>
+  
+  @media screen, print /* in MQ this works as "screen || print" */
+  {
+    span#test { color:red; }
+  }
+  
+  span#os 
+  { 
+    color:green; 
+    assigned!: self:value = os; // getting 'os' media query variable;
+  }
+  span#monitors 
+  { 
+    color:blue; 
+    assigned!: self:value = monitors; // getting 'monitors' media query variable;
+  }
+  
+  
+  
+  </style>  
+  <script type="text/tiscript">
+  
+  var mv = view.mediaVars();
+  stdout.printf("All MQ variables:\n%V\n",mv);
+    
+  </script>  
+</head>
+<body>
+  <p>This must be of red color:<span#test>test</span></p>
+  <p>You a running <span#os></span> OS on <span#monitors>x</span> monitors.</p>
+  
+</body>
+</html>

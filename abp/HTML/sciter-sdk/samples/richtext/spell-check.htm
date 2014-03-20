@@ -1,0 +1,96 @@
+<html>
+  <head>
+    <title></title>
+    <style></style>
+    <script type="text/tiscript">
+
+      var rt = $(richtext#editor);
+      
+      function spellResult(yes)
+      {
+        $(text#status).text = yes? "Spell check complete" : " ";
+      }
+      
+      function suggestWord(word)
+      {
+        var r = view.msgbox(
+           #question, 
+           String.printf("word %s not found in dictionary, replace it?",word),
+           "Spell check",
+           [#yes, #ignore, #cancel] );
+        switch(r)
+        {
+          case #yes: 
+                    rt.replaceBy("{Woo-hoo!}"); // do replacement
+                    spellResult( rt.doSpellCheck(checkWord) ); // resume spell check
+                    break; 
+          case #ignore: 
+                    spellResult( rt.doSpellCheck(checkWord) ); // just resume spell check
+                    break; 
+          case #cancel:
+                    rt.doSpellCheck(false);     // stop spell checking
+                    $(text#status).text = "Spell canceled";
+                    break; 
+        }
+      }
+      
+      function validWord(word) 
+      {
+        const vocabulary = ["one","two", "three"];
+        var idx = vocabulary.indexOf(word);
+        if( idx >= 0 )
+          return true; // found
+        return false;
+      }
+      
+      function checkWord(word) 
+      {         
+        if(validWord(word))
+          return true; // found
+
+        // the word is not found in dictionary:
+        
+        view.focus = rt; // set focus on the richtext
+        
+        rt.post( function() {suggestWord(word);}); // post request for showing suggest dialog
+        return false;    // stop checking until it will be resumed by suggestWord.
+      }
+      
+      $(button#do-spell).onClick = function()
+      {
+        spellResult( rt.doSpellCheck(checkWord) );
+      }
+      
+      $(button#do-spell-highlight).onClick = function()
+      {
+        if (this.value) {
+          function doCheck()
+          {
+            rt.doSpellCheckHighlighting(validWord); // run spell checking
+          }
+          rt.onValueChanged = function() // when value has changed, start delayed check.
+          {
+            rt.timer(1000, doCheck); // 1s threshold for running background spell checks
+          }
+          doCheck(); // and do it right now
+        }
+        else
+          rt.doSpellCheckHighlighting(false); // remove all spellcheck highlightings
+      }
+      
+      
+      
+    
+    </script>
+  </head>
+<body>
+  <H1>Demo of spell check support in Richtext</h1>
+  <p>Vocabulary in this demo has only three words: 'one', 'two' and 'three'</p>
+  <button #do-spell>Spell Check</button>
+  <button #do-spell-highlight type="checkbox">Highlight misspellings</button>
+  <richtext #editor>
+    one two zzz three 
+  </richtext>
+  <text #status>&nbsp;</text>
+</body>
+</html>

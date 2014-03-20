@@ -1,0 +1,50 @@
+<html>
+<head>
+  <style>
+    body 
+    { 
+      margin:0; 
+      padding:0; 
+      background-color: yellow brown red gold; 
+      flow:vertical;
+      size:*;
+    }
+    body > text { white-space:nowrap; width:max-intrinsic; margin:*; color:white; }
+  </style>
+  <script type="text/tiscript">
+    $(#version).text = String.printf("%d.%d.%d.%d", 
+		  (Sciter.VERSION >> 16) & 0xffff, Sciter.VERSION & 0xffff,
+		  (Sciter.REVISION >> 16) & 0xffff, Sciter.REVISION & 0xffff);
+		 
+		$(button#test-stdout).onClick = function()
+		{
+		  stdout.println("Message in stdout.");
+		}
+		
+    $(button#test-stderr).onClick = function()
+		{
+		  stdout.println("Message in stderr.");
+		}
+		
+    $(button#test-vb-function).onClick = function()
+		{
+      // calling function defined in VB,
+      // see FunctionsForScript.cls in VB6 folder
+      var r = view.Foo("Script calling!");
+		  stdout.printf("Got from VB:%s\n",r);
+		}
+    
+    function Hello(greeting) 
+    {
+      return greeting + " World!";
+    }
+    
+  </script>
+</head>
+<body>
+  <text #logo>Sciter <span #version /></text>
+  <button #test-stdout>test stdout</button>
+  <button #test-stderr>test stderr</button>
+  <button #test-vb-function>call of VB function</button>
+</body>
+</html>

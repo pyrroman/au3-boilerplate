@@ -1,0 +1,112 @@
+﻿<html>
+  <head>
+    <meta name="GENERATOR" content="BLOCKNOTE.NET"/>
+    <meta name="source"/>
+    <meta name="source"/>
+    <basefont face="Verdana" size="2"/>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>XMLScanner object</h1>
+  <p>XMLScanner - XML/HTML tokenzier. Also known as XML push parser.</p>
+  <div align="left">
+    <table border="0" cellpadding="2" cellspacing="4" width="100%">
+      <tr>
+        <td colspan="2">
+          <h2>Constants</h2>
+          <p>return values of token() method</p></td></tr>
+      <tr>
+        <td width="147" valign="top" align="right"><strong><em>ERROR</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">- error in markup of input stream</td></tr>
+      <tr>
+        <td valign="top" align="right"><strong><em>EOF</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">- end of stream reached</td></tr>
+      <tr>
+        <td valign="top" align="right"><strong><em>HEAD</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">
+          <div>- head of the element parsed:</div>
+          <div><font face="Courier New">&lt;tag ...<br/>^-- happens here</font></div></td></tr>
+      <tr>
+        <td valign="top" align="right"><strong><em>HEAD_END</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">
+          <div>- end of head of non-empty element parsed:</div>
+          <div><font face="Courier New">&lt;tag ... &gt;<br/> &nbsp;&nbsp;&nbsp;&nbsp;^-- happens here</font></div></td></tr>
+      <tr>
+        <td valign="top" align="right"><strong><em>EMPTY_HEAD_END</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">
+          <div>- end of head of empty element parsed:</div>
+          <div><font face="Courier New">&lt;tag ... /&gt;<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^-- happens here</font></div></td></tr>
+      <tr>
+        <td valign="top" align="right"><strong><em>TAIL</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">
+          <div>- tail of the non-empty element parsed:</div>
+          <div><font face="Courier New">&lt;/tag&gt;<br/>^-- happens here</font></div></td></tr>
+      <tr>
+        <td valign="top" align="right"><strong><em>ATTR</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">
+          <div>- attribute parsed:</div>
+          <div><font face="Courier New">&lt;tag attr=&quot;value&quot; &gt;</font></div>
+          <div><font face="Courier New">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^-- happens here</font></div>
+          <p>Attribute can be with or without (html style) value. <em>scanner.attribute</em> is the name of attribute and <em>scanner.value</em> - is a value of attribute.</p></td></tr>
+      <tr>
+        <td valign="top" align="right"><strong><em>WORD</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">
+          <div>- sequence of non-space characters parsed.</div>
+          <p><em>scanner.value</em> contains the text.</p></td></tr>
+      <tr>
+        <td valign="top" align="right"><em><strong>SPACE</strong></em></td>
+        <td bgcolor="#fffff0" valign="top">
+          <div>- space sequence parsed.</div>
+          <p><em>scanner.value</em> contains the sequence of space characters.</p></td></tr>
+      <tr>
+        <td valign="top" align="right"><strong><em>CDATA</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">
+          <div>- cdata parsed:</div>
+          <div><font face="Courier New">&lt;![CDATA[ ...value... ]]&gt;<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^-- happens here</font></div>
+          <p><em>scanner.value</em> contains text of the cdata.</p></td></tr>
+      <tr>
+        <td valign="top" align="right"><strong><em>PI</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">
+          <div>- processing instruction parsed:</div>
+          <div><font face="Courier New">&lt;? ...value... ?&gt;<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^-- happens here</font></div>
+          <p><em>scanner.value</em> contains text of the instruction.</p></td></tr>
+      <tr>
+        <td valign="top" align="right"><strong><em>DOCTYPE</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">- doctype declaration parsed:
+          <div><font face="Courier New">&lt;!DOCTYPE ...value... &gt;<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^-- happens here</font></div>
+          <p><em>scanner.value</em> contains text of the doctype declaration: characters after <font face="Courier New">&lt;!DOCTYPE</font> and before closing '<code>&gt;</code>'</p></td></tr>
+      <tr>
+        <td colspan="2">
+          <h2>Properties</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>value</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>string</em>, text of attribute value, text, cdata or pi.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>attribute</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>string</em>, name of the attribute. Valid if <font face="Courier New">token == XMLScanner.ATTR</font></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>tag</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>string</em>, name of the tag. Valid if <font face="Courier New">token</font> is <font face="Courier New">XMLScanner.HEAD</font>, <font face="Courier New">XMLScanner.TAIL or XMLScanner.HEAD_END</font>.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>lineNo</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- integer, read-only, reports current line number in input stream.</td></tr>
+      <tr>
+        <td colspan="2" valign="top">
+          <h2>Methods</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>this</em></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p><strong>( input</strong>: Stream<strong> )</strong> </p>
+          <p>Constructor, used as <code>new XMLScanner(stream)</code>. Takes input stream as first parameter.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>token</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p><strong>( </strong>&nbsp;<strong>)</strong> returns: <em>int</em></p>
+          <p>Returns one of constants above. Use them in fully qualified form, e.g. <font face="Courier New">XMLScanner.HEAD, XMLScanner.TAIL</font>, etc.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>stepBack</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p><strong>( &nbsp;)</strong></p>
+          <p>pushes back current token so next invocation of <code>token()</code> will return it.</p></td></tr></table></div>
+</body>
+</html>

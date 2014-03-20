@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <title></title>
+    <style>
+      @import url(common.css);
+    </style>
+    <script type="text/tiscript">
+    
+      namespace validationRules // set of validation functions 
+      {
+        // names of functions here shall match @name of correspondent form field:
+        function textbox(el) { return el.value.length < 5? "at least 5 characters!":null; }
+        function datebox(el) { return el.value.year != 2011? "this year only please!":null; }
+      };
+
+      function validateForm(form, validationRules)
+      {
+        var r = true;
+        
+        for( var el in form.$$(span.error) ) // clear all errors
+          el.clear();
+          
+        var firstInv = null;
+        
+        for( var (name, func) in validationRules )
+        {
+          var el = form.$([name="{name}"]); // select element with the @name
+          assert el;
+          var txt = func(el); // call validation function with the element
+          if( txt ) 
+          { // we've got an error
+            firstInv = firstInv || el; // remember first invalid field
+            el.next.text = txt; // show error text in the next element (span.error)
+            r = false;
+          }
+        }
+        if( firstInv ) firstInv.state.focus = true; // set focus on it.
+        return r;
+      }
+    
+      $(#validate-form).onClick = function()
+      {
+        var theForm = $(#the-form);
+        var r = validateForm( theForm, validationRules );
+        $(pre#out).text = r? "form valid": "form invalid";  
+      }
+      
+    </script>
+  </head>
+<body>
+  <h1>"FormValidation" sample</h1>
+  <include src="form.htm" />
+  <button #validate-form>Validate form</button>
+  <pre id="out" />
+</body>
+</html>
+

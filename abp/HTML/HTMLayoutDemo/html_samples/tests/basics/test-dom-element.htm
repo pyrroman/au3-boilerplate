@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <style>
+      body { height:100%%; }
+      #sandbox 
+      { 
+        height:50%%; 
+        border:1px dotted silver; 
+        margin:4px;
+        overflow:auto;
+      }
+      #output 
+      { 
+        height:50%%; 
+        border:1px dotted silver;
+        margin:4px;
+        overflow:auto;
+      }
+    </style>
+    <script type="text/tiscript">
+    
+    var sandbox = self.select("#sandbox");
+    var output = self.select("#output");
+    
+    if( !sandbox || !output ) throw "select is not working or bad DOM";
+	
+    
+    // Event handler of onControlEvent
+    self.onControlEvent = function(evt)
+    {
+      if(evt.type == Event.BUTTON_CLICK)
+      {
+         var name = evt.target.attributes["name"];
+         try {
+           var handler = eval( String.printf("on_%s_click", name));
+           if( handler instanceof Function )
+            // we've got function onNameClick defined, let's call it.
+             return handler(evt.target);
+         } 
+         catch( er )
+         {
+           output.html = "<pre>" + er.toString() + "</pre>";   
+           output.update(true);
+         }
+      }
+      return false;
+    }
+    
+    
+    function on_Test_click(el)
+    {
+		   output.html = "<p>Got click on <em>Test</em> button!</p>";   
+		   output.update(true);
+    }
+    function on_ShowSandboxContent_click(el)
+    {
+		   output.html = "<pre>" + sandbox.html.htmlEscape() + "</pre>";
+		   output.update(true);
+    }
+   
+    </script>
+  </head>
+  <body>
+    <h1>DOM access script functions test</h1>
+    <button name="Test" titleid="TitleForTest">Test</button>
+	  <button name="ShowSandboxContent" titleid="TitleShowSandboxContent">Show Sandbox Content</button><br>
+    sandbox:
+    <div id="sandbox">
+      <h1>Something</h1>
+      <p>Anything</p>
+    </div>
+    output:
+    <div id="output"></div>
+    <popup id="TitleForTest">
+      After press on this button output shall contain text:<br>
+      Got click on Test button!
+    </popup>
+    <popup id="TitleForShowSandboxContent">
+      After press on this button output shall contain<br>
+	  html source of the <em>sandbox</em>.
+    </popup>
+  </body>
+</html>
+  

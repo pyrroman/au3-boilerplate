@@ -1,0 +1,80 @@
+<html>
+<head>
+<title>View (window) events</title>
+<style> 
+</style>
+  <script src="sciter:lib/root-extender.tis" type="text/tiscript"/> 
+  <script type="text/tiscript">
+    view.onSize = function()
+    {
+      var status = self.select("#status");
+      status.value = String.printf("client size %d,%d | window size %d,%d | client pos %d,%d | window pos %d,%d", 
+         view.box(#width), view.box(#height), 
+         view.box(#width, #border), view.box(#height,#border),
+         view.box(#left, #client, #screen), view.box(#top, #client, #screen), 
+         view.box(#left, #border, #screen), view.box(#top, #border, #screen)
+        );
+    }
+    // the same handler for onMove event
+    view.onMove = view.onSize;
+    
+    var xOffset;
+    var yOffset;
+    
+    type WindowMover: Behavior
+    {
+      function onMouse(evt)
+      {
+        if(!evt.mainButton) return false;
+        switch(evt.type)
+        {
+          case Event.MOUSE_DOWN:
+            xOffset = evt.xScreen - view.box(#left, #border, #screen);
+            yOffset = evt.yScreen - view.box(#top, #border, #screen);
+            this.capture(true);
+            return true;
+          case Event.MOUSE_UP:
+            xOffset = evt.xScreen - view.box(#left, #border, #screen);
+            yOffset = evt.yScreen - view.box(#top, #border, #screen);
+            this.capture(false);
+            return true;
+          case Event.MOUSE_MOVE:
+            {
+              var x = evt.xScreen - xOffset;
+              var y = evt.yScreen - yOffset;
+              view.move(x,y);
+            }
+            return true;
+        }
+        return false;
+      }
+    }    
+    </script>
+
+    <style>
+      #WindowMover
+      {
+        prototype: WindowMover;
+        cursor: move;
+      }
+      #WindowMover:hover
+      {
+        background-color:yellow;
+        cursor: move;
+      }
+      #WindowMover:active
+      {
+        color:orange;
+      }
+      
+    </style>
+</head>
+
+<body>
+  <h1>View (window) events</h1>
+  <p id="WindowMover">Click here to move the window</p>
+  <p id="status" />
+  
+</body>
+
+</html>

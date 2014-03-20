@@ -1,0 +1,100 @@
+body
+{
+  font:10pt Verdana;
+  margin:0;
+  padding:0;
+}
+
+frameset#body 
+{
+  flow:horizontal;
+  width:*;
+  height:*; 
+}
+
+#toolbar 
+{
+  flow:horizontal;
+  border-bottom:3px solid threedface;
+}
+#toolbar > widget[type="button"]
+{
+  behavior:clickable;
+  width: 24px;
+  height: 24px;
+  padding:2px;
+  foreground-position:center center;
+  foreground-repeat:no-repeat;
+  
+}
+#toolbar > widget[type="button"]:disabled 
+{ 
+  foreground-image-transformation:colorize(#ddd);
+}
+#toolbar > widget.back    { foreground-image:url(back.png); }
+#toolbar > widget.forward { foreground-image:url(forward.png); }
+
+#index
+{
+  background-color: window window infobackground infobackground;
+  width:max-intrinsic;
+  height:*;
+  overflow-y:auto;
+  margin:0;
+}
+
+#index caption { display:block; margin-bottom: 0.2em; }
+#index li { display:block; line-height:1.4em; }
+#index li li { margin:0; }
+
+#index ul { margin: 0 0 0 2em; }
+#index>ul { margin: 0; padding:1em; border-spacing:1em; }
+
+#content    
+{ 
+  width:*; height:*; 
+}
+
+#toc
+{
+  font:system;
+  background-color: infobackground;
+  width:200px;
+  height:*;
+  overflow:auto;
+  margin:0;
+}
+
+#toc > ul
+{
+  margin:4px;
+  padding:0;
+  flow:horizontal-flow;
+}
+#toc > ul > caption
+{
+  behavior:clickable;
+  font-weight:bold;
+  width:*;
+  clear:right;
+  white-space:no-wrap;
+  overflow-x: hidden;
+}
+#toc > ul > li
+{
+  behavior:clickable;
+  display:block;
+  width:*;
+  white-space:nowrap;
+  max-width:auto; /* all items have the same width equal to widest item */
+  margin:4px;
+}
+
+#toc > ul > caption:hover,
+#toc > ul > li:hover
+{
+  text-decoration:underline;
+}
+
+
+

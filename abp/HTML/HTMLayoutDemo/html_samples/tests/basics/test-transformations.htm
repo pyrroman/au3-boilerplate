@@ -1,0 +1,75 @@
+<html>
+<head>
+<style> 
+
+  html { background-color: #fff #e9e8f3 #e9e8f3 #fff; }
+    
+</style>
+  <script src="sciter:lib/root-extender.tis" type="text/tiscript"/> 
+  <script type="text/tiscript">
+    
+    var sandbox = self.select("#sandbox");
+    if(!sandbox) throw "sandbox not found";
+    
+    
+    function foreach(out,coll,func) { for(var t in coll) func(out,t); return ""; }
+    
+    
+    function transform(rules,data)
+    {
+      var out = Stream.openString();
+      rules.self(out,data);
+      return out;
+    }
+
+
+    // case #1 - simple array enumeration
+    
+    var data1 = ["One","Two","Three"];
+    
+    var rules1 = 
+    {
+      self: :$,_: $ << "<ul>" << foreach($,_,this.item) << "</ul>",
+      item: :$,_: $ << "<li>" << _ << "</li>"
+    };
+
+
+    // case #2 - simple object tranformation
+
+  
+    var data2 = { uri:"http://company.com", title:"company homepage" };
+    var rules2 = 
+    {
+      self: :$,_: $ << "<a href='" << _.uri << "'>" << _.title << "</a>"
+    }
+
+
+     
+    function on_Test1_click(btn)
+    {
+      sandbox.html = transform(rules1,data1);
+      sandbox.update();
+    }
+    
+    function on_Test2_click(btn)
+    {
+      sandbox.html = transform(rules2,data2);
+      sandbox.update();
+    }
+    
+    
+    </script>
+
+
+</head>
+
+<body>
+<h1>Demo of transformations</h1>
+<button id="Test1">Do Test 1</button>
+<button id="Test2">Do Test 2</button>
+
+<div id="sandbox" style="width:100%%; height:100%%; background-color: #fff" />
+
+</body>
+
+</html>

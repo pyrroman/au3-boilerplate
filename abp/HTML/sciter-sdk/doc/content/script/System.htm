@@ -1,0 +1,91 @@
+<html>
+  <head>
+    <meta name="GENERATOR" content="BLOCKNOTE.NET"/>
+    <meta name="source"/>
+    <meta name="source"/>
+    <basefont face="Verdana" size="2"/>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>System object</h1>
+  <p><font color="#ff3300">ATTN</font>: methods of this object are not always available to the script - they depend on feature parameters of VM creation.</p>
+  <div align="left">
+    <table border="0" cellpadding="4" cellspacing="0" width="100%">
+      <tr>
+        <td colspan="2">
+          <h2>Constants</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>IS_READONLY</em></strong></td>
+        <td valign="middle">- int, scanFiles callback/attributes, file/dir is readonly.</td></tr>
+      <tr>
+        <td width="117" bgcolor="#ffffff" valign="top" align="right"><strong><em>IS_DIR</em></strong></td>
+        <td valign="middle">- int, scanFiles callback/attributes, file is directory(folder).</td></tr>
+      <tr>
+        <td width="117" bgcolor="#ffffff" valign="top" align="right"><strong><em>IS_HIDDEN</em></strong></td>
+        <td valign="middle">- int, scanFiles callback/attributes, file/dir is marked as hidden.</td></tr>
+      <tr>
+        <td width="117" bgcolor="#ffffff" valign="top" align="right"><strong><em>IS_SYSTEM</em></strong></td>
+        <td valign="middle">- int, scanFiles callback/attributes, file/dir is marked as internal for the system.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MOBILE_OS</em></strong></td>
+        <td valign="middle">- true for the <em>mosciter</em> that is running on mobile platform, false otherwise.</td></tr>
+      <tr>
+        <td width="117" bgcolor="#ffffff" valign="top" align="right"><em><strong>DESKTOP_OS</strong></em></td>
+        <td valign="middle">- true for the <em>sciter</em> running on desktop PC/platform, false otherwise.</td></tr>
+      <tr>
+        <td width="117" bgcolor="#ffffff" valign="top" align="right"><strong><em>OS</em></strong></td>
+        <td valign="middle">- symbol, on Windows it is one of these:
+          <ul>
+            <li><code>#Windows-98</code></li>
+            <li><code>#Windows-98-SE</code></li>
+            <li><code>#Windows-ME</code></li>
+            <li><code>#Windows-CE</code> - Windows CE or Windows Mobile</li>
+            <li><code>#Windows-NT4</code></li>
+            <li><code>#Windows-2000</code></li>
+            <li><code>#Windows-2003</code></li>
+            <li><code>#Windows-XP</code></li>
+            <li><code>#Windows-Vista</code></li>
+            <li><code>#Windows-7</code></li></ul></td></tr>
+      <tr>
+        <td colspan="2" valign="top">
+          <h2>Methods</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>scanFiles</em></strong></td>
+        <td valign="middle">
+          <p><strong>( </strong><em>path</em>:string [,<em> callback</em>:function]<strong> )</strong> :integer</p>
+          <p>Function calls <em>callback</em> function for each entry found in directory defined by the <em>path. Path</em> can contain wildcards like ? or *. Function returns number of entries scanned.</p>
+          <p>If callback is ommited then function just returns number of items satisfying path condition. In this form the scan can be used for testing of some file existence as an example.</p>
+          <p>Callback function shall accept two parameters:</p>
+          <blockquote>
+            <p>function <em>callback</em>( <em>filename</em>: string, <em>attributes</em>: integer ): bool</p></blockquote>
+          <p>where <em>filename</em> is an name of the file and <em>attributes</em> is an integer - OR-ed combination of IS_*** flags. Callback function shall return <em>true</em> if further scanning needed and <em>false</em> to stop enumeration.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>home</em></strong></td>
+        <td valign="middle">
+          <div><strong>(</strong>[<em>relpath</em>:string]<strong>)</strong> returns: <em>string</em></div>
+          <p>Returns home folder of the application - folder where sciter started from. If <em>relpath</em> is some string then it will be appended to the return value. Use this if you need to find fully qualified file name residing in sciter folder or subfolder.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>path</em></strong></td>
+        <td valign="middle">
+          <div><strong>(</strong>system-folder: symbol [,<em>relpath</em>:string]<strong>)</strong> returns: <em>string</em></div>
+          <p>Returns path of one of the system folders. <em>system-folder</em> here is one of:</p>
+          <ul>
+            <li><code>#SYSTEM</code></li>
+            <li><code>#SYSTEM_BIN</code></li>
+            <li><code>#PROGRAM_FILES</code></li>
+            <li><code>#USER_APPDATA</code></li>
+            <li><code>#COMMON_APPDATA</code></li>
+            <li><code>#USER_DOCUMENTS</code></li>
+            <li><code>#COMMON_DOCUMENTS</code></li></ul></td></tr>
+      <tr>
+        <td colspan="2" bgcolor="#ffffff" valign="top">
+          <h2>Prperties</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>language</em></strong></td>
+        <td valign="middle">The abbreviated name of the language, ISO Standard 639 names.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>country</em></strong></td>
+        <td valign="middle">Country/region name, based on ISO Standard 3166.</td></tr></table></div>
+  <div></div>
+</body>
+</html>

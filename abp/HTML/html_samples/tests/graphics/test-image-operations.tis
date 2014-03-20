@@ -1,0 +1,43 @@
+  var sandbox = self.select("#sandbox");
+  var angleCtl = self.select("#angle");
+  var angle = 0;
+ 
+  var img = sandbox.loadImage("photo.jpg"); 
+  if( !img )
+  {
+    sandbox.value = "photo.jpg is not found";
+    return;
+  }
+  
+  function angleCtl.onValueChanged()
+  {
+    angle = angleCtl.value;
+    sandbox.onSize();
+  }
+
+  function sandbox.draw() 
+  {
+    var gfx = this.graphics(0xFFFFFFFF);
+    
+    var width = this.box(#width);
+    var height = this.box(#height);      
+    
+    var imgHalfWidth = img.width/2;    
+    var imgHalfHeight = img.height/2;
+
+    gfx.save();
+      gfx.translate( width/2, height/2 );
+      gfx.rotate( (angle * Math.PI) / 180.0 );
+      gfx.drawImage(img, -imgHalfWidth, -imgHalfHeight );
+    gfx.restore();
+    
+    var padding = height/10;
+    gfx.rectangle(padding, padding, width - 2*padding, height - 2*padding, 20);
+   
+  }
+
+  function sandbox.onSize()
+  {
+    this.draw();
+    this.refresh();
+  }

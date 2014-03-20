@@ -1,0 +1,124 @@
+<html>
+<head>
+  <title>View (window) events</title>
+  <meta name="custom-window-frame" />
+  <style> 
+  
+	html 
+	{ 
+		font:10pt Verdana; 
+		overflow:hidden;
+	}
+	body 
+	{ 
+		padding:3px;
+		margin:0;
+		background-color:#B0CFD1;
+		border-top:1px solid #ebf5f3;
+		border-left:1px solid #ebf5f3;
+		border-bottom:1px solid #84a0a2;
+		border-right:1px solid #84a0a2;
+		background-image:url(TOPRIGHT.PNG);
+		background-repeat:no-repeat;
+		background-position:100% 0%;
+		width:100%%; 
+		height:100%%; 
+	}
+
+	#topbar
+	{
+		flow:horizontal;
+		margin-bottom:3px;
+	}
+
+	#topbar #window-caption 
+	{
+		color: #274749;
+		padding:0 4px;
+    height:*;
+	}
+	#window-content
+	{
+		background-color:window;
+		width:100%%; 
+		height:100%%; 
+	}
+	#topbar widget[type="button"] 
+	{
+		width:1em;
+		height:1em;
+		background-image:none;
+		padding:1px;
+		font-family: marlett;
+		font-size:10pt;
+		color: #274749;
+		border:1px solid #B0CFD1;
+		text-align:center;
+		vertical-align:center;
+		margin:0;
+	}
+	#topbar widget[type="button"]:hover 
+	{
+		color:orange;
+		border-color:orange;
+		background-color:#B0CFD1;
+	} 
+	#topbar widget[type="button"]:active 
+	{
+		background-color:#274749;
+	} 
+
+	#topbar widget#window-minimize,
+	#topbar widget#window-maximize { margin-right:2px; } 
+
+	#topbar widget#window-icon
+	{
+		foreground-image:url(icon.png);
+		foreground-repeat:no-repeat;
+		foreground-position:50% 50%;
+	}
+
+	#bottombar 
+	{
+		margin-top:3px;
+		flow:horizontal;
+	}
+
+	#bottombar #window-corner
+	{
+	  margin-top:100%%;
+		font-family: marlett;
+		font-size:10pt;
+		color: #274749;
+		width:min-intrinsic;
+	}
+
+	#bottombar #window-status
+	{
+		color: #274749;
+		font-size:9pt;
+    margin:0;
+	}
+ 
+  </style>
+  <!--<script type="text/tiscript"></script>-->
+</head>
+
+<body>
+	<div id="topbar">
+		<widget id="window-icon" type="button"></widget>
+		<div id="window-caption"></div>
+		<widget id="window-minimize" type="button">0</widget>
+		<widget id="window-maximize" type="button">1</widget>
+		<widget id="window-close" type="button" title="Guess what is this button doing?">r</widget>
+	</div>
+	<div id="window-content">
+	Hello world! Some input: <input type="text" /> and button <button id="button-to-click">Click me!</button>
+	</div>
+	<div id="bottombar">
+		<p id="window-status">This is the <i>status</i>...</p>
+		<div id="window-corner">o</div>
+	</div>
+  
+</body>
+</html>

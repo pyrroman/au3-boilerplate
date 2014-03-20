@@ -1,0 +1,92 @@
+<html>
+<head>
+  <style>
+  
+    table#grid  
+    { 
+      border:1px solid #bdbccc; 
+      overflow: auto;
+      width:*;
+      height:100%%;
+      margin:0 *;
+      prototype:EditableGrid url(editable-grid.tis);
+    }
+    table#grid > tr > th 
+    { 
+      color: white;
+      font-family:"Century Gothic","Verdana"; 
+      font-size:10pt; 
+      border:none;
+      padding:4px; 
+      background-color:#DDD; 
+      background-image:url(header.png);
+      background-repeat:expand stretch-left stretch-right stretch-middle;
+      background-position:3px 3px 3px 3px;
+    }
+    table#grid > tr > th:hover 
+    { 
+      color: #ffe598;
+      transition:blend;
+      background-image:url(header-hover.png);
+    }
+    
+    /* column widths */
+    table#grid > tr > th:nth-child(1) { width:*; } 
+    table#grid > tr > th:nth-child(2) { width:6em; text-align:right; } 
+    table#grid > tr > th:nth-child(3) { width:6em; text-align:right; } 
+    
+    /* column alignment */
+    table#grid > tr > td:nth-child(1) { text-align:left; } 
+    table#grid > tr > td:nth-child(2) { text-align:right; } 
+    table#grid > tr > td:nth-child(3) { text-align:right; } 
+    
+    table#grid > tr:nth-child(odd) { background-color:white; } /* each odd row */
+    table#grid > tr:nth-child(even) { background-color:#F4F3F9; } /* each even row */
+    
+    table#grid > tr > td 
+    { 
+      font:system; 
+      height:1.4em;
+      padding:2px; 
+    }
+    
+    table#grid > tr.editable > td 
+    {
+      height:calc(1.4em + 4px);
+      padding:0;
+    }
+    table#grid  > tr.editable > td > widget
+    { 
+      size:*;
+    } 
+    table#grid  > tr.template { display:none; }
+  
+  
+  </style>  
+  <script type="text/tiscript"></script>  
+</head>
+<body>
+
+  <p>Editable table (grid). Main idea here is that the table contains template row <code>&lt;tr .editable .template&gt;</code> with editors used for editing data.</p>
+  <p>In reality EditableGrid should accept array of "cell formatters" - functions that produce on-screen representation of values e.g. dates. All this formatting can be done inside EditableGrid.onRowClick() method.</p>
+
+  <table #grid fixedrows=1 fixedlayout>
+    <tr><th>text</th><th>number</th><th>decimal</th></tr>
+    <tr><td></td><td>1</td><td>100.00</td></tr>
+    <tr><td></td><td>2</td><td>200.00</td></tr>
+    <tr><td></td><td>3</td><td>300.00</td></tr>
+    <tr><td></td><td>4</td><td>400.00</td></tr>
+    <tr><td></td><td>5</td><td>500.00</td></tr>
+    <tr><td></td><td>6</td><td>600.00</td></tr>
+    <tr><td></td><td>7</td><td>700.00</td></tr>
+    <tr><td></td><td>8</td><td>800.00</td></tr>
+    <tr><td></td><td>9</td><td>900.00</td></tr>
+    <tr .editable .template>
+        <td><widget type="text" /></td>
+        <td><widget type="number" min=0 max=100 step=1 /></td>
+        <td><widget type="decimal" /></td></tr>
+    
+  </table>
+
+</body>
+</html>

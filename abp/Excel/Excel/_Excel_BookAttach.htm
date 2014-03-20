@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Function _Excel_BookAttach</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="../css/default.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h1>Function Reference</h1>
+<font size="+1">_Excel_BookAttach</font>
+<hr size="2">
+<p>Attach to the first instance of a workbook where the search string matches based on the selected mode.<br></p>
+
+<p class="codeheader">
+#Include &lt;Excel Rewrite.au3&gt;<br>
+_Excel_BookAttach($sString[, $sMode = "FilePath"[, $oInstance = Default]])<br>
+</p>
+<p>&nbsp;</p>
+
+<p><b>Parameters</b></p>
+<table border="1" width="100%" cellspacing="0" cellpadding="3" bordercolor="#C0C0C0">
+  <tr>
+    <td width="15%">$sString</td>
+    <td width="85%">String to search for</td>
+  </tr>
+  <tr>
+   <td>$sMode</td>
+   <td>Optional: specifies search mode:<br>
+       FileName - Name of the open workbook<br>
+       FilePath - Full path to the open workbook (default)<br>
+       Title - Title of the Excel window</td>
+  </tr>
+  <tr>
+   <td>$oInstance</td>
+   <td>Optional: Object of the Excel instance to be searched (default = keyword Default = all instances)</td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p><b>Return Value</b></p>
+Success: Returns the Excel workbook object<br>
+Failure: Returns 0 and sets @error:<br>
+&nbsp;&nbsp;&nbsp; 1 - An error occurred or $sString can't be found in any of the open workbooks. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 2 - $sMode is invalid<br>
+<p>&nbsp;</p>
+
+<p><b>Remarks</b></p>
+None.<br>
+<br>
+<p>&nbsp;</p>
+
+<p><b>Related</b></p>
+<a href="_Excel_BookClose.htm">_Excel_BookClose</a>, <a href="_Excel_BookNew.htm">_Excel_BookNew</a>, <a href="_Excel_BookOpen.htm">_Excel_BookOpen</a>, <a href="_Excel_BookOpenText.htm">_Excel_BookOpenText</a>
+<p>&nbsp;</p>
+
+<p><b>Example</b></p>
+<p class="codebox">
+<br>
+<span><span class="S12">#AutoIt3Wrapper_AU3Check_Stop_OnWarning=Y</span><br>
+<span class="S12">#AutoIt3Wrapper_AU3Check_Parameters=-d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6</span><br>
+<br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Excel Rewrite.au3&gt;</span><br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Constants.au3&gt;</span><br>
+<br>
+<span class="S1">; Create application object and open an example workbook</span><br>
+<span class="S5">Global</span><span class="S0"> </span><span class="S9">$oAppl</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_Open</span><span class="S8">()</span><br>
+<span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Exit</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_BookAttach Example"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error creating the Excel application object."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S5">Global</span><span class="S0"> </span><span class="S9">$oWorkbook</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_BookOpen</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">,</span><span class="S0"> </span><span class="S6">@ScriptDir</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"\_Excel1.xls"</span><span class="S8">)</span><br>
+<span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_BookAttach Example"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error opening workbook '_Excel1.xls'."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_Close</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Exit</span><br>
+<span class="S5">EndIf</span><br>
+<br>
+<span class="S0">Example1</span><span class="S8">()</span><br>
+<span class="S0">Example2</span><span class="S8">()</span><br>
+<br>
+<span class="S5">Exit</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 1</span><br>
+<span class="S1">; Attach to the first Workbook where the file path matches</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example1</span><span class="S8">()</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$sWorkbook</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S6">@ScriptDir</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"\_Excel1.xls"</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$oWorkbook</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_BookAttach</span><span class="S8">(</span><span class="S9">$sWorkbook</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_BookAttach Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error attaching to '"</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sWorkbook</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"'."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_BookAttach Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Search by 'filepath':"</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"Successfully attached to Workbook '"</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sWorkbook</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"'."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"Value of cell B3: "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$oWorkbook</span><span class="S8">.</span><span class="S14">Activesheet</span><span class="S8">.</span><span class="S14">Range</span><span class="S8">(</span><span class="S7">"B3"</span><span class="S8">).</span><span class="S14">Value</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example1</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 2</span><br>
+<span class="S1">; Attach to the first Workbook where the file name matches</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example2</span><span class="S8">()</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$sWorkbook</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S7">"_Excel1.xls"</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$oWorkbook</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_BookAttach</span><span class="S8">(</span><span class="S9">$sWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"filename"</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_BookAttach Example 2"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error attaching to '"</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sWorkbook</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"'."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_BookAttach Example 2"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Search by 'filename':"</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"Successfully attached to Workbook '"</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sWorkbook</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"'."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"Value of cell A2: "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$oWorkbook</span><span class="S8">.</span><span class="S14">Activesheet</span><span class="S8">.</span><span class="S14">Range</span><span class="S8">(</span><span class="S7">"A2"</span><span class="S8">).</span><span class="S14">Value</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example2</span></span><br>
+<br><OBJECT id=hhctrl type="application/x-oleobject" classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11" width=58 height=57>
+<PARAM name="Command" value="ShortCut">
+<PARAM name="Button" value="Text:Open this Script">
+<PARAM name="Item1" value=",Examples\HelpFile\_Excel_BookAttach.au3,">
+</OBJECT>
+<p>&nbsp;</p>
+
+</body>
+</html>

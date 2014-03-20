@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Function _Excel_ConvertFormula</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="../css/default.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h1>Function Reference</h1>
+<font size="+1">_Excel_ConvertFormula</font>
+<hr size="2">
+<p>Converts cell references in a formula between A1 and R1C1 reference styles, relative and absolute reference type, or both.<br></p>
+
+<p class="codeheader">
+#Include &lt;Excel Rewrite.au3&gt;<br>
+_Excel_ConvertFormula($oExcel, $sFormula, $iFromStyle[, $iToStyle = Default[, $iToAbsolute = Default[, $vRelativeTo = Default]]])<br>
+</p>
+<p>&nbsp;</p>
+
+<p><b>Parameters</b></p>
+<table border="1" width="100%" cellspacing="0" cellpadding="3" bordercolor="#C0C0C0">
+  <tr>
+    <td width="15%">$oExcel</td>
+    <td width="85%">Excel application object</td>
+  </tr>
+  <tr>
+   <td>$sFormula</td>
+   <td>String containing the formula to convert</td>
+  </tr>
+  <tr>
+   <td>$iFromStyle</td>
+   <td>The reference style of the formula. Can be any of the XlReferenceStyle enumeration</td>
+  </tr>
+  <tr>
+   <td>$iToStyle</td>
+   <td>Optional: A XlReferenceStyle enumeration specifying the reference style to be returned. If omitted, the reference style isn't changed</td>
+  </tr>
+  <tr>
+   <td>$iToAbsolute</td>
+   <td>Optional: A XlReferenceType which specifies the converted reference type. If this argument is omitted, the reference type isn't changed</td>
+  </tr>
+  <tr>
+   <td>$vRelativeTo</td>
+   <td>Optional: A Range object or a A1 range that contains one cell. Relative references relate to this cell. If omitted A1 is used</td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p><b>Return Value</b></p>
+Success: Returns the converted formula as a string<br>
+Failure: Returns "" and sets @error<br>
+&nbsp;&nbsp;&nbsp; 1 - $oExcel is not an object or not an application object<br>
+&nbsp;&nbsp;&nbsp; 2 - $vRelativeTo is not an object or a valid A1 range<br>
+<p>&nbsp;</p>
+
+<p><b>Remarks</b></p>
+R1C1 references are language dependant.<br>
+In English: "R10C5" (row 10 column 5), in German: "Z10S5" (Zeile 10 Spalte 5)<br>
+<br>
+<p>&nbsp;</p>
+
+<p><b>Related</b></p>
+
+<p>&nbsp;</p>
+
+<p><b>Example</b></p>
+<p class="codebox">
+<br>
+<span><span class="S12">#AutoIt3Wrapper_AU3Check_Stop_OnWarning=Y</span><br>
+<span class="S12">#AutoIt3Wrapper_AU3Check_Parameters=-d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6</span><br>
+<br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Excel Rewrite.au3&gt;</span><br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Array.au3&gt;</span><br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Constants.au3&gt;</span><br>
+<br>
+<span class="S1">; Create application object and open an new workbook</span><br>
+<span class="S5">Global</span><span class="S0"> </span><span class="S9">$oAppl</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_Open</span><span class="S8">()</span><br>
+<span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Exit</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_ConvertFormula Example"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error creating the Excel application object."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S5">Global</span><span class="S0"> </span><span class="S9">$oWorkbook</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_BookNew</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">)</span><br>
+<span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_ConvertFormula Example"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error creating new workbook."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_Close</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Exit</span><br>
+<span class="S5">EndIf</span><br>
+<br>
+<span class="S0">Example1</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">)</span><br>
+<span class="S0">Example2</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">)</span><br>
+<br>
+<span class="S5">Exit</span><br>
+<br>
+<span class="S1">; ****************************************************************************</span><br>
+<span class="S1">; Example 1</span><br>
+<span class="S1">; Translate an A1 range to a R1C1 range and vice versa</span><br>
+<span class="S1">; ****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example1</span><span class="S8">(</span><span class="S9">$oExcel</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$sFormula</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S7">"C4:G12"</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S1">; Relative: A1 to R1C1</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$sR1C1</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_ConvertFormula</span><span class="S8">(</span><span class="S9">$oExcel</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$sFormula</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlA1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlR1C1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlRelative</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_ConvertFormula Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error converting formula to R1C1 style."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S1">; R1C1 to A1</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$sA1</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_ConvertFormula</span><span class="S8">(</span><span class="S9">$oExcel</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$sR1C1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlR1C1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlA1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlRelative</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_ConvertFormula Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error converting formula to A1 style."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S1">; Show result</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_ConvertFormula Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Conversion type: Relative"</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">" &nbsp;A1 to a R1C1 style: "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sFormula</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">" to "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sR1C1</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">" &nbsp;R1C1 to A1 style: "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sR1C1</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">" to "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sA1</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S1">; Absolute: A1 to R1C1</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S9">$sR1C1</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_ConvertFormula</span><span class="S8">(</span><span class="S9">$oExcel</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$sFormula</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlA1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlR1C1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlAbsolute</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_ConvertFormula Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error converting formula to R1C1 style."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S1">; R1C1 to A1</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S9">$sA1</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_ConvertFormula</span><span class="S8">(</span><span class="S9">$oExcel</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$sR1C1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlR1C1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlA1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlAbsolute</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_ConvertFormula Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error converting formula to A1 style."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S1">; Show result</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_ConvertFormula Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Conversion type: Absolute"</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">" &nbsp;A1 to a R1C1 style: "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sFormula</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">" to "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sR1C1</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">" &nbsp;R1C1 to A1 style: "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sR1C1</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">" to "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sA1</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example1</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 2</span><br>
+<span class="S1">; Translate an formula from A1 to R1C1 style and use a relative reference</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example2</span><span class="S8">(</span><span class="S9">$oExcel</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$sFormula</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S7">"=SUM(C4:G12)"</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$sConverted</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_ConvertFormula</span><span class="S8">(</span><span class="S9">$oExcel</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$sFormula</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlA1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlR1C1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlRelative</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$oExcel</span><span class="S8">.</span><span class="S14">Range</span><span class="S8">(</span><span class="S7">"B2"</span><span class="S8">))</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_ConvertFormula Example 2"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error converting formula."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_ConvertFormula Example 2"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Translate an A1 formula to a R1C1 and use a relative reference:"</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sFormula</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">" to "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S9">$sConverted</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Return</span><span class="S0"> </span><span class="S9">$sConverted</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example2</span></span><br>
+<br><OBJECT id=hhctrl type="application/x-oleobject" classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11" width=58 height=57>
+<PARAM name="Command" value="ShortCut">
+<PARAM name="Button" value="Text:Open this Script">
+<PARAM name="Item1" value=",Examples\HelpFile\_Excel_ConvertFormula.au3,">
+</OBJECT>
+<p>&nbsp;</p>
+
+</body>
+</html>

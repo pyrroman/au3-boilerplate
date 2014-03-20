@@ -1,0 +1,240 @@
+
+@const TB_BUTTON_BACK_NORMAL: url(theme:toolbar-button-normal) stretch;	
+@const TB_BUTTON_BACK_HOVER: url(theme:toolbar-button-hover) stretch;
+@const TB_BUTTON_BACK_ACTIVE: url(theme:toolbar-button-pressed) stretch;
+@const TB_BUTTON_BACK_CHECKED: url(theme:toolbar-button-checked) stretch;
+@const TB_BUTTON_BACK_CHECKED_HOVER: url(theme:toolbar-button-checked-hover) stretch;
+@const TB_BUTTON_BACK_DISABLED: url(theme:toolbar-button-disabled) stretch;
+@const TB_BUTTON_TEXT_COLOR: graytext;	
+
+@const CAPTION_BACKGROUND_COLOR: threedface threedface scrollbar scrollbar;
+@const CAPTION_BORDER: threeddarkshadow threedhighlight threedhighlight threeddarkshadow;
+@const VIEW_BORDER: threeddarkshadow threedhighlight threedhighlight threeddarkshadow;
+
+html 
+{
+  background-color:threedface;
+  overflow:hidden;
+}
+body 
+{
+  font:system;
+  padding:0;
+  margin:0;
+}
+
+widget { background-image:none; }
+
+div#toolbar 
+{
+  flow:h-flow;
+  background-color:threedhighlight threedhighlight threedface threedface;
+}
+div#toolbar > widget.tb-button
+{
+  behavior:clickable;
+  width:28px; height:28px; 
+  foreground-repeat:no-repeat;
+  foreground-position:50% 50%;
+  background:@TB_BUTTON_BACK_NORMAL;
+  padding:0;
+  margin:2px;
+  text-align:center;
+  vertical-align:middle;
+}
+div#toolbar > widget.tb-button:hover
+{
+  background:@TB_BUTTON_BACK_HOVER;
+}
+div#toolbar > widget.tb-button:checked
+{
+  background:@TB_BUTTON_BACK_CHECKED;
+}
+div#toolbar > widget.tb-button:active
+{
+  background:@TB_BUTTON_BACK_ACTIVE;
+}
+div#toolbar > widget.tb-button:disabled
+{
+  foreground-image-transformation: contrast-brightness-gamma(0.15,0.75,1.0);
+}
+
+div#toolbar > hr
+{
+  border:none;
+  border-left: 1px solid threedshadow;
+  border-right: 1px solid threedhighlight;
+  width:0;
+  height:*; 
+  padding:0;
+  margin:2px;
+}
+
+div#statusbar 
+{
+  background-color:scrollbar scrollbar threedface threedface;
+  height:18px;
+}
+
+frameset 
+{
+  border-spacing:0;
+  width:*;
+  height:*;
+}
+frameset > hr 
+{
+  width:3px;
+  height:*;
+  border:none;
+  padding:0;
+  margin:0;
+  background-color: threedface;
+}
+
+div#sidebar 
+{
+  style-set: "side-bar";
+}
+div#sandbox 
+{
+  height:*;
+}
+
+hr.caption-bar
+{
+  padding:0; margin:0;
+  height:3px;
+  border:none;
+  background-color: threedface;
+  margin:0;
+}
+
+widget#tab-strip 
+{ 
+  style-set: "tab-strip"; 
+  width:*;
+}
+div#views 
+{ 
+  prototype: Views;
+  width:*;
+  height:*;
+}
+div#views > widget
+{
+  display:none;
+}
+div#views > widget:first-child
+{
+  display:block;
+}
+
+div#search-n-replace
+{
+  style-set: "SR";
+}
+
+@set SR
+{ 
+  :root
+  {
+    padding:3px;
+    width:*;
+    display:none;
+    prototype:SearchReplace;
+    
+  }
+  :root:expanded
+  {
+    display:block; 
+  }
+  
+  button.ctl
+  {
+    width:max-intrinsic;
+    height:max-intrinsic;
+    background: @TB_BUTTON_BACK_NORMAL;
+    color: @TB_BUTTON_TEXT_COLOR;      
+    font: 10pt Marlett;
+    margin:2px;
+    padding:2px;
+    transition:none;
+  }
+  
+  button,
+  input 
+  {
+    vertical-align:middle;
+  }
+  
+  button.ctl:disabled
+  {
+    color: threedface;
+    background: @TB_BUTTON_BACK_DISBALED;
+  }
+  button.ctl:hover
+  {
+    background: @TB_BUTTON_BACK_HOVER;
+  }
+  button.ctl:active
+  {
+    background: @TB_BUTTON_BACK_ACTIVE;
+  } 
+  
+  button#search-n-replace-close 
+  {
+    margin-right:*;
+  }
+  
+  span#search-result
+  {
+    prototype:StatusMessage; 
+    display:inline-block; 
+    white-space:nowrap; 
+    width:12em; 
+    color: red;
+    margin-right:*;
+  }
+  span#search-result img 
+  {
+    vertical-align:middle;
+  }
+}
+
+
+widget.tabview {
+  border:1px solid;
+  border-color: @VIEW_BORDER;
+  width:*;
+  height:*;
+  overflow:hidden;
+}
+
+pre#log 
+{
+  prototype: Log;
+  flow:vertical; /* to prevent delayed measurements.*/
+  behavior:htmlarea;
+  cursor:text;
+  border:1px solid;
+  border-color: @VIEW_BORDER;
+  width:*;
+  height:*;
+  background-color:window;
+  overflow:auto;
+  padding:3px 3px 5px 3px;
+  margin:0;
+}
+
+pre#log > text.error {
+  background-color:#FFDFDF;
+}
+
+div#r-sidebar
+{
+  border:1px solid;
+  border-color: @VIEW_BORDER;
+  style-set: "r-side-bar";
+}
+

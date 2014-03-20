@@ -1,0 +1,241 @@
+//|
+//| grid behavior, must be applied to tables.
+//|
+//| add style="overflow:auto" and fixedrows="1" if you need it scrollable
+//|
+//| NOTIFICATIONS:
+//|   Row Click:
+//|       calls this.onRowClick(rowElement) 
+//|   Header Click:
+//|       calls this.onHeaderClick(headerCellElement) 
+//|
+
+class Grid: Behavior
+{
+  // constants from /api/sciter-x-behavior.h(278) 
+  
+  const TABLE_HEADER_CLICK = 0x81;   // click on some cell in table header, 
+                                     //     target = the cell, 
+                                     //     reason = index of the cell (column number, 0..n)
+  const TABLE_ROW_CLICK = 0x82;      // click on data row in the table, target is the row
+                                     //     target = the row, 
+                                     //     reason = index of the row (fixed_rows..n)
+  const TABLE_ROW_DBL_CLICK = 0x83;  // mouse dbl click on data row in the table, target is the row
+                                     //     target = the row, 
+                                     //     reason = index of the row (fixed_rows..n)
+                                     
+  // Click on Header cell,
+  // override it for particular grid instance
+  // E.g. you may chose to reorder table using this column as a key.
+  function onHeaderClick( headerCell )
+    {
+      this.postEvent(TABLE_HEADER_CLICK,headerCell.index, headerCell);
+      return true;
+    }
+  
+  // Click on some row 
+  // override it for particular grid instance
+  function onRowClick( row )
+    {
+      this.postEvent(TABLE_ROW_CLICK,row.index, row);
+      return true;
+    }
+  function onRowDoubleClick( row )
+    {
+      this.postEvent(TABLE_ROW_DBL_CLICK,row.index, row);
+      return true;
+    }
+  
+  
+  // returns current row (if any)
+  function getCurrentRow()
+    {
+      return this.select( "tr:current" );
+    }
+  
+  // returns current column (if any)
+  function getCurrentColumn()
+    {
+      var fixed = this.fixedRows( );
+      if( fixed == 0) return null;
+      return this[0].select( "td:current,th:current" ); // return current cell in first header row
+    }
+  
+  
+  // set current row
+  function setCurrentRow( row, doubleClick = false )
+    {
+      // get previously selected row:
+      var prev = this.getCurrentRow();
+      if( prev )
+      {
+        if( prev === row ) return; // already here, nothing to do.
+        prev.clearState(Element.STATE_CURRENT); // drop state flag
+      }
+      row.setState(Element.STATE_CURRENT); // set state flag
+      row.scrollToView();
+      if( doubleClick )
+        this.onRowDoubleClick(row);
+      else
+        this.onRowClick(row);
+    }
+  
+  function setCurrentColumn( col )
+    {
+      // get previously selected column:
+      var prev = this.getCurrentColumn();
+      if( prev )
+      {
+        if( prev === col ) return; // already here, nothing to do.
+        prev.clearState(Element.STATE_CURRENT); // drop state flag
+      }
+      col.setState(Element.STATE_CURRENT); // set state flag
+      col.scrollToView();
+      this.onHeaderClick(col);
+    }
+  
+    
+  // get number of fixed Rows in the table
+  function fixedRows( )
+    {
+      var v = this.attributes["fixedrows"];
+      return toInteger(v,0);
+    }
+  
+  function attached()
+  {
+      if( this.tag != "table" )
+        stderr.printf("grid: attached to wrong element - %s\n", this.tag );
+  }
+  
+  function onMouse(evt)
+    {
+      if( (evt.type != Event.MOUSE_DOWN) && (evt.type != Event.MOUSE_DCLICK) )
+          return false;
+      
+      if(!evt.mainButton) 
+          return false;
+         
+      // auxiliary function, returns row this target element belongs to
+      function targetRow( table, target )
+        {
+          if( !target || target.parent === table)
+            return target;
+          return targetRow(table, target.parent);
+        }
+         
+      // auxiliary function, returns row this target element belongs to
+      function targetHeaderCell(headerRow, target)
+        {
+          if( !target || target.parent === headerRow)
+            return target;
+          return targetHeaderCell(headerRow, target.parent);
+        }
+          
+      var row = targetRow(this, evt.target);
+  
+      if(row) // click on the row
+        {
+          if( row.index < this.fixedRows() )
+          {
+            // click on the header cell
+            var headerCell = targetHeaderCell(row,evt.target);
+            if( headerCell )  
+              return this.setCurrentColumn( headerCell );
+            return true;
+          }
+          this.setCurrentRow(row, evt.type == Event.MOUSE_DCLICK);
+        }
+        return true; // as it is always ours then stop event bubbling
+    }
+  
+  function onFocus(evt)
+  {
+      return ( evt.type == Event.GOT_FOCUS || evt.type == Event.LOST_FOCUS );
+  }
+  
+  function onKey(evt)
+    {
+        
+      if( evt.type != Event.KEY_DOWN )
+          return false; // handling only KEY_DOWN
+      
+      //stdout.printf("onKey:%x\n",evt.keyCode);
+      
+      switch( evt.keyCode )
+      {
+        case Event.VK_DOWN:
+          {
+             var crow = this.getCurrentRow();
+             var idx = crow? crow.index + 1 : this.fixedRows();
+             if( idx < this.length ) this.setCurrentRow(this[idx]);
+          }
+          return true;
+          
+        case Event.VK_UP:             
+          {
+             var crow = this.getCurrentRow();
+             var idx = crow? crow.index - 1 : this.length - 1;
+             if( idx >= this.fixedRows() ) this.setCurrentRow(this[idx]);
+          }
+          return true;
+  
+        case Event.VK_PRIOR:
+          {
+             var y = this.scroll( #top ) - this.scroll( #height );
+             var firstScrollable = this.fixedRows();
+             var r;
+             for( var i = this.length - 1; i >= firstScrollable; --i )
+             {
+                 var pr = r; r = this[i];
+                 if( r.box( #top, #inner, #parent ) < y ) 
+                 {
+                    // this row is further than scroll pos - height of scroll area 
+                    this.setCurrentRow(pr? pr: r); // to last fully visible
+                    return true;
+                 }
+             }
+             this.setCurrentRow(r); // just in case
+          }
+          return true;
+  
+        case Event.VK_NEXT:
+          {
+             var y = this.scroll( #bottom ) + this.scroll( #height );
+             var lastScrollable = this.length - 1;
+             var r;
+             for( var i = this.fixedRows(); i <= lastScrollable; ++i )
+             {
+                 var pr = r; r = this[i];
+                 if( r.box( #bottom, #inner, #parent ) > y ) 
+                 {
+                    // this row is further than scroll pos - height of scroll area 
+                    this.setCurrentRow(pr? pr: r); // to last fully visible
+                    return true;
+                 }
+             }
+             this.setCurrentRow(r); // just in case
+          }
+          return true;
+          
+        case Event.VK_HOME:
+          {
+             var idx = this.fixedRows();
+             if( idx < this.length )
+                this.setCurrentRow(this[idx]); 
+          }
+          return true;
+  
+        case Event.VK_END:
+          {
+             var idx = this.length - 1;
+             if( idx >= this.fixedRows() )
+                this.setCurrentRow(this[idx]); 
+          }
+          return true;
+      }
+      return false; 
+    }
+  
+}
+

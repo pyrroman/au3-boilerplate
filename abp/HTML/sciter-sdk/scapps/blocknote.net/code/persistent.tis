@@ -1,0 +1,41 @@
+
+
+// place where components may register themselves to be persistable
+var persistent = {};
+const SETTINGS_FILE = "blocknote-settings.json";
+
+function storeSettings() 
+{
+  var data = {};
+  for(var pn in persistent)
+  {
+    var p = persistent[pn];
+    //stdout.printf("%V\n",persistent);
+    data[pn] = p.storeSettings();
+  }
+  var path = System.path(#USER_APPDATA, SETTINGS_FILE);
+  var stream = Stream.openFile(path,"w");
+  stream.printf("%V",data);
+  stream.close();
+}
+
+function restoreSettings() 
+{
+  var path = System.path(#USER_APPDATA, SETTINGS_FILE);
+  var stream = Stream.openFile(path,"r");
+  if( !stream )
+    return false;
+  var data = parseData( stream );
+  stream.close();
+  var cnt = 0;
+  for(var pn in persistent)
+  {
+    var p = persistent[pn];
+    if( !p ) continue;
+    var pdata = data[pn];
+    if( !pdata ) continue;
+    if(p.restoreSettings(pdata))
+      ++cnt;
+  }
+  return cnt > 0;
+}

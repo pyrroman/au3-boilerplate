@@ -1,0 +1,5 @@
+  widget[type="scintilla"]
+  {
+    behavior: sciter-scintilla\:editor;
+    prototype: Scintilla;
+  }

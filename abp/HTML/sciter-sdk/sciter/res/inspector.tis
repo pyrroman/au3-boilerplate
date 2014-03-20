@@ -1,0 +1,228 @@
+
+var pinned = null;
+var elementPresented = null;
+var inspector = null;
+var contentFrame = null;
+
+class DOMonitor : Behavior
+{
+  function attached() { contentFrame = this; }
+  function detached() { inspector = null; }
+  function onMouse(evt)
+  {
+    //if( !inspector )
+    //  return false;
+    if( !pinned && evt.type == (Event.MOUSE_MOVE | Event.SINKING))
+    {
+      if(elementPresented !== evt.target)
+        inspector.show(elementPresented = evt.target);
+    }
+    if( evt.type == (Event.MOUSE_DOWN | Event.SINKING) && evt.ctrlKey && evt.shiftKey )
+    {
+      inspector.show(elementPresented = evt.target, true);
+      return true;
+    }
+    else if( evt.type == (Event.MOUSE_UP | Event.SINKING) && evt.ctrlKey && evt.shiftKey )
+      return true;
+  }
+}
+
+class DOMinspector : Behavior
+{
+  function attached() 
+  { 
+    inspector = this; 
+    this.rules = this.$(table#current-rules); assert this.rules;
+    this.styles = this.$(table#current-styles);
+    this.states = this.$(widget#current-states);
+    this.atts = this.$(widget#current-atts);
+    this.metrics = this.$(widget#current-metrics);
+    this.metricsRelTo = symbol(this.$(button[name='rel-to']:checked).@#value);
+  }
+  function detached()
+  {
+    this.reset();
+    inspector = null; 
+  }
+
+  function show(element, pinIt = false)
+  {
+    var list = this.$("ul#current-tags");
+    list.clear();
+    var el = element;
+    while(el && el !== contentFrame)
+    {
+      var nm = el.tag;
+      var pn = el.style#prototype;
+      var id = el.@#id;
+      var cls = el.@#class;
+      if( id )  nm += "#" + id;
+      if( cls ) nm += "." + cls;
+      if( pn )  nm += "::" + pn;
+      var item = new Element("li", String.printf("<%s>", nm));
+      item.forElement = el;
+      list.insert(item,0);
+      el = el.parent;
+    }
+    if(pinIt)
+    {
+      pinned = element;
+      list.last.value = true;
+      pinned.attributes["pinned-by-inspector"] = true;
+      this.showInfo(pinned);
+      this.timer(1000,this.onTimer);
+    }
+  }
+  function onControlEvent(evt)
+  {
+    if( evt.type == Event.BUTTON_STATE_CHANGED && evt.target.match("ul#current-tags>li"))
+      return this.onPinnedListItemClick(evt.target);
+    if( evt.type == Event.BUTTON_STATE_CHANGED && evt.target.match("button[name='rel-to']"))
+      return this.onRelToChanged(symbol(evt.target.@#value));
+  }
+  function onPinnedListItemClick(item)
+  {
+    if( !item.value ) // was unchecked
+      this.reset();
+    else // was checked
+    {
+      var list = this.$("ul#current-tags");
+      function clearOther(it) { if(it !== item) it.value = false; }
+      list.select(clearOther, "li:checked"); // remove previously checked
+      if(pinned)
+        pinned.attributes["pinned-by-inspector"] = undefined;
+      pinned = item.forElement; // set new pin
+      pinned.attributes["pinned-by-inspector"] = true;
+      this.showInfo(pinned);
+      this.timer(1000,this.onTimer);
+    }
+    return true;
+  }
+  
+  function reset()
+  {
+    if( pinned )
+    {
+      pinned.attributes["pinned-by-inspector"] = undefined;
+      pinned = null;
+      this.$("ul#current-tags").clear();
+      this.timer(0, this.onTimer);
+    }
+  }
+  
+  function onTimer()
+  {
+    this.showInfo(pinned);
+    return true; // keep counting
+  }
+  
+  function showInfo(el)
+  {
+    this.showRules(el);
+    this.showCurrentStyles(el)
+    this.showAttributes(el);
+    this.showStates(el);
+    this.showMetrics(el);
+  }
+  
+  function showRules(el)
+  {
+    var ruleList = el.style.rules();
+    var table = this.rules;
+    table.clear();
+   
+    for(var rule in ruleList)
+    {
+      if(rule.type == #style-rule)
+      {
+        if(rule.selector == "[pinned-by-inspector]")
+          continue; // do not need this one
+        table.insert(String.printf("<caption><span.name>%s</span><span.value>%s(%d)</span></caption>", 
+           rule.selector, (rule.file %~ "/") || rule.file, rule.lineNo));         
+      }
+      else if(rule.type == #inline-style)
+        table.insert("@style:");
+      else if(rule.type == #runtime-style)
+        table.insert("runtime style:");
+      var attributes = rule.attributes;  
+      var attribute_names = [];  
+      for(var name in attributes) attribute_names.push(name);
+      attribute_names.sort();
+      for(var name in attribute_names)
+        table.insert(String.printf("<tr><td.attr-name>%s :</td><td.attr-value>%s</td></tr>", name.toString(), attributes[name].toString()));
+    }
+  }
+  function showAttributes(el)
+  {
+    this.atts.clear();
+    for(var att in el.attributes)
+      if(att != "pinned-by-inspector")
+      {
+        var option = new Element(#option);
+        this.atts.insert(option);        
+        option.html = String.printf("<span.name>%s</span><span.value>%s</span>", 
+           att,el.attributes[att]);         
+      }
+  }
+  
+  function showCurrentStyles(el)
+  {
+    var table = this.styles;
+    table.clear();
+    var attributes = el.style.all();  
+    var attribute_names = [];  
+    for(var name in attributes) attribute_names.push(name);
+    attribute_names.sort();
+    for(var name in attribute_names)
+      table.insert(String.printf("<tr><td.attr-name>%s :</td><td.attr-value>%s</td></tr>", name.toString(), attributes[name].toString()));
+  }
+
+  
+  function showStates(el)
+  {
+    var names =[#link,        #hover,       #active,      #visited,     #focus,     #tab-focus,
+                #popup,       #current,     #checked,     #disabled,    #expanded,  #collapsed,
+                #incomplete,  #animating,   #focusable,   #read-only,   #empty,     #anchor,  
+                #synthetic,   #owns-popup,  #busy,        #rtl,         #ltr,       #has-child,
+                #drag-over,   #drop-target, #moving,      #copying,     #drag-source,  
+                #drop-marker, #has-children ];
+    this.states.clear();
+    for(var n in names)
+    {
+      if(el.state[n]) 
+      {
+        var option = new Element(#option);
+        this.states.insert(option);        
+        option.html = String.printf("<span.name>%s</span><span.value>on</span>", n);
+      }
+    }
+  }
+  function showMetrics(el)
+  {
+    var metrics = this.metrics;
+    metrics.clear();
+    function boxdef(name,l,t,r,b,w,h)
+    { 
+      var option = new Element(#option); metrics.insert(option);        
+      option.html = String.printf("<span.name>%s</span><span.value>%d,%d,%d,%d:%d,%d</span>",name,l,t,r,b,w,h);
+    }
+    var relTo = this.metricsRelTo;
+    
+    var boxes = [#margin, #border, #padding, #inner, #content, #client, #icon ];
+    for(var boxname in boxes)
+      boxdef( boxname,  el.box(#left,boxname,relTo),
+                        el.box(#top,boxname,relTo), 
+                        el.box(#right,boxname,relTo),
+                        el.box(#bottom,boxname,relTo),
+                        el.box(#width,boxname,relTo),
+                        el.box(#height,boxname,relTo));
+  }
+  function onRelToChanged(newRelToSym)
+  {
+    this.metricsRelTo = newRelToSym;
+    if(pinned)
+      this.showMetrics(pinned); 
+  }
+  
+  
+}

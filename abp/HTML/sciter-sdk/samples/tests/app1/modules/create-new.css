@@ -1,0 +1,72 @@
+
+	#create-new-bar 
+	{
+	  overflow:hidden; 
+	  height:100%%; 
+	  width:100%%;	  
+	  margin:0;
+	  border:1px solid #006e9b;     
+	  background-color: #fff;
+	  overflow:auto;
+	  behavior:expandable-list;
+	}
+	
+	#create-new-bar > li 
+	{
+	   color:black;
+	   transition:slide; /* sliding! */
+	} 
+
+  #create-new-bar > li > .caption
+	{
+	  font-weight:bold;
+	  color:white;
+	  padding:6px;
+	  margin:-1px;
+	  padding-left:40px; /* space for icon */
+	  foreground-repeat:no-repeat; /* space for icon */
+	  foreground-position:2px 50%; /* icon */
+	  background-image:url(images/bback-normal.png);
+	  background-repeat:expand stretch-left stretch-right stretch-middle;
+	  background-position:3px 3px 3px 3px;
+	  
+	  margin:0;
+	} 
+
+  #create-new-bar > li > .caption:hover
+	{
+	  color: #ffe598;
+	  transition:blend;
+	  background-image:url(images/bback-hover.png);
+	} 
+	
+  #create-new-bar > li:current
+	{
+      height:100%%; /* whole idea - it takes all available space */ 	  
+	}
+	
+    /*#create-new-bar > li:current > .caption
+	{
+	  
+	}*/
+	
+	#create-new-bar > li > .content 
+	{
+    display:none;	 /* hidden by default */  
+	  background-color: #f8f8f8;
+  	padding:4px;
+	  height:100%%; 
+	  overflow-y:hidden; 
+	}
+	#create-new-bar > li:expanded > .content 
+	{
+      display:block; /* visible */
+	}
+  
+  #create-new-bar em 
+  {
+    color:red;
+  }
+    
+  
+  

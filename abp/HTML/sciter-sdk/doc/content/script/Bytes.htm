@@ -1,0 +1,60 @@
+﻿<html>
+  <head>
+    <meta name="GENERATOR" content="BLOCKNOTE.NET"/>
+    <meta name="source"/>
+    <meta name="source"/>
+    <basefont face="Verdana" size="2"/>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>Bytes object</h1>
+  <p>Bytes is an array of bytes.</p>
+  <div align="left">
+    <table border="0" cellpadding="2" cellspacing="4" width="100%">
+      <tr>
+        <td colspan="2">
+          <h2>Constants</h2></td></tr>
+      <tr>
+        <td width="147" valign="top" align="right"></td>
+        <td bgcolor="#fffff0" valign="top">N/A</td></tr>
+      <tr>
+        <td colspan="2">
+          <h2>Properties</h2></td></tr>
+      <tr>
+        <td width="117" bgcolor="#ffffff" valign="top" align="right"><strong><em>[index]</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"><strong>- </strong><em>integer</em>, element of the array at the <em>index</em> position, read-write index accessor. Zero-based integer index.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>length</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, read-only, number of bytes in the byte vector.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>type</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>any</em>, could be used for any purposes but sciter uses it to report mime-type (string) of the data received or sent by request() method.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>name</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>any</em>, could be used for any purposes but sciter uses it to report file name (string) of the data received or sent by request() method.</td></tr>
+      <tr>
+        <td colspan="2" valign="top">
+          <h2>Methods</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>this</em></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p>( <em>numBytes</em>: integer )</p>
+          <p>Constructs object of type Bytes - sequence of bytes of <em>numBytes</em> length.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toString</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p><strong>( </strong>[<em>encoding</em>:string] <strong>)</strong> returns: <em>string</em></p>
+          <p>If encoding is not provided then the method returns <em>base64</em> representation of the byte vector. Otherwise if encoding is one of supported encondings from IANA charset list <a href="http://www.iana.org/assignments/character-sets">http://www.iana.org/assignments/character-sets</a> the function returns decoded string.</p>
+          <p>E.g. <code>var str = bytes.toString(&quot;UTF-8&quot;);</code> returns a string from UTF-8 encoded bytes.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>save</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong>( </strong><em>filename</em>:string <strong>)</strong> returns: <em>true|false</em></div>
+          <p>Saves content of the byte vector into the file. If file exists then it will be overwritten.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>load</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong>( </strong><em>filename</em>:string <strong>)</strong> returns: <em>Bytes</em></div>
+          <p>Static method. Creates new Bytes object, loads file into it and returns that object.</p></td></tr></table></div>
+</body>
+</html>

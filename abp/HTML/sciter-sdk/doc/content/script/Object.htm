@@ -1,0 +1,84 @@
+﻿<html>
+  <head>
+    <title>TIScript - Date object</title>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>Object object</h1>
+  <p>Despite of its name Object is a class that contains methods of objects in tiscript. Last line here will be evaluated to <em>true</em>:</p>
+  <pre>var obj = { one:1, two:2 }; // creating object from literal
+if( obj instanceof Object )
+      stdout.printf( &quot;I am an instance of Object&quot; ); // will output this
+</pre>
+  <div align="left">
+    <table border="0" cellpadding="2" cellspacing="2" width="100%">
+      <tr>
+        <td colspan="2">
+          <h2>Properties</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>className</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">readonly, string. Name of the class if object was created as instance of user defined <code>class</code>.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>length</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">readonly, integer. Returns total number of members this instance contains.</td></tr>
+      <tr>
+        <td colspan="2" valign="top">
+          <h2>Methods</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>this</em></td>
+        <td bgcolor="#fffff0" valign="top">( )
+          <p>constructor, creates instance of Object class - object per se.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toString</em></strong><br/> <strong><em>toLocaleString</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">( ) : string
+          <p>Returns string <code>&quot;[object Object]&quot;</code>.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>valueOf</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">( ) : value
+          <p>Returns object itself.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>clone</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">( ) : value
+          <p>Makes copy of the object and returns it.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>exists</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">( <strong>tag</strong>: value, [<strong>deep</strong> = false] ) : true | false
+          <p>Checks property by its tag for existence. If deep == true then does deep lookup - in objects itself and its chain of classes.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>remove</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">( <strong>tag</strong>: value ) : void
+          <p>Removes property of the object by its tag (a.k.a. name).</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>call</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">( <strong>func</strong>: function, [<strong>p1</strong>:value, <strong>p2</strong>:value, ... <strong>pN</strong>:value [, <strong>argv</strong>: array] ] ) : value
+          <p>Calls the <em>func</em> with context of <em>this</em> equal to the object. Parameters if given passed to the function. If <em>argv</em> is provided then its memebers will be added to the list of parameters of the call.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>show</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">( [<strong>out</strong>: Stream] ) : void
+          <p>Reports class name and list of property name/values of the object. Intended to use for debugging purposes.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>eval</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">( <strong>what</strong>: string | Stream [, <strong>namespace</strong>: object] ): value
+          <p>Evaluates (interprets) <em>what</em> with context of <em>this</em> equal to the object. If <em>namespace</em> object is given then it is used as global namespace for evaluated code.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>propertyAt</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">( <strong>tag</strong>: value ) : value
+          <p>Does lookup in the object for member/property by its tag. This is a direct equivalent of <em>obj.tag</em> construction.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>seal</em></strong></td>
+        <td bgcolor="#fffff0" valign="top"><strong>( </strong>[<strong>strict</strong>:true|false] <strong>)</strong> : object
+          <p>Locks structure of the object - after the call any attempt to add or remove object's property will throw an error. Values of existing properties can be changed though. Returns the object iself. If <em>strict</em> parameter is provided and it is exactly <em>true</em> then any attempt to get unknown property will throw an error.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>isSealed</em></strong></td>
+        <td bgcolor="#fffff0" valign="top"><strong>( </strong>[<strong>strict</strong>:true|false]<strong> )</strong> : true | false | undefined
+          <p>Returns <em>true</em> if the object is sealed. If <em>strict</em> parameter is provided and is exactly <em>true</em> then the method returns <em>true</em> only if <em>seal(true)</em> was called for it.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>freeze</em></strong></td>
+        <td bgcolor="#fffff0" valign="top"><strong>( </strong>[<strong>strict</strong>:true|false] <strong>)</strong> : object
+          <p>Locks the object - makes it immutable - any attempt to add, remove and modify value of any object's property will throw an error. Returns the object itself. If there is a <em>strict</em> parameter and it is exactly <em>true</em> then any attempt to get unknown property will throw an error.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>isFrozen</em></strong></td>
+        <td bgcolor="#fffff0" valign="top"><strong>( </strong>[<strong>strict</strong>:true|false]<strong> )</strong> : true | false | undefined
+          <p>Returns <em>true</em> if the object is frozen. If <em>strict</em> parameter is provided and is exactly <em>true</em> then the method returns <em>true</em> only if <em>freeze(true)</em> was called for it.</p></td></tr></table></div>
+</body>
+</html>

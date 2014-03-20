@@ -1,0 +1,131 @@
+
+type StatusMessage: Behavior
+{
+  function show(msg, msgtype = null)
+  {
+    var step = 2.0;
+    if( msgtype == #no )
+      this.html = "<img src='utils/no.gif' /> " + msg;
+    else 
+      this.html = msg;
+    this.style#opacity = 1.0;
+    function onTimer()
+    {
+      step -= 0.1;
+      if(step <= 0.0) { this.style#opacity = 0; return false; }
+      this.style#opacity = Float.min(step,1.0);
+      return true;
+    }
+    this.timer(200,onTimer);
+    return true;
+  }
+}
+
+type SearchReplace: Behavior
+{
+  function activate(forReplace = false)
+  {
+    var ctlSearchText = this.$(#search-text);
+                  
+    var selectedWord = "";
+    if( front.hasSelection && front.lineNo(front.caretPosition) == front.lineNo(front.anchorPosition) )        
+      selectedWord = front.selection;
+    
+    if( this.state.expanded && ctlSearchText.value == selectedWord)
+    {
+      ctlSearchText.state.focus = true;
+      this.doSearchNext();
+      return;
+    }
+    var doSearch = false;
+    this.state.expanded = true;
+    if( selectedWord )
+    {
+      ctlSearchText.value = selectedWord; // popuplate searchText in case of single line selection.
+      doSearch = true;
+    }
+    if( forReplace )
+    {
+      this.$(#do-search-all).state.disabled = false;
+      this.$(#replace-with).value = true;
+      this.$(#replace-text).state.disabled = false;
+      this.$(#replace-text).state.focus = true;
+    }
+    else
+    {
+      ctlSearchText.state.focus = true;
+      if(doSearch)
+        this.doSearchNext();
+      else
+        ctlSearchText.value = ctlSearchText.value; // why ctlSearchText.selectAll(true) does not always work?
+    }
+  }
+
+  function toggleReplace(btn)
+  {
+    var onOff = btn.value;
+   
+    this.$(#replace-text).state.disabled = !onOff;
+    this.$(#do-search-all).state.disabled = !onOff;
+    if(onOff)
+      this.$(#replace-text).state.focus = true;
+    return true;
+  }
+  
+  function doSearchNext()
+  {
+    var text = this.$(#search-text).value;
+    if( !text )
+      return false;
+      
+    var replace = this.$(#replace-with).value;
+    if( replace )
+    {
+      var replaceBy = this.$(#replace-text).value;
+      if(front.selection == text)
+        front.selection = replaceBy;
+    }
+      
+    var wholeWord = this.$(#search-whole-word).value;
+    var matchCase = this.$(#search-match-case).value;
+    var forward = !this.$(#search-backward).value;
+    if(!front.doSearch(text,forward,matchCase,wholeWord))
+      this.$(#search-result).show("No more text found!",#no);
+    return true;
+  }
+  
+  function onControlEvent(evt)
+  {
+    if(evt.type == Event.BUTTON_CLICK) 
+    {
+      if( evt.target.id == #replace-with ) 
+        return this.toggleReplace(evt.target);
+      if( evt.target.id == #search-n-replace-close ) 
+        return this.state.collapsed = true;
+      if( evt.target.id == #do-search-next ) 
+        this.doSearchNext();
+      return true;
+    }
+    return false;
+  }  
+  function onKey(evt)
+  {
+    if( evt.type == Event.KEY_DOWN && evt.keyCode == Event.VK_RETURN)
+    {
+      this.doSearchNext();
+      return true;
+    }
+    if(evt.type == Event.KEY_DOWN && evt.ctrlKey && !evt.altKey && !evt.shiftKey)
+    {
+      if( evt.keyCode == 'F' )
+        this.activate(false);
+      else if( evt.keyCode == 'H' )
+        this.activate(true);
+      else 
+        return false;
+      return true;
+    }
+    return false;
+  }
+  
+}

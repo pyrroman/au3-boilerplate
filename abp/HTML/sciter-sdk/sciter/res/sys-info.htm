@@ -1,0 +1,177 @@
+<html>
+<head>
+<style>
+  html { background-color: threedhighlight threedface threedface threedhighlight ;}
+  body { height:*; }
+  #info { margin:10px 0 0 100%%; }
+  #info th { color:threedshadow; }
+  #info td:nth-child(1) { text-align:right; }
+  #info td:nth-child(2) { text-align:left; background-color:window; margin:1px; border:1px solid threedshadow; }
+  #about { font:8.5pt verdana; color:threeddarkshadow; text-align:center; }
+  #about a { color:threeddarkshadow; }
+  ul#scapplist
+  {
+    flow:h-flow;
+    height:*;
+    padding:0;
+    overflow:auto;
+  }
+  ul#scapplist > li
+  {
+    display:block;
+    padding:4px;
+    margin:4px;
+    width:max-intrinsic;
+    height:*;
+    text-align:center;
+    behavior:button;
+    prototype:LaunchButton;
+  }
+  ul#scapplist > li img
+  {
+    width:64px;
+    height:64px;
+  }
+  ul#scapplist > li:hover
+  {
+    background-image:url(theme:toolbar-button-hover);
+    background-repeat:expand;
+  }
+  ul#scapplist > li:active
+  {
+    background-image:url(theme:toolbar-button-pressed);
+  }
+
+  text#contrast-screen
+  {
+    display:none;
+  }
+ 
+  @media contrast-screen
+  {
+    text#contrast-screen
+    {
+      display:block;
+    }
+  }
+  
+  
+</style>
+<script type="text/tiscript">
+    self.select("#version").text = String.printf("%d.%d.%d.%d", 
+		  (Sciter.VERSION >> 16) & 0xffff, Sciter.VERSION & 0xffff,
+		  (Sciter.REVISION >> 16) & 0xffff, Sciter.REVISION & 0xffff);
+	  self.select("#user").text = Sciter.userName();
+	  self.select("#machine").text = Sciter.machineName();
+	  self.select("#domain").text = Sciter.machineName(true);
+	  self.select("#home").text = System.home();
+	  self.select("#language").text = System.language;
+	  self.select("#country").text = System.country;
+	  self.select("#os-type").text = System.HANDHELD_OS? "handheld":"desktop";
+	  self.select("#os-version").text = System.OS;
+
+	self.onControlEvent = function(evt)
+    {
+      if(evt.type == Event.HYPERLINK_CLICK)
+      {
+        var href = evt.target.attributes["href"];
+	      if( href ) { Sciter.open(href); return true; }
+      }
+      return false;
+    }	
+	
+  type LaunchButton: Behavior
+  {
+    function onClick()
+    {
+      var path = this.@#path;
+      if(view.load(path))
+        view.caption = this.@#caption;
+    }
+  }
+  
+  function initScappList()
+  {
+    var path = System.home("scapps/");
+    var out = Stream.openString();
+    
+    function getManifestFileName(path)
+    {
+      var r = null;
+      function cb(fn,atts) 
+      {
+        if(atts == System.IS_DIR) return true;
+        r = path + "/" + fn;
+        return false; // found, stop
+      }
+      System.scanFiles(path + "/*.scapp", cb);    
+      return r;
+    }
+    
+    function gotFolder(fn,atts)
+    {
+      if(fn like ".*") 
+        return true;
+      if(atts != System.IS_DIR) 
+        return true;
+        
+      var manifestFileName = getManifestFileName( path + fn );
+      //stdout << manifestFileName << "\n";
+      if(!manifestFileName)
+        return true;
+      var manifestStream = Stream.openFile(manifestFileName,"r");
+      if( !manifestStream )
+        return true;
+      
+      var manifest = parseData(manifestStream);
+      manifestStream.close();
+     
+      if(!manifest || !manifest.main) return true;
+      out.printf("<li title='%S' path='%s' caption='%s'><img src='%s' /><br/>%S</li>",
+         manifest.description,
+         "file://" + path + fn + manifest.main,
+         manifest.label,
+         "file://" + path + fn + manifest.icon, 
+         manifest.label);
+
+      //stdout << ("file://" + path + fn + manifest.icon) << "\n";
+      return true;
+    }
+    System.scanFiles(path + "*.*",gotFolder);
+    var list = out.toString();
+    if( list)
+      self.select("ul#scapplist").html = list;
+    out.close();
+  }
+  initScappList();
+  
+</script>
+</head>
+<body>
+Welcome to the Sciter!
+<ul #scapplist></ul>
+<text #contrast-screen>Contrast Screen Detected!</text>
+<table id="info">
+	<tr><th colspan="2">Sciter</th></tr>
+	<tr><td>version:</td>	<td id="version"></td></tr>
+	<tr><td>home:</td>		<td id="home"></td></tr>
+	<tr><th colspan="2">System</th></tr>
+	<tr><td>OS type:</td>	<td id="os-type"></td></tr>
+	<tr><td>OS version:</td> <td id="os-version"></td></tr>
+	<tr><td>user:</td>		<td id="user"></td></tr>
+	<tr><td>machine:</td>	<td id="machine"></td></tr>
+	<tr><td>domain:</td>	<td id="domain"></td></tr>
+	<tr><td>country:</td>	<td id="country"></td></tr>
+	<tr><td>language:</td>	<td id="language"></td></tr>
+</table>
+<text id="about">Sciter includes H-SMILE (HTML/CSS) and TIScript engines of Terra Informatica Software, Inc.<br/>
+Sciter also uses excellent 
+<a href="http://www.antigrain.com">AGG library</a>,
+<a href="http://www.garret.ru/~knizhnik/">DyBase library</a>, 
+<a href="http://www.libpng.org">PNG library</a>, 
+<a href="http://www.zlib.org">ZLib</a> and
+<a href="http://www.ijg.org">JPEG library</a>, special credits to their authors.<br/>
+&copy;2004-2008, Terra Informatica Software, Inc. All rights reserved.
+</text>
+</body>
+</html>

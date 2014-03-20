@@ -1,0 +1,40 @@
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\bin\Debug\BASS_SFXTestVB.exe
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\bin\Debug\BASS_SFXTestVB.pdb
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\bin\Debug\BASS_SFXTestVB.xml
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Debug\BASS_SFXTestVB.frmMain.resources
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Debug\BASS_SFXTestVB.Resources.resources
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Debug\BASS_SFXTestVB.vbproj.GenerateResource.Cache
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Debug\BASS_SFXTestVB.exe
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Debug\BASS_SFXTestVB.xml
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Debug\BASS_SFXTestVB.pdb
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\bin\Release\BASS_SFXTestVB.exe
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\bin\Release\BASS_SFXTestVB.pdb
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\bin\Release\BASS_SFXTestVB.xml
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.frmMain.resources
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.Resources.resources
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.vbproj.GenerateResource.Cache
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.exe
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.xml
+C:\Users\Greg Ellis\Documents\Visual Studio 2005\Projects\BASS_SFXTestVB\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.pdb
+C:\Users\Greg Ellis\Desktop\SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.exe
+C:\Users\Greg Ellis\Desktop\SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.xml
+C:\Users\Greg Ellis\Desktop\SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.pdb
+C:\Users\Greg Ellis\Desktop\SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\bin\Release\BASS_SFXTestVB.exe
+C:\Users\Greg Ellis\Desktop\SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\bin\Release\BASS_SFXTestVB.pdb
+C:\Users\Greg Ellis\Desktop\SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\bin\Release\BASS_SFXTestVB.xml
+C:\Users\Greg Ellis\Desktop\SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Greg Ellis\Desktop\SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.frmMain.resources
+C:\Users\Greg Ellis\Desktop\SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.Resources.resources
+C:\Users\Greg Ellis\Desktop\SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.vbproj.GenerateResource.Cache
+C:\Users\Greg Ellis\Desktop\New SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.exe
+C:\Users\Greg Ellis\Desktop\New SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.xml
+C:\Users\Greg Ellis\Desktop\New SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.pdb
+C:\Users\Greg Ellis\Desktop\New SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\bin\Release\BASS_SFXTestVB.exe
+C:\Users\Greg Ellis\Desktop\New SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\bin\Release\BASS_SFXTestVB.pdb
+C:\Users\Greg Ellis\Desktop\New SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\bin\Release\BASS_SFXTestVB.xml
+C:\Users\Greg Ellis\Desktop\New SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Greg Ellis\Desktop\New SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.frmMain.resources
+C:\Users\Greg Ellis\Desktop\New SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.Resources.resources
+C:\Users\Greg Ellis\Desktop\New SFX Release\BASS_SFX\VS 2005\VB .NET\BASS_SFXTestVB\obj\Release\BASS_SFXTestVB.vbproj.GenerateResource.Cache

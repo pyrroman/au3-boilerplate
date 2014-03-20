@@ -1,0 +1,31 @@
+//|
+//| Root extender, extends root by default event handlers.
+//|    
+    // Event handler of onControlEvent
+    self.onControlEvent = function(evt)
+    {
+      if(evt.type == Event.BUTTON_CLICK)
+      {
+          // Button Click handler - translates button click event to VB style call of 
+          // function named on_IdOfTheButton_click(button) where IdOfTheButton is actual
+          // id of the button clicked.
+          var id = evt.target.attributes["id"];
+          if (!id) return false;
+          var functionName = String.printf("on_%s_click", id);
+          try {
+            // try to find such method in the scope of current script
+            var handler = eval( functionName );
+            if( handler instanceof Function )
+            // we've found on_IdOfTheButton_click function, let's call it.
+            {
+                handler(evt.target);
+                return true;
+            }
+          } 
+          catch( er )
+          {
+            stderr << functionName << ":" << er;   
+          }
+      }
+      return false;
+    }

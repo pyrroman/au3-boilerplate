@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Function _Excel_RangeSort</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="../css/default.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h1>Function Reference</h1>
+<font size="+1">_Excel_RangeSort</font>
+<hr size="2">
+<p>Sorts a cell range.<br></p>
+
+<p class="codeheader">
+#Include &lt;Excel Rewrite.au3&gt;<br>
+_Excel_RangeSort($oWorkbook, $vWorksheet, $vRange, $vKey1[, $iOrder1 = $xlAscending[, $iSortText = $xlSortNormal, [$iHeader = $xlNo[, $bMatchcase = False[, $iOrientation = $xlSortRows[, $sKey2 = Default[, $iOrder2 = Default[, $sKey3 = Default[, $iOrder3 = Default]]]]]]]]])<br>
+</p>
+<p>&nbsp;</p>
+
+<p><b>Parameters</b></p>
+<table border="1" width="100%" cellspacing="0" cellpadding="3" bordercolor="#C0C0C0">
+  <tr>
+    <td width="15%">$oWorkbook</td>
+    <td width="85%">Excel workbook object</td>
+  </tr>
+  <tr>
+   <td>$vWorksheet</td>
+   <td>Name, index or worksheet object to be sorted. If set to keyword Default the active sheet will be used</td>
+  </tr>
+  <tr>
+   <td>$vRange</td>
+   <td>A range object, an A1 range or keyword Default to sort the whole worksheet (default = keyword Default)</td>
+  </tr>
+  <tr>
+   <td>$vKey1</td>
+   <td>Specifies the first sort field, either as an A1 range or range object</td>
+  </tr>
+  <tr>
+   <td>$iOrder1</td>
+   <td>Optional: Determines the sort order. Can be any of the XlSortOrder enumeration (default = $xlAscending)</td>
+  </tr>
+  <tr>
+   <td>$iSortText</td>
+   <td>Optional: Specifies how to sort text in $vKey1, $sKey2 and $sKey3. Can be any of the XlSortDataOption enumeration (default = $xlSortNormal)</td>
+  </tr>
+  <tr>
+   <td>$iHeader</td>
+   <td>Optional: Specifies whether the first row contains header information. Can be any of the XlYesNoGuess enumeration (default = $xlNo)</td>
+  </tr>
+  <tr>
+   <td>$bMatchCase</td>
+   <td>Optional: True to perform a case-sensitive sort, False to perform non-case sensitive sort (default = False)</td>
+  </tr>
+  <tr>
+   <td>$iOrientation</td>
+   <td>Optional: Specifies the sort orientation. Can be any of the XlSortOrientation enumeration (default = $xlSortColumns)</td>
+  </tr>
+  <tr>
+   <td>$sKey2</td>
+   <td>Optional: See $vKey1</td>
+  </tr>
+  <tr>
+   <td>$iOrder2</td>
+   <td>Optional: See $iOrder1</td>
+  </tr>
+  <tr>
+   <td>$sKey3</td>
+   <td>Optional: See $vKey1</td>
+  </tr>
+  <tr>
+   <td>$iOrder3</td>
+   <td>Optional: See $iOrder1</td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p><b>Return Value</b></p>
+Success: Object of the sorted range<br>
+Failure: Returns 0 and sets @error:<br>
+&nbsp;&nbsp;&nbsp; 1 - $oWorkbook is not an object or not a workbook object<br>
+&nbsp;&nbsp;&nbsp; 2 - $vWorksheet name or index are invalid or $vWorksheet is not a worksheet object. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 3 - $vRange is invalid. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 4 - $vKey1 is invalid. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 5 - $vKey2 is invalid. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 6 - $vKey3 is invalid. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 7 - Error returned by the Sort method. @extended is set to the COM error code<br>
+<p>&nbsp;</p>
+
+<p><b>Remarks</b></p>
+None.<br>
+<br>
+<p>&nbsp;</p>
+
+<p><b>Related</b></p>
+
+<p>&nbsp;</p>
+
+<p><b>Example</b></p>
+<p class="codebox">
+<br>
+<span><span class="S12">#AutoIt3Wrapper_AU3Check_Stop_OnWarning=Y</span><br>
+<span class="S12">#AutoIt3Wrapper_AU3Check_Parameters=-d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6</span><br>
+<br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Excel Rewrite.au3&gt;</span><br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Array.au3&gt;</span><br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Constants.au3&gt;</span><br>
+<br>
+<span class="S1">; Create application object and open an example workbook</span><br>
+<span class="S5">Global</span><span class="S0"> </span><span class="S9">$oAppl</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_Open</span><span class="S8">()</span><br>
+<span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Exit</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeSort Example"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error creating the Excel application object."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S5">Global</span><span class="S0"> </span><span class="S9">$oWorkbook</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_BookOpen</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">,</span><span class="S0"> </span><span class="S6">@ScriptDir</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"\_Excel1.xls"</span><span class="S8">)</span><br>
+<span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeSort Example"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error opening workbook '_Excel1.xls'."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_Close</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Exit</span><br>
+<span class="S5">EndIf</span><br>
+<br>
+<span class="S0">Example1</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">Example2</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">Example3</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<br>
+<span class="S5">Exit</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 1</span><br>
+<span class="S1">; Sort a range with headers ascending on column I</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example1</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeSort Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Press OK to sort range I1:K7. Key is column I."</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeSort</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"I1:K7"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"I:I"</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlYes</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeSort Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error sorting data."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeSort Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Data successfully sorted in range I1:K7"</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example1</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 2</span><br>
+<span class="S1">; Sort a range with headers descending on column K. Sort numbers as text</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example2</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeSort Example 2"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Press OK to sort range I1:K7. Key is column K."</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeSort</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"I1:K7"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"K:K"</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlDescending</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlYes</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeSort Example 2"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error sorting data."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeSort Example 2"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Data successfully sorted in range I1:K7"</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example2</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 3</span><br>
+<span class="S1">; Sort a range with headers descending on row 1 (column headers)</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example3</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeSort Example 3"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Press OK to sort range I1:K7. Key is row 1."</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeSort</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"I1:K7"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"1:1"</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlDescending</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlYes</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlSortRows</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeSort Example 3"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error sorting data."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeSort Example 3"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Data successfully sorted in range I1:K7"</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example3</span></span><br>
+<br><OBJECT id=hhctrl type="application/x-oleobject" classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11" width=58 height=57>
+<PARAM name="Command" value="ShortCut">
+<PARAM name="Button" value="Text:Open this Script">
+<PARAM name="Item1" value=",Examples\HelpFile\_Excel_RangeSort.au3,">
+</OBJECT>
+<p>&nbsp;</p>
+
+</body>
+</html>

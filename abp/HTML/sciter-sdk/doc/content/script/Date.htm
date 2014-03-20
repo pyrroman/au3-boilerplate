@@ -1,0 +1,144 @@
+﻿<html>
+  <head>
+    <title>TIScript - Date object</title>
+    <meta name="GENERATOR" content="BLOCKNOTE.NET"/>
+    <basefont face="Verdana" size="2"/>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>Date object</h1>
+  <p>Represents date and time. Local and UTC timezones supported.</p>
+  <div align="left">
+    <table border="0" cellpadding="4" cellspacing="0" width="100%">
+      <tr>
+        <td colspan="3">
+          <h2>Properties</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>day</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, number of the day, from 1 up to number of days in current month. Read/write property.</td>
+        <td rowspan="9" bgcolor="#fffff0" valign="middle">local<br/>time</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>month</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, number of the month, from 1 to 12. Read/write property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>year</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, full number of the year, e.g. 2005. Read/write property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>hour</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, hour, from 0 to 23. Read/write property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>minute</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, minute, from 0 to 59. Read/write property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>second</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, second, from 0 to 59. Read/write property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>millisecond</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, millisecond, from 0 to 999. Read/write property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>dayOfWeek</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, number of day of the week, from 0 to 6 where 0 is Monday. Read-only property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>firstDayOfWeek</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, from 0 to 6 where 0 is Monday - first day of the week in current locale. Read-only class property that can be used as Date.firstDayOfWeek.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>UTCday</em></strong></td>
+        <td bgcolor="#fff8e1" valign="middle">- <em>integer</em>, number of the day, from 1 up to number of days in current month. Read/write property.</td>
+        <td rowspan="8" bgcolor="#fff8e1" valign="middle">UTC<br/>time</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>UTCmonth</em></strong></td>
+        <td bgcolor="#fff8e1" valign="middle">- <em>integer</em>, number of the month, from 1 to 12. Read/write property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>UTCyear</em></strong></td>
+        <td bgcolor="#fff8e1" valign="middle">- <em>integer</em>, full number of the year, e.g. 2005. Read/write property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>UTChour</em></strong></td>
+        <td bgcolor="#fff8e1" valign="middle">- <em>integer</em>, hour, from 0 to 23. Read/write property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>UTCminute</em></strong></td>
+        <td bgcolor="#fff8e1" valign="middle">- <em>integer</em>, minute, from 0 to 59. Read/write property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>UTCsecond</em></strong></td>
+        <td bgcolor="#fff8e1" valign="middle">- <em>integer</em>, second, from 0 to 59. Read/write property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>UTCmillisecond</em></strong></td>
+        <td bgcolor="#fff8e1" valign="middle">- <em>integer</em>, millisecond, from 0 to 999. Read/write property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>UTCdayOfWeek</em></strong></td>
+        <td bgcolor="#fff8e1" valign="middle">- <em>integer</em>, number of day of the week, from 0 to 6 where 0 is Monday. Read-only property.</td></tr>
+      <tr>
+        <td colspan="3" valign="top">
+          <h2>Methods</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right">[new Date]</td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <p><strong>( </strong>[<em>string</em><strong> </strong>|<strong> </strong>&nbsp;[ year, month, day [, hour [, minute [, second [, millisecond ]]]]]] )</p>
+          <p>Creates new date object. If no parameters were given then initializes date fields to the current time (UTC).<br/>If single <em>string</em> parameter provided then parses date contained in the string.<br/>And if year, month, day, etc. provided uses these numeric values to initialize new Date instance.</p>
+          <p><code>new Date(string)</code> form recognizes date in RFC-822 date format ( <a href="http://www.w3.org/Protocols/rfc822/#z28">http://www.w3.org/Protocols/rfc822/#z28</a> ) and ISO 8601 ( <a href="http://www.w3.org/TR/NOTE-datetime">http://www.w3.org/TR/NOTE-datetime</a> ).</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toString<br/></em></strong></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <div><strong>()</strong> : string</div>
+          <p>Returns RFC-822 string representation of this date object.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toUTCString</em></strong></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <div><strong>()</strong> : string </div>
+          <p>Returns RFC-822 string representation of this date object as UTC date/time.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toISOString</em></strong></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <div><strong>(</strong> [<em>asUTC</em>: <em>false|true </em>] <strong>)</strong></div>
+          <p>Returns ISO 8601 string representation of this date object as either local or UTC date/time.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toLocaleString</em></strong></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <p><strong>( </strong>[<em>longFormat</em>]<strong> )</strong> returns: string</p>
+          <p>Returns string representation of the date using current system settings. Local time.<br/>If <em>longFormat</em> is equal exactly <em>true</em> then formats date using system long date format.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>valueOf</em></strong></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <div><strong>()</strong> returns: <em>float</em></div>
+          <p>Returns stored time value in milliseconds since midnight, January 1, 1970 UTC.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>parse</em></strong></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <p><strong>( </strong><em>string</em><strong> )</strong> returns: <em>float</em> | <em>undefined</em></p>
+          <p>Static method. Tries to parse date in <em>string. </em>If result of parsing is successfull then returns date as <em>number of milliseconds</em> since midnight, January 1, 1970 UTC. <br/>On error returns <em>undefiend</em> value.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>UTC</em></strong></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <p><strong>( </strong>year, month, day [, hour [, minute [, second [, millisecond ]]]]]<strong> )</strong> returns: <em>float</em> | <em>undefined</em></p>
+          <p>Static method. Returns number of milliseconds since midnight, January 1, 1970 UTC up to date defined by parameters</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>setTime</em></strong></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <p><strong>( </strong><em>milliseconds</em><strong> )</strong> returns: <em>float</em></p>
+          <p>Sets this date object fields equal to date defined by <em>milliseconds</em> parameter. <em>milliseconds</em> is a number (<strong>float</strong>) of milliseconds since midnight, January 1, 1970 UTC.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>monthName</em></strong></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <div><strong>( </strong><em>longFormat</em><strong> )</strong> returns: <em>string</em></div>
+          <p>Returns name of the month in current user's locale. If <em>longFormat</em> is equal <em>true </em>returns full month name, otherwise - it's abbreviation.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>dayOfWeekName</em></strong></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <div><strong>( </strong><em>longFormat</em><strong> )</strong> returns: <em>string</em></div>
+          <p>Returns name of the day in current user's locale. If <em>longFormat</em> is equal <em>true </em>returns full week day name, otherwise - it's abbreviation.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em><strong>isDaylight</strong></em></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <div><strong>(</strong> <strong>)</strong> : <em>true</em> | <em>false</em></div>
+          <p>Returns <em>true</em> if current clock is using daylight saving time.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em><strong>timeZoneOffset</strong></em></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <div><strong>(</strong> <strong>)</strong> : <em>integer</em></div>
+          <p>Returns shift in milliseconds of current timezone from GMT.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em><strong>timeZoneName</strong></em></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <div><strong>(</strong> <strong>)</strong> : <em>string</em></div>
+          <p>Returns name of current timezone.</p></td></tr></table></div>
+</body>
+</html>

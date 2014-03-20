@@ -1,0 +1,160 @@
+<html>
+  <head>
+    <meta name="source"/>
+    <meta name="source"/>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>States object</h1>
+  <p>Represents states of DOM <a href="Element.htm">elements</a>.</p>
+  <p>To access state collection of the element use its <em>state</em> property: element.state</p>
+  <div align="left">
+    <table border="0" cellspacing="4" width="100%">
+      <tr>
+        <td colspan="3">
+          <h2>Properties</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>link</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, true if this element is a link - has <em>href</em> attribute defined.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>hover</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false,</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>active</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false,</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>focus</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, this element is in focus. To set focus on the element is it enough to assign <em>true</em> value to the attribute:
+          <pre>el.state.focus = true;
+</pre></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>tabfocus</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">r</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, this element is in focus and got the focus due to TAB/SHIFT+TAB key handling.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>visited</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false,</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>current</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false,</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>checked</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false,</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>disabled</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false,</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>readonly</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false,</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>expanded</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false,</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>collapsed</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false,</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>incomplete</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false,</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>animating</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">r</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, element is running animation.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>focusable</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, element is focusable. Focusable is the element having either: tabindex &gt;= 0 attribute defined or it has behavior that has focus handler defined.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>anchor</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, element is an anchor (first element) in selection.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>synthetic</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, element was synthesized - created by some behavior.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>popup</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, element is shown as popup window. To close such popup window simply assign value false to the attribute:
+          <pre>el.state.popup = false;
+</pre></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>ownspopup</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">r</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, element is requested popup to be shown and that popup is visible. Following:
+          <pre>el.popup(elementToPopup, pos);
+</pre>
+          <p>will cause this flag to be set for the element <em>el</em>.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>empty</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">r</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, the element is empty - has no children and no text.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>busy</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, element is requested data to be delivered by calling <code>el.request(...)</code> and that data is not delivered yet.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>dragover</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">r</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, the dragged element is over the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>droptarget</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">r</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, dragging is active and the element is active drop target for the dragging element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right">
+          <div><em>moving</em></div>
+          <div><em>copying</em></div></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">r</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, either one of these is true for the element that is being dragged. Engine creates copy of drag-source element and that copy is being dragged.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>dragsource</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">r</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, element one of these is true for the element that being dragged.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>pressed</em></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, element has mouse pressed in it.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right">
+          <div><em>isltr</em></div>
+          <div><em>isrtl</em></div></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">r</font></td>
+        <td bgcolor="#fffff0" valign="middle">true/false, element is in directional environment - itself or one of its parents has attribute <em>dir</em> defined.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right">
+          <div><em><strong>value</strong></em></div></td>
+        <td bgcolor="#fffff0" valign="top" align="center"><font color="#999999">rw</font></td>
+        <td bgcolor="#fffff0" valign="middle">&quot;raw&quot; value of the element. It is either the value managed by native behavior or, if the element has no behavior attached, it is a text of the element (see Element.text).</td></tr>
+      <tr>
+        <td colspan="3" valign="top">
+          <h2>Methods</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>get</em></strong></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <div><strong>()</strong> returns: <em>int</em></div>
+          <p>Returns integer - &quot;ORed&quot; set of Element.STATE_*** constants.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>set</em></strong></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <div><strong>(</strong>flags:int<strong>) </strong>returns: <em>undefined</em></div>
+          <p>Sets flags. <em>flags</em> here &quot;ORed&quot; set of Element.STATE_*** constants.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>clear</em></strong></td>
+        <td colspan="2" bgcolor="#fffff0" valign="middle">
+          <div><strong>(</strong>flags:int<strong>) </strong>returns: <em>undefined</em></div>
+          <p>Clears <em>flags</em>.</p></td></tr></table></div>
+  <div></div>
+</body>
+</html>

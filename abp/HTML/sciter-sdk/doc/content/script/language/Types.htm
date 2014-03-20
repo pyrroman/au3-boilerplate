@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <title>TIScript 3.2 Reference Manual. Types</title>
+    <link rel="stylesheet" href="for-screen.css"/>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>Values and Data types</h1>
+  <p><input type="checkbox" checked id="show-defintions"/> show/hide defintions.</p>
+  <p>TIScript is a dynamically typed language. That means that the variables can contain values of any supported type. Types are:</p>
+  <dl>
+    <dt><strong>Integer</strong></dt>
+    <dd>The value of the <em>Integer</em> class; a 32-bit signed integer between Integer.MIN and Integer.MAX. If you have definition var i = 3; then following statements are both equal to <em>true</em>: &nbsp;<br/><code>typeof i == #integer;</code><br/><code>i instanceof Integer;</code></dd>
+    <dt><strong>Float</strong></dt>
+    <dd>The value of the <em>Float</em> class; a 63-bit floating point number between <em>Float.MIN</em> and <em>Float.MAX</em>. The following statements both evaluate to <em>true</em>: &nbsp;<br/><code>typeof 3.14 == #float;</code><br/><code>3.14 instanceof Float;</code></dd>
+    <dt><strong>String</strong></dt>
+    <dd>The value of the <em>String</em> class; an immutable sequence of UNICODE characters. The following statements both evaluate to <em>true</em>: &nbsp;<br/><code>typeof &quot;abc&quot; == #string;</code><br/><code>&quot;abc&quot; instanceof String;</code></dd>
+    <dt><strong>Symbol</strong></dt>
+    <dd>The value of the <em>Symbol</em> class. A <em>symbol</em> (otherwise known as atom) is a unique integer value, assosiated with a name. Internally, symbols are represented by 32-bit integers. Symbols are defined as a name token that's also allowed to have <code>-</code> characters, preceded by the <strong><code>#</code></strong> character. Examples of valid symbols are: <code>#integer</code>, <code>#foo</code>, <code>#Bar</code>, <code>#sub-script</code>. Examples of invalid symbols are: #123, #1abc. Symbols are resolved into unique integer value at compile time. So, the comparison of two symbols is as computationally effective as the comparison of two integers. In TIScript, symbols are used as the names of object attributes. Hence, the expression <code>obj.foo = 1;</code> is a close equivalent of <code>obj[#foo] = 1;</code>. The following two statements both evaluate to <em>true</em>: &nbsp;<br/><code>typeof #abc == #symbol;</code><br/><code>#abc instanceof Symbol;</code></dd>
+    <dt><strong>Array</strong></dt>
+    <dd>An <em>array</em> is an indexed sequence of elements - values. Elements of the array can be accessed by the [index] operator, where <em>index</em> is an integer value - the sequence number of the element in the array. Indexes in arrays start from 0 (zero). If you have a variable defined as <code>var a = [1,2,3];</code>, the following statements all evaluate to <em>true</em>: <br/><code>typeof a == #array;</code><br/><code>a instanceof Array;</code><br/><code>a[0] == 1; a.length == 3;</code></dd>
+    <dt><strong>Object</strong></dt>
+    <dd>The value of the <em>Object</em> class; a collection of &quot;named values&quot; - pairs of names (a.k.a. <em>key</em>) and values assigned to those names. As in JavaScript, objects here are universal entities. They can be used as a map (hash map) of name/value pairs, or as real objects - instances of user-defined classes. If the obj variable has an object assigned to it, the following statements both evaluate to <em>true</em>:<br/><code>typeof obj == #object;</code><br/><code>obj instanceof Object;</code></dd>
+    <dt><strong>Function</strong></dt>
+    <dd>The value of the <em>Function</em> class. Functions are first-class entities of the language. Once defined, a function can be assigned to any variable, and passed as a parameter to function calls. If you have the following statement:<br/><code>var foo = function(p) { return &nbsp;p + 1; }</code>, the following two statements evaluate to <em>true</em>:<code><br/>typeof foo == #function;</code><br/><code>foo instanceof Function;</code></dd>
+    <dt><strong>Class</strong></dt>
+    <dd>The value of the <em>Class</em> class; allows to define classes of objects with a specific set of methods and attributes. If you have the declaration:<br/><code>class MyClass { function myMethod() { ... } }</code> &nbsp;<br/>you can create instances of the class using the <em>new</em> operator ( <code>var obj = new MyClass()</code> ). <br/>The following statement evaluate to <em>true</em> for all classes:<br/><code>typeof MyClass == #class;</code></dd>
+    <dt><strong>Namespace</strong></dt>
+    <dd><em>Namespace</em> is an object (of class Class) that groups multiple variables, constants, and methods into a single named entity. Thus, if you have the declaration:<br/><code>namespace MyNamespace { const myConst = 12; function myMethod() { ... } }</code><br/>you can refer to the members of the namespace using the dot notation as: <code>MyNamespace.myMethod()</code> and <code>MyNamespace.myConst</code></dd>
+    <dt><strong>Length</strong></dt>
+    <dd>The value of the <em>Length </em>class. Length values represent lengths - numeric values with unit designators. Length units are constructed by the corresponding length constructor functions. For example, <code>px(12)</code> returns the value representing 12 pixels - <code>mm(12.6)</code>, which is 12.6 millimeters. See the description of &nbsp;the Length class for more details. Internally, length values are represented as fixed point values with 0.001 precision. The following three statements evaluate to <em>true</em>:<br/><code>typeof mm(12.6) == #length;</code><br/><code>mm(12.6) instanceof Length;</code><br/><code>mm(12.6).units == #mm;</code></dd>
+    <dt><strong>Color</strong></dt>
+    <dd>The value of the <em>Color </em>class. Color values represent colors - structures that have the red, green, blue, and the optional alpha fields. Color values are constructed by the <code>color(red,green,blue[,opacity])</code> function. The following statements all evaluate to <em>true</em>:<br/><code>typeof color(0xFF,0,0) == #color;</code><br/><code>color(0xFF,0,0) instanceof Color;</code><br/><code>color(0xFF,0,0).red == 0xFF; <br/>color(0xFF,0,0).blue == 0;</code></dd>
+    <dt><strong>Date</strong></dt>
+    <dd>The value of the <em>Date</em> class. Date values represent date and time, and are constructed by using the <em>new</em> operator:<br/><code>var date = new Date(2009,7,15)</code>.<br/>THe following statements evaluate to <em>true</em>:<code><br/>typeof date == #date;</code><br/><code>date instanceof Date;</code><br/><code>date.day == 15; date.year == 2009;</code></dd>
+    <dt><strong>Bytes</strong></dt>
+    <dd>The value of the <em>Bytes</em> class. An instance of Bytes is an array (sequence) of byte values (integers in range 0 .. 255). The following statements all evaluate to <em>true</em>:<br/><code>typeof (new Bytes(12)) == #Bytes;</code><br/><code>(new Bytes(12)) instanceof Bytes;</code><br/><code>(new Bytes(12)).length == 12;</code></dd>
+    <dt><strong>Stream</strong></dt>
+    <dd>The value of the <em>Stream</em> class. A stream represents a sequence (possibly unlimited) of elements called stream units. TIScript supports various types of streams that can be created via the <code>Stream.open****</code> methods: <br/><code>var stream = Stream.openSocket(&quot;10.0.0.1:14&quot;);</code><br/>The following statements all evaluate to <em>true</em>:<code><br/>typeof stream == #Stream;<br/>stream instanceof Stream;</code></dd>
+    <dt><strong>Regular expression</strong></dt>
+    <dd>The value of the RegExp class. A RegExp object is a compiled reqular expression. It is also used for storing information about the results of regular expression pattern matches. Regular expressions can be created by the constructor function of RegExp class, or by the RE-literal:<br/><code>var re = /ain/i; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// RE literal</code><br/><code>r = &quot;The rain in Spain&quot;.match(re); // attempts to match search string</code><br/><code>assert r == &quot;ain&quot;;</code></dd>
+    <dt></dt></dl>
+</body>
+</html>

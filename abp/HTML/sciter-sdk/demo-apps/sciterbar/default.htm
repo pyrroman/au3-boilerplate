@@ -1,0 +1,76 @@
+<html docked="left">
+<head>
+	<style>
+	  html { background-color: window;  }
+	  body 
+	  { 
+	    margin:0; 
+		padding:4px; 
+		//border: 1px solid threedshadow; 
+	  }
+	  html[docked="left"] body
+	  {
+	    border-right: 2px solid threedshadow;
+	  }
+	  html[docked="right"] body
+	  {
+	    border-left: 2px solid threedshadow;
+	  }
+
+	  a:hover { color:green; }
+	  legend { color:orange; }
+	  fieldset { text-align:center; }
+	</style>
+
+	<script type="text/tiscript">
+
+	   //stdout << "sample\n";
+
+       self.select("button#docking-left").value = SciterBar.side == 0;
+	   self.select("button#docking-right").value = SciterBar.side == 1;
+
+	   function self.onControlEvent(evt)
+	   {
+	     if( evt.type == Event.BUTTON_STATE_CHANGED )
+		 {
+		    if(self.select("button#docking-left").value)
+			{
+			   SciterBar.side = 0;
+			   self.attributes["docked"] = "left";
+			   self.update();
+			}
+		    else if(self.select("button#docking-right").value)
+			{
+			   SciterBar.side = 1;
+			   self.attributes["docked"] = "right";
+			   self.update();
+			}
+			return true;
+		 }
+	     else if( evt.type == Event.BUTTON_CLICK )
+		 {
+		    if(evt.target.match("button#exit"))
+			{
+			   SciterBar.exit();
+			   return true;
+			}
+		 }
+	   }
+	</script>
+
+</head>
+<body>
+	<p style="background-color:white;">
+	  Sciter bar demo content. 
+	  In real life content here shall be loaded/assembled from some file to allow dynamic configaration and installation of gadgets.  
+	<a href="http://terrainformatica.com">Link sample</a>.
+	</p>
+	<widget type="calendar" />
+	<fieldset>
+		<legend>Docking:</legend>
+		<button type="radio" name="docking" id="docking-left">left</button> <button type="radio" name="docking" id="docking-right">right</button>
+	</fieldset>
+	<button id="exit">exit</button>
+	<!--<input type="hslider" name="animationTime" max="1000" value="100" />-->
+</body>
+</html>

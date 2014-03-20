@@ -1,0 +1,95 @@
+
+function initPalette( tbl )
+{
+  var images =
+ ["cave",        "cave_0000",    "cave_0001",    "cave_0010",
+  "cave_0011",   "cave_0100",    "cave_0101",    "cave_0110",
+  "cave_0111",   "cave_1000",    "cave_1001",    "cave_1010",
+  "cave_1011",   "cave_1100",    "cave_1101",    "cave_1110",
+  "cave_1111",   "dirt-mount",   "dirt-snow1",   "dirt-snow2",
+  "dirt-snow3",  "dirt-snow4",   "dirt",         "empty",
+  "grass-dirt1", "grass-dirt2",  "grass-dirt3",  "grass-dirt4",
+  "grass-mount", "grass",        "sand-grass1",  "sand-grass2",
+  "sand-grass3", "sand-grass4",  "sand-mount",   "sand",
+  "sea_0000",    "sea_0001",     "sea_0010",     "sea_0011",
+  "sea_0100",    "sea_0101",     "sea_0110",     "sea_0111",
+  "sea_1000",    "sea_1001",     "sea_1010",     "sea_1011",
+  "sea_1100",    "sea_1101",     "sea_1110",     "sea_1111",
+  "snow-mount",  "snow-mount1",  "snow-mount2",  "snow",
+  "stone1",      "trans_empty"];
+
+  var ncols = tbl.attributes#cols || 4;
+  for( var n = 0; n < images.length;  )
+  {
+    var row = new Element("tr");
+    for (var c = 0; c < ncols && n < images.length; ++c)
+    {
+      var td = new Element("td");
+      var d = new Element("div");
+      d.attributes#style = String.printf("foreground-image:url(images/%s.gif)", images[n]);
+      d.attributes#tile = images[n];
+      td.insert(d);
+      row.insert(td);
+      ++n;
+    }
+    tbl.insert(row);
+  }
+}
+
+function initMap(tbl)
+{ 
+  var nrows = tbl.attributes#rows || 10;
+  var ncols = tbl.attributes#cols || 10;
+  for(var r = 0; r < nrows; ++r)
+  {
+    var row = new Element("tr");
+    for(var c = 0; c < ncols; ++c)
+    {
+      var td = new Element("td");
+      row.insert(td);
+    }
+    tbl.insert(row);
+  }
+}
+
+function loadMap(palette_tbl, tbl)
+{
+  var s = Stream.openFile("map.json","rt");
+  if( !s ) return;
+  var v = parseData(s);
+  for(var r = 0; r < v.length; ++r )
+  {
+    var row = v[r];
+    for(var c = 0; c < row.length; ++c )
+    {
+      var td = tbl.select("tr:nth-child(%d) > td:nth-child(%d)", r+1,c+1); if( !td ) continue;
+      td.clear();
+      var t = row[c]; if( !t ) continue;
+      var d = palette_tbl.select("div[tile='%s']", t); if( !d ) continue;
+      td.insert(d.clone());
+    }
+  }
+  s.close();
+  tbl.update();
+}
+
+function saveMap(tbl)
+{
+  var s = Stream.openFile("map.json","wt");
+  if( !s ) return;
+  s.printf("[\n");
+  for( var r = 0; r < tbl.length; ++r )
+  {
+    var row = tbl[r];
+    var row_data = [];
+    for( var c = 0; c < row.length; ++c )
+    {
+      var cell_div = row[c][0]; 
+      var cell_data = cell_div? cell_div.attributes#tile : null; 
+      row_data.push(cell_data); 
+    }
+    s.printf("\t%V,\n",row_data);
+  }
+  s.printf("]\n");
+  s.close();
+}

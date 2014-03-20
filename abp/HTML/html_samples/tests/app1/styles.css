@@ -1,0 +1,117 @@
+  html { margin:0; padding:0; }
+  body { 
+    margin:0; 
+    padding:0; 
+    background-color: white; 
+    font-family: Tahoma, Verdana;
+    font-size: 8.5pt;
+  }
+
+  
+  h3 
+  { 
+    font-family: "Century Gothic";
+    font-size: 12pt;
+    /*font-weight: bold;*/
+  }
+
+  #mainarea {
+    flow:horizontal; 
+    height:100%%; 
+    width:100%%;  
+  }
+  
+  #left-sb 
+  {
+    margin-left:10px;
+    width:160px;
+    height:100%%;
+  }
+  
+  #left-sb .panel
+  {
+    margin:10px 0;
+    padding:4px;
+    background-color: #f8f8f8;
+    border:1px solid #006e9b; 
+  }
+  
+  #sandbox 
+  {
+    width:100%%;
+    height:100%%;
+    margin-left:20px;
+    margin-right:20px;
+  }
+  #right-sb 
+  {
+    width:140px;
+    height:100%%;
+  }
+
+/* scrollable grid */
+
+  table.grid 
+  { 
+    border:1px solid #006e9b; 
+    overflow: auto;
+    width:100%%;
+    height:100%%;
+    prototype:grid;
+  }
+  table.grid th 
+  { 
+    color: white;
+    font-family:"Verdana"; 
+	  font-size:10pt; 
+    border:none;
+    padding:4px; 
+    white-space:nowrap;
+    background-color:#DDD; 
+    background-image:url(images/bback-normal.png);
+    background-repeat:expand stretch-left stretch-right stretch-middle;
+	  background-position:3px 3px 3px 3px;
+  }
+  table.grid th:hover 
+  { 
+	  color: #ffe598;
+    transition:blend;
+	  background-image:url(images/bback-hover.png);
+  }
+  
+  table.grid th:active 
+  { 
+	  color: #ffe598;
+    transition:blend;
+	  background-image:url(images/bback-pressed.png);
+  }
+
+  
+  table.grid tr:nth-child(odd) { background-color:white; } /* each odd row */
+  table.grid tr:nth-child(even) { background-color:#f2f9fc; } /* each even row */
+  
+  table.grid tr:current /* current row */ 
+  { 
+    background-color:#3c90b2; 
+    color:white;
+  } 
+  
+  table.grid td 
+  { 
+    padding:2px; 
+    /*font-family:"Verdana"; 
+	  font-size:9pt;*/
+    border-left:1px solid #bdbccc;
+    overflow:hidden;        
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    height:1.5em;
+  }
+  table.grid td:last-child 
+  { 
+    border-left:none;
+  }
+  
+
+/* end of scrollable grid */
+

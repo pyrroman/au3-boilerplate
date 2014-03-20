@@ -1,0 +1,49 @@
+  #my-contacts #letter-strip 
+  {
+    flow:horizontal;
+  }
+  
+  #my-contacts #letter-strip widget 
+  {
+    color: white;
+    border:none;
+    margin:0 1px;  
+    padding:4px;  
+    background-image:url(images/bback-normal.png);
+    background-repeat:expand stretch-left stretch-right stretch-middle;
+	  background-position:3px 3px 3px 3px;
+    width:100%%;
+    text-align:center;
+  }
+  
+ #my-contacts #letter-strip widget:hover 
+  { 
+	  color: #ffe598;
+    transition:blend;
+	  background-image:url(images/bback-hover.png);
+  }
+  
+  #my-contacts #letter-strip widget:active 
+  { 
+	  color: #ffe598;
+    transition:blend;
+	  background-image:url(images/bback-pressed.png);
+  } 
+  
+  #my-contacts #contact-details 
+  {
+    padding:4px;
+    background-color: #f8f8f8;
+    border:1px solid #006e9b;
+  }
+  
+  #my-contacts widget[name="contact-info-next-contact"]
+  {
+    width:6px;
+    height:100%%;
+  }
+  #my-contacts widget[name="contact-info-prev-contact"]
+  {
+    width:6px;
+    height:100%%;
+  } 

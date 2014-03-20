@@ -1,0 +1,157 @@
+html
+{
+  background-color: scrollbar scrollbar threedface threedface;
+}
+
+h1
+{
+  text-align: center;
+}
+
+.invalid
+{
+  background-color: #FF9999
+}
+
+table.sudoku_tbl
+{
+  prototype:  Sudoku;
+  width:      *;
+  height:     *;
+  border:     2px threeddarkshadow;
+  padding:    0;
+  margin:     0;
+  font: 14px Verdana;
+  background-color: window;
+}
+
+table.sudoku_tbl[factor="medium"]
+{
+  font-size: 24px;
+}
+
+
+table.sudoku_tbl[factor="large"]
+{
+  font-size: 32px;
+}
+
+table.sudoku_tbl > tr > td
+{
+  overflow:hidden;
+  padding: 0;
+  text-align: center; 
+  vertical-align: middle; 
+  border:     1px threedshadow;
+  min-width:  1em;
+  min-height:  1em;
+  height:*; /* all cells are equal */
+  width:*;  
+}
+
+table.sudoku_tbl td:hover 
+{ 
+  transition: blend;
+  background-color: gold;
+}
+
+table.sudoku_tbl td:nth-child(3), table.sudoku_tbl td:nth-child(6) 
+{
+  border-right: 2px threeddarkshadow;
+}
+table.sudoku_tbl tr:nth-child(3) td, table.sudoku_tbl tr:nth-child(6) td
+{
+  border-bottom: 2px threeddarkshadow;
+}
+
+popup.sudoku-selector
+{
+  behavior:   select;
+  prototype:  Popup;
+  padding:    0px;
+  margin:     0px;
+  border:     1px solid threedshadow;
+  text-align: center;
+  font-size:  1.5em;
+  background-color: infobackground;
+
+}
+
+popup.sudoku-selector table
+{
+  padding:    0px;
+  margin:     0px;
+  width:      *;
+  height:     *;
+}
+
+popup.sudoku-selector td
+{
+  text-align:center;
+  vertical-align:middle;
+  width:2em;
+  height:2em;
+}
+popup.sudoku-selector td:hover
+{
+  background-color: highlight;
+  color: highlighttext;
+}
+
+@media handheld /* batteries! */
+{
+  table.sudoku_tbl td:hover 
+  {
+    transition: none;
+  }
+}
+
+
+/* toolbar */
+.toolbar { flow:horizontal; }
+
+
+/* common */
+.button 
+{ 
+	width:18px; height:18px; 
+	padding:4px; margin:1px;
+	border:1px solid transparent;
+  prototype: ToolbarButton;
+  text-align:center;
+  vertical-align:middle;
+}
+
+.button:checked 
+{ 
+    background-color:#DDE3D0 #DDE3D0 #EEF5E7 #DDE3D0;  
+    border: solid 1px #A3A8A0;
+}
+
+.button:hover 
+{ 
+    background-color:#F5FCF0 #EEF5E7 #DDE3D0 #EEF5E7;  
+    border-top: solid 1px #F5FCF0;
+    border-left: solid 1px #F5FCF0;
+    border-right: solid 1px #A3A8A0;
+    border-bottom: solid 1px #A3A8A0;
+}
+.button:active 
+{ 
+    background-color:#DDE3D0 #EEF5E7 #F5FCF0 #EEF5E7;  
+    padding:5px 3px 3px 5px;
+    border-top: solid 1px #A3A8A0;
+    border-left: solid 1px #A3A8A0;
+    border-right: solid 1px #F5FCF0;
+    border-bottom: solid 1px #F5FCF0;
+}
+
+.button:hover:checked 
+{ 
+    background-color:#EEF5E7 #DDE3D0 #DDE3D0 #DDE3D0;  
+    border-top: solid 1px #F5FCF0;
+    border-left: solid 1px #F5FCF0;
+    border-right: solid 1px #A3A8A0;
+    border-bottom: solid 1px #A3A8A0;
+}
+

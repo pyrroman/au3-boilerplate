@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <meta name="generator" content="h-smile:richtext"/>
+    <meta name="source" content="http://www.terrainformatica.com/wiki/doku.php?id=h-smile:built-in-behaviors:edit"/>
+  </head>
+<body>
+  <h1><a name="behavioredit" id="behavioredit">behavior: edit</a></h1>
+  <p>Standard single line input element behavior</p>
+  <h2><a name="elements" id="elements">Elements</a></h2>
+  <p>that have this behavior applied by default (see <a href="/wiki/doku.php?id=h-smile:built-in-behaviors:master_style_sheet" class="wikilink1" title="h-smile:built-in-behaviors:master_style_sheet">master style sheet</a>):</p>
+  <ul>
+    <li><code>&lt;input type=&quot;text&quot; /&gt;</code> - inline single line</li>
+    <li><code>&lt;widget type=&quot;text&quot;&gt;&lt;/widget&gt;</code></li></ul>
+  <h2><a name="attributes" id="attributes">Attributes</a></h2>
+  <p>that this behavior knows about:</p>
+  <ul>
+    <li><code>value=&quot;text&quot;</code> - initial value of the input element</li>
+    <li><code>size=integer</code> - determines value of (intrinsic and default) width of the element.</li>
+    <li><code>maxlength=integer</code> - maximum number of characters that this element can contain.</li>
+    <li><code>filter=&quot;filter-expr&quot;</code> - limits set of characters allowed to input in the field. <code>filter-expr</code> string accepts single characters and character ranges. Example: &quot;.@0~9a~zA~Z&quot; - all alpha-numeric characters, '.' and '@'. If you just want to exclude some characters then you can prepend filter with '^' sign. So this <code>filter=&quot;^.,-&quot;</code> filter will allow to input any character except '.', ',' and '-'.</li>
+    <li><code>novalue=&quot;text&quot;</code> - if textbox is empty then it shows text provided by the <em>novalue</em> attribute. You can style this state by using <code>:empty</code> CSS selector.</li></ul>
+  <h2><a name="events" id="events">Events</a></h2>
+  <p>Together with the standard set of events (mouse, keyboard, focus) <em>behavior: button</em> generates:</p>
+  <ul>
+    <li>EDIT_VALUE_CHANGED event - value of the element was changed due to user actions. Posted (asynchronous) event.</li>
+    <li>EDIT_VALUE_CHANGING event - sent when value of the element is about to change. Synchronous event.</li></ul>
+  <h2><a name="value" id="value">Value</a></h2>
+  <p>type <code>json::value::T_STRING</code>, reflects current status of internal editing buffer.</p>
+  <h2><a name="special_key_combinations" id="special_key_combinations">Special key combinations</a></h2>
+  <ul>
+    <li>LEFT, CTRL+LEFT, SHIFT+LEFT, CTRL+SHIFT+LEFT</li>
+    <li>RIGHT, CTRL+RIGHT, SHIFT+RIGHT, CTRL+SHIFT+RIGHT</li>
+    <li>HOME, SHIFT+HOME</li>
+    <li>END, SHIFT+END</li>
+    <li>BACKSPACE, ALT+BACKSPACE, CTRL+BACKSPACE</li>
+    <li>CTRL+A</li>
+    <li>DELETE, SHIFT+DELETE, CTRL+DELETE</li>
+    <li>INSERT, SHIFT+INSERT, CTRL+INSERT</li>
+    <li>CTRL+X</li>
+    <li>CTRL+V</li>
+    <li>CTRL+Z</li>
+    <li>CTRL+(LEFT)SHIFT and CTRL+(RIGHT)SHIFT - in forms having the <code>dir</code> attribute these key combinations switches between <code>dir=&quot;ltr&quot;</code> and <code>dir=&quot;rtl&quot;</code>.</li></ul>
+  <h2>Methods</h2>
+  <p></p>
+</body>
+</html>

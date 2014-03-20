@@ -1,0 +1,27 @@
+// Element class extenders
+
+//| Stringizer method, accepts inline HTML inclusion
+//| Inserts the html at the beginning of the element
+//| Example of use:
+//|   table.$insert( <tr><td>{def.name}</td><td>{def.value}</td></tr> );
+function Element.$insert(html..)
+{
+  for( var i = 1; i < html.length; i += 2 ) // each odd parameter is a formal one
+      html[i] = html[i].toHtmlString();
+  this.insert( html.join(""), 0);
+}
+
+//| Stringizer method, accepts inline HTML inclusion
+//| Appands the html at the end of the element
+//| Example of use:
+//|   var def = { name:"something", value:">23" };
+//|   table.$append( <tr><td>{def.name}</td><td>{def.value}</td></tr> );
+function Element.$append(html..)
+{
+  for( var i = 1; i < html.length; i += 2 ) // each odd parameter is a formal one
+      html[i] = html[i].toHtmlString();
+  this.insert( html.join(""));
+}
+
+  
+

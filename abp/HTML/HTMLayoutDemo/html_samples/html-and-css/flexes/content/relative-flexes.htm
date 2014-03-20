@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <style>
+      
+      ul { flow: horizontal; 
+           padding:4px; border-spacing:4px; border:2px solid black; }
+      li { display:block; border: 2px solid salmon; background: seashell; }
+      
+      ul.case1 > li { height:*; }
+      
+      ul.case1 > li:nth-child(1) { background: seashell url(images/w200.png) repeat-y; }
+      ul.case1 > li:nth-child(2) { background: seashell url(images/w400.png) repeat-y; }
+      
+      ul.case2 > li              { background: seashell url(images/w200.png) repeat-y; }
+
+
+      p.comment { font-size:70%; }
+        
+    </style>
+  </head>
+<body>
+  <h1>relative flexes in flow:horizontal</h1>
+ 
+  <p>All list items here have <code>height:*</code> and so they span the whole height of the row. 
+  If height of such row element is not set (as in this sample) then it will be equal to tallest element in the row.</p>
+  
+  <p>Case 1, different base lengths, same flex value:
+  <ul .case1>
+    <li style="width:fx(1,200px)">width:fx(1,200px)</li>
+    <li style="width:fx(1,400px)">width:fx(1,400px)</li>
+  </ul>
+
+  <p>Case 2, same base length - 200px, different flex values:
+  <ul .case2>
+    <li style="width:fx(1,200px)">width:fx(1,200px)</li>
+    <li style="width:fx(2,200px)">width:fx(2,200px)</li>
+  </ul>
+
+  <p>Case 3, same flex value, base lengths are using max-intrinsic widths:
+  <ul .case3>
+    <li style="width:fx(1,max-intrinsic)">width:fx(1,max-intrinsic)</li>
+    <li style="width:fx(1,max-intrinsic)">width:fx(1,max-intrinsic), more content added</li>
+  </ul>
+  
+  
+</body>
+</html>

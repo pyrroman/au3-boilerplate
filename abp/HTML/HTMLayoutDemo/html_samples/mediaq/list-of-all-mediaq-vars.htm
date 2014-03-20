@@ -1,0 +1,26 @@
+<html>
+<head>
+  <style>
+    
+    table.list { border-spacing:-1px; }
+    table.list td { border:1px solid gray; padding:2px 4px;}
+    table.list td.value { font-family:monospace; }
+ 
+  </style>  
+  <script type="text/tiscript">
+    var mvars = view.mediaVars();
+    var out = Stream.openString();
+      
+    out.$(<table.list><tr><th>name</th><th>value</th></tr>);
+    for( var (k,v) in mvars )
+      out.$(<tr><td.name>{k}</td><td.value>{v}</td></tr>);
+    out.$(</table>);
+
+    self.$(body).append(out.close(true));
+    
+  </script>  
+</head>
+<body>
+  <p>List of all MQ variables:</p>
+</body>
+</html>

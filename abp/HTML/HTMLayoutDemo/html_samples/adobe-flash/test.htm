@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <title></title>
+    <style>
+    
+  div#popup { position:absolute; size:100px; background:rgba(255,255,0,0.5); }
+	div#content 
+	{
+    size:*;
+	  flow: "1 1"
+	        "2 3"
+	  		  "4 4";
+	}
+  frame[type="flash"]
+  {
+    behavior: "sciter-adobe-flash:player";
+    size:50%;
+    border:1px solid;
+    background:red gold blue blue;
+  }
+	
+	ol#select { width:*; }
+	ol#select > li { behavior:clickable; cursor: pointer; }
+	ol#select > li:hover { text-decoration:underline; }
+
+    
+    </style>
+    <script type="text/tiscript">
+	  
+	  $(#show-props).onClick = function()
+	  {
+	    var player = $(#player);
+	    stdout.printf("TotalFrames:%v\n",player.GetTotalFrames());
+		stdout.printf("Playing:%v\n",player.GetPlaying());
+		stdout.printf("Quality:%v\n",player.GetQuality());		
+		stdout.printf("ScaleMode:%v\n",player.GetScaleMode());		
+		stdout.printf("AlignMode:%v\n",player.GetAlignMode());
+		stdout.printf("BackgroundColor:%v\n",player.GetBackgroundColor());
+		stdout.printf("Loop:%v\n",player.GetLoop());
+		stdout.printf("Movie:%v\n",player.GetMovie());
+	  }
+
+      $(ol#select).onControlEvent = function(evt)
+	  {
+	    if( evt.type == Event.BUTTON_CLICK )
+		{
+		  var file = this.url(evt.target.text);
+		  //$(#player).PutScaleMode(3);
+		  $(#player).PutMovie(file);
+		}
+	  }
+       
+	
+	</script>
+  </head>
+<body>
+  <div #popup>Element on top</div>
+  <div #content>
+    <p>Adobe Flash Player:</p>
+    <frame type="flash" src="construction.swf" #player />
+    <!--<frame type="flash" src="http://h-2.h1.hostworks.com.ru/games/gamesonline/_games/1935.swf" #player /> -->
+    
+    <ol #select>
+      <li>test.swf</li>
+    <li>snail.swf</li>
+    <li>christmas-greeting.swf</li>
+    <li>http://h-2.h1.hostworks.com.ru/games/gamesonline/_games/1935.swf</li>
+    </ol>
+    <text>
+      <button #show-props>Show Props</button>
+    </text>
+  </div>
+
+</body>
+</html>
+

@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <meta name="source" content="http://www.terrainformatica.com/wiki/doku.php?id=h-smile:built-in-behaviors:button"/>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1><a name="behaviorbutton" id="behaviorbutton">behavior: button</a></h1>
+  <p>Standard button behavior</p>
+  <h2><a name="elements" id="elements">Elements</a></h2>
+  <p>that have this behavior applied by default (see <a href="/wiki/doku.php?id=h-smile:built-in-behaviors:master_style_sheet" class="wikilink1" title="h-smile:built-in-behaviors:master_style_sheet">master style sheet</a>):</p>
+  <ul>
+    <li><code>&lt;button&gt;&lt;/button&gt;</code></li>
+    <li><code>&lt;input type=&quot;button&quot; /&gt;</code></li>
+    <li><code>&lt;widget type=&quot;button&quot;&gt;&lt;/widget&gt;</code></li>
+    <li><code>&lt;input type=&quot;reset&quot; /&gt;</code></li>
+    <li><code>&lt;input type=&quot;submit&quot; /&gt;</code></li></ul>
+  <h2><a name="attributes" id="attributes">Attributes</a></h2>
+  <p>that this behavior knows about:</p>
+  <ul>
+    <li><code>value=&quot;caption&quot;</code> - caption that will appear on the button <a href="#fn__1" name="fnt__1" id="fnt__1" class="fn_top">1)</a></li></ul>
+  <h2><a name="events" id="events">Events</a></h2>
+  <p>Together with the standard set of events (mouse, keyboard, focus) <em>behavior: button</em> generates:</p>
+  <ul>
+    <li>BUTTON_CLICK event - mouse down/up or <code>spacebar</code> key click when button is in focus. Posted (asynchronous) event</li>
+    <li>BUTTON_PRESS event - mouse down or <code>spacebar</code> key down when button is in focus. Synchronous event.</li></ul><a href="#fnt__1" id="fn__1" name="fn__1" class="fn_bot">1)</a> <code>&lt;button&gt;</code> element uses its content as a caption, example:
+  <pre class="code type=">  &lt;button&gt;&lt;img src=.../&gt; and some text&lt;/botton&gt;
+</pre>will be rendered as a button with the image and text inside.
+</body>
+</html>

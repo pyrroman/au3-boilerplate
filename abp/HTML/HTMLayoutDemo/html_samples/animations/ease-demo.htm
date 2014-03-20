@@ -1,0 +1,96 @@
+<html>
+  <head>
+    <style>
+      html { background-color:floralwhite; }
+      body { flow:horizontal; } 
+      div#demo
+      {
+        position:relative;
+        prototype:Demo;
+        width:400px;
+        height:400px;
+        margin:30px;
+        border:1px dashed #7f0000;
+      }
+      picture#ball
+      {
+        position:absolute;
+        left:40px;
+        top:40px;
+        width:21px;
+        height:21px;
+      }
+      
+      div.controls
+      {
+        margin:30px;
+        height:400px;
+      }
+      widget#ease-funcs
+      {
+        width:*;
+        height:*;
+      }
+    </style>
+    <script type="text/tiscript">
+      include "../event-decorators.tis";
+      include "animations.tis";
+      include "graph.tis";
+      
+      function initList()
+      {
+        var sel = self#ease-funcs;
+        for(var fn in Animation.Ease)
+        {
+          var opt = new Element(#option,fn.toString());
+          opt.fn = fn;
+          sel.insert(opt);
+        }
+      }
+      
+      initList();
+      
+      var easef = null; // ease function
+
+      // use of decorators:     
+      @when Event.SELECT_SELECTION_CHANGED @on "widget#ease-funcs": evt 
+      {
+        var fn = evt.target.select(":current").fn;
+        var canvas = self#demo;
+        easef = Animation.Ease[fn];
+        Chart.draw( canvas, easef );
+      }
+      
+      self.$("div#demo").onMouse = function(evt)
+      {
+        if( !easef ) return false;
+        if( evt.type != Event.MOUSE_DOWN ) return false;
+        var ball = this.$("picture#ball");
+        Animation.move( ball,
+            evt.x - ball.box(#width)/2, 
+            evt.y - ball.box(#height)/2,
+            easef );
+      }
+      
+      function self.ready()
+      {
+        view.update();
+        var canvas = self#demo;
+        easef = Animation.Ease.InOutBack;
+        Chart.draw( canvas, easef );
+      }
+      
+    </script>
+  </head>
+<body>
+  <div #demo>
+    <picture #ball src="images/ball.png" />
+  </div>
+  <div .controls>
+    Select ease function:
+    <widget #ease-funcs type="select">
+    </widget>
+    And click on canvas on the left.
+  </div>
+</body>
+</html>

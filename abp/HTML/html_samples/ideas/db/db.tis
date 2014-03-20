@@ -1,0 +1,14 @@
+
+function openDatabase(pathname = "records.db")
+{
+  var ndb = Storage.open(pathname);
+  if(!ndb.root)
+  { 
+    // new db, initialize structure
+    ndb.root = 
+      { // root of our db is an object having single field 'records'
+        records: ndb.createIndex(#integer) // main index, int -> item
+      };
+  }
+  return ndb;
+}

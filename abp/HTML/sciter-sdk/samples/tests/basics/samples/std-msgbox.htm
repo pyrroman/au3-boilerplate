@@ -1,0 +1,105 @@
+<html>
+<head>
+  <title><% =title || "Sciter"; %></title>
+  <style>
+    html 
+    { 
+      width:max-intrinsic; 
+      height:max-intrinsic; 
+      overflow:hidden;
+      background-color:threedface;
+    }
+    body { margin:0; padding:0; }
+    #content
+    {
+      background-color:scrollbar;
+      padding-left:80px;
+      padding-right:10px;
+      vertical-align:middle;
+      background-repeat: no-repeat;
+      background-position: 10px 50%;
+      min-width:60px;
+      min-height:80px;
+      width:*;
+      height:*;
+      border-bottom: 1px solid threedshadow;
+    }
+    #button-bar
+    {
+      padding:10px;
+      margin:0;
+      text-align:center;
+    }
+    #content[type="information"] { background-image:url(res:icon-information.png); }
+    #content[type="alert"] { background-image:url(res:icon-alert.png); }
+    #content[type="warning"] { background-image:url(res:icon-warning.png); }
+    #content[type="question"] { background-image:url(res:icon-question.png); }
+    
+	#button-bar button { margin:0 4px; }
+    #button-bar button[role="default-button"] { background-image:url(theme:button-defaulted);  }
+    
+  </style>
+  <script type="text/tiscript">
+    self.onControlEvent = function(evt)
+    {
+      if(evt.type != Event.BUTTON_CLICK || !evt.target.match("#button-bar button[id]"))
+        return false;
+
+      var idsym = evt.target.attributes["id"].toSymbol();
+     
+      if( view.parameters.onClose instanceof Function )
+      {
+        if(!view.parameters.onClose(self, idsym))
+          return true; // caller's script rejected closing
+      }
+      view.close(idsym); 
+    }
+    
+    if( view.parameters.onLoad instanceof Function )
+      view.parameters.onLoad(self);
+    
+    </script>
+</head>
+<body>
+<div id="content" type="<% =type || "information"; %>" >
+<% =content || "{nothing}"; %>
+</div>
+<p id="button-bar">
+<% 
+	var captions = { ok:"OK", cancel:"Cancel", abort:"Abort", ignore:"Ignore",yes:"Yes",no:"No",close:"Close"};
+	function renderButton(role, button_def)
+	{
+ 	   try 
+	   {
+		var id; 
+		var text;
+		if( typeof button_def == #object ) { id = button_def.id; text = button_def.text; }
+		else { id = button_def;	text = captions[id]; }
+%><button id="<% =id %>" <% =role; %> ><% =text %></button><%
+		return true;
+	  } catch(e) { stdout << "msgbox error - bad button definition:" << e; }
+	  return false;
+	}
+    var numbuttons = 0;
+	if( typeof buttons == #array ) 
+	  for(var i = 0; i < buttons.length; ++i)
+      {
+		var role = "";
+        if( i == 0 ) role = "role='default-button'";
+        else if( i != 0 && i == (buttons.length-1) ) role = "role='cancel-button'";
+		if(renderButton(role, buttons[i]));
+		  ++numbuttons;
+      }
+	else if( typeof buttons == #object || typeof buttons == #symbol)
+	{
+		if(renderButton("role='default-button'", buttons))
+		  ++numbuttons;
+	}
+	if(!numbuttons)	// no buttons - no luck
+    {
+%><button id="ok" role="default-button" >OK</button> <%
+    } 
+%>
+</p>
+</body>
+</html>

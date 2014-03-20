@@ -1,0 +1,116 @@
+  
+  @set tab-strip
+  {
+    :root
+    {
+      font:system;
+      background-image:none;
+      prototype: TabStrip;
+      background-color: @CAPTION_BACKGROUND_COLOR;
+      border:1px solid;
+      border-color: @CAPTION_BORDER;
+      flow:horizontal;
+    }
+
+    widget.tabs // where tab's live
+    {
+      background-image:none;
+      width:*;
+      height:*;
+      overflow-x: hidden;
+      padding:0 4px;
+      flow:horizontal;
+      accept-drop: selector( widget.tabs > option ); /* accept drop of tabs */ 
+      outline-color: orange; /* color of insertion marker */
+      outline-width: 4px;
+    }
+    widget.tabs > option /* single tab */
+    {
+      display:block;
+      width:max-intrinsic;
+      text-wrap:suppress;
+      height:*;
+      visibility:hidden; /* hidden by default */
+      behavior: clickable; /* will generate BUTTON_PRESS/CLICK */
+      margin:3px -1px 0 -1px;
+      padding:2px 4px 2px 4px;
+      border:1px solid;
+      border-radius:5px 5px 0 0;
+      border-bottom-style:none;
+      
+      draggable: only-move;
+      border-color:threedshadow;
+      background-color:scrollbar;
+    }
+
+    //widget.tabs > option > text {
+    //  margin-left: 5px;
+    //}
+  
+    widget.tabs > option:current /* current tab */
+    {
+      font-weight:bold;
+      color:windowtext;
+      /*@media christmas-tree 
+      {
+        background-color:white white lightskyblue lightskyblue;
+        border-color:appworkspace;
+      }*/
+      background-color:threedhighlight scrollbar threedface threedface;
+      border-color: threedhighlight threeddarkshadow threeddarkshadow threedhighlight;
+      margin:2px -3px -1px -3px;
+      padding:3px 5px 3px 5px; /* to compensate negative margin above */
+      position:relative; /* to draw it on top of container */
+      
+    }
+    
+    widget.tabs > option:checked /* document under this tab is modified */
+    {
+      text-decoration:underline;
+    }
+    
+    widget.tabs > option:moving /* moving tab */
+    {
+      opacity:0.75;  
+    }
+    
+    widget.tabs > option[visible]
+    {
+      visibility:visible;
+    }
+    widget.ctl /* two buttons on the right */
+    {
+      width:max-intrinsic;
+      height:*;
+      background: @TB_BUTTON_BACK_NORMAL;
+      margin:2px;
+      padding:2px;
+      color: @TB_BUTTON_TEXT_COLOR;      
+    }
+    widget.ctl > text /* two buttons on the right */
+    {
+      font: 10pt Marlett;
+    }
+    widget.ctl:disabled
+    {
+      color: threedface;
+      background: @TB_BUTTON_BACK_DISBALED;
+    }
+    widget.ctl:hover
+    {
+      background: @TB_BUTTON_BACK_HOVER;
+    }
+    widget.ctl:active
+    {
+      background: @TB_BUTTON_BACK_ACTIVE;
+    }
+    widget.ctl.off-strip 
+    {
+      behavior: clickable popup-menu;
+    }
+    widget.ctl.close    
+    {
+      behavior: clickable;
+    }
+  }
+ 

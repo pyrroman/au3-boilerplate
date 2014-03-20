@@ -1,0 +1,34 @@
+HKCR
+{
+	AxSciter.Sciter.1 = s 'Sciter Class'
+	{
+		CLSID = s '{99829A7E-007E-4F60-AC36-31B646896593}'
+	}
+	AxSciter.Sciter = s 'Sciter Class'
+	{
+		CLSID = s '{99829A7E-007E-4F60-AC36-31B646896593}'
+		CurVer = s 'AxSciter.Sciter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {99829A7E-007E-4F60-AC36-31B646896593} = s 'Sciter Class'
+		{
+			ProgID = s 'AxSciter.Sciter.1'
+			VersionIndependentProgID = s 'AxSciter.Sciter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			ForceRemove 'Control'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 102'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '%OLEMISC%'
+			}
+			'TypeLib' = s '{25D9681B-32F2-44C9-B94F-5E82E7ED0C75}'
+			'Version' = s '1.0'
+		}
+	}
+}

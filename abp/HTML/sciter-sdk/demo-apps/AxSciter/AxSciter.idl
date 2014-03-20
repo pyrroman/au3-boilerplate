@@ -1,0 +1,293 @@
+// AxSciter.idl : IDL source for AxSciter
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (AxSciter.tlb) and marshalling code.
+
+#include "olectl.h"
+import "oaidl.idl";
+import "ocidl.idl";
+
+
+
+[
+	uuid(25D9681B-32F2-44C9-B94F-5E82E7ED0C75),
+	version(1.0),
+	helpstring("AxSciter 1.0 Type Library")
+]
+library AxSciterLib
+{
+ typedef enum
+ {
+	ContentBox = 0x00,   // content (inner)  box
+	PaddingBox = 0x10,   // content + paddings
+	BorderBox  = 0x20,   // content + paddings + border
+	MarginBox  = 0x30,   // content + paddings + border + margins 
+
+	BackImageArea = 0x40, // relative to content origin - location of background image (if it set no-repeat)
+	ForeImageArea = 0x50, // relative to content origin - location of foreground image (if it set no-repeat)
+
+	ScrollableArea = 0x60,   // scroll_area - scrollable area in content box 
+ } ElementBoxType;
+
+typedef enum 
+{
+  RootRelative = 0x01,       // - or this flag if you want to get HTMLayout window relative coordinates,
+							 //   otherwise it will use nearest windowed container e.g. popup window.
+  SelfRelative = 0x02,       // - "or" this flag if you want to get coordinates relative to the origin
+						     //   of element iself.
+  ContainerRelative = 0x03,  // - position inside immediate container.
+  ViewRelative = 0x04,       // - position relative to view - HTMLayout window
+} RelativeToType;
+
+typedef enum 
+{ 
+  DATA_HTML = 0, 
+  DATA_IMAGE = 1, 
+  DATA_STYLE = 2, 
+  DATA_CURSOR = 3,
+  DATA_SCRIPT = 4,
+} ResourceType;
+
+typedef enum  
+  {
+	  MASK_BUBBLING = 0,        // bubbling (emersion) phase
+	  MASK_SINKING  = 0x08000,  // capture (immersion) phase, this flag is or'ed with EVENTS codes below
+	  MASK_HANDLED  = 0x10000   // event already processed.
+	// see: http://www.w3.org/TR/xml-events/Overview.html#s_intro
+  } PhaseMask;
+
+typedef enum 
+  {
+	  ME_MOUSE_ENTER = 0,
+	  ME_MOUSE_LEAVE = 1,
+	  ME_MOUSE_MOVE  = 2,
+	  ME_MOUSE_UP    = 3,
+	  ME_MOUSE_DOWN  = 4,
+	  ME_MOUSE_DCLICK = 5,
+	  ME_MOUSE_WHEEL = 6, 
+	  ME_MOUSE_TICK  = 7, // mouse pressed ticks
+	  ME_MOUSE_IDLE  = 8, // mouse stay idle for some time
+
+	  ME_DROP        = 9,   // item dropped, target is that dropped item 
+	  ME_DRAG_ENTER  = 0xA, // drag arrived to the target element that is one of current drop targets.  
+	  ME_DRAG_LEAVE  = 0xB, // drag left one of current drop targets. target is the drop target element.  
+
+	  ME_DRAGGING = 0x100, // This flag is 'ORed' with MOUSE_ENTER..MOUSE_DOWN codes if dragging operation is in effect.
+						// E.g. event DRAGGING | MOUSE_MOVE is sent to underlying DOM elements while dragging.
+  } MouseEvents;
+
+typedef enum 
+  {
+	  BE_BUTTON_CLICK = 0,              // click on button
+	  BE_BUTTON_PRESS = 1,              // mouse down or key down in button
+	  BE_BUTTON_STATE_CHANGED = 2,      // checkbox/radio/slider changed its state/value 
+	  BE_EDIT_VALUE_CHANGING = 3,       // before text change
+	  BE_EDIT_VALUE_CHANGED = 4,        // after text change
+	  BE_SELECT_SELECTION_CHANGED = 5,  // selection in <select> changed
+	  BE_SELECT_STATE_CHANGED = 6,      // node in select expanded/collapsed, heTarget is the node
+
+	  BE_POPUP_REQUEST   = 7,           // request to show popup just received, 
+									 //     here DOM of popup element can be modifed.
+	  BE_POPUP_READY     = 8,           // popup element has been measured and ready to be shown on screen,
+									 //     here you can use functions like ScrollToView.
+	  BE_POPUP_DISMISSED = 9,           // popup element is closed,
+									 //     here DOM of popup element can be modifed again - e.g. some items can be removed
+									 //     to free memory.
+
+	  BE_MENU_ITEM_ACTIVE = 0xA,        // menu item activated by mouse hover or by keyboard,
+	  BE_MENU_ITEM_CLICK = 0xB,         // menu item click, 
+									 //   BEHAVIOR_EVENT_PARAMS structure layout
+									 //   BEHAVIOR_EVENT_PARAMS.cmd - MENU_ITEM_CLICK/MENU_ITEM_ACTIVE   
+									 //   BEHAVIOR_EVENT_PARAMS.heTarget - the menu item, presumably <li> element
+									 //   BEHAVIOR_EVENT_PARAMS.reason - BY_MOUSE_CLICK | BY_KEY_CLICK
+
+	  BE_CONTEXT_MENU_SETUP   = 0xF,    // evt.he is a menu dom element that is about to be shown. You can disable/enable items in it.      
+	  BE_CONTEXT_MENU_REQUEST = 0x10,   // "right-click", BEHAVIOR_EVENT_PARAMS::he is current popup menu HELEMENT being processed or NULL.
+									 // application can provide its own HELEMENT here (if it is NULL) or modify current menu element.
+    
+	  BE_VISIUAL_STATUS_CHANGED = 0x11, // broadcast notification, sent to all elements of some container being shown or hidden   
+
+
+	  // "grey" event codes  - notfications from behaviors from this SDK 
+	  BE_HYPERLINK_CLICK = 0x80,        // hyperlink click
+	  BE_TABLE_HEADER_CLICK,            // click on some cell in table header, 
+									 //     target = the cell, 
+									 //     reason = index of the cell (column number, 0..n)
+	  BE_TABLE_ROW_CLICK,               // click on data row in the table, target is the row
+									 //     target = the row, 
+									 //     reason = index of the row (fixed_rows..n)
+	  BE_TABLE_ROW_DBL_CLICK,           // mouse dbl click on data row in the table, target is the row
+									 //     target = the row, 
+									 //     reason = index of the row (fixed_rows..n)
+
+	  BE_ELEMENT_COLLAPSED = 0x90,      // element was collapsed, so far only behavior:tabs is sending these two to the panels
+	  BE_ELEMENT_EXPANDED,              // element was expanded,
+
+	  BE_ACTIVATE_CHILD,                // activate (select) child, 
+									 // used for example by accesskeys behaviors to send activation request, e.g. tab on behavior:tabs. 
+
+	  BE_DO_SWITCH_TAB = BE_ACTIVATE_CHILD,// command to switch tab programmatically, handled by behavior:tabs 
+									 // use it as HTMLayoutPostEvent(tabsElementOrItsChild, DO_SWITCH_TAB, tabElementToShow, 0);
+
+	  BE_INIT_DATA_VIEW,                // request to virtual grid to initialize its view
+    
+	  BE_ROWS_DATA_REQUEST,             // request from virtual grid to data source behavior to fill data in the table
+									 // parameters passed throug DATA_ROWS_PARAMS structure.
+
+	  BE_UI_STATE_CHANGED,              // ui state changed, observers shall update their visual states.
+									 // is sent for example by behavior:richtext when caret position/selection has changed.
+
+	  BE_FORM_SUBMIT,                   // behavior:form detected submission event. BEHAVIOR_EVENT_PARAMS::data field contains data to be posted.
+									 // BEHAVIOR_EVENT_PARAMS::data is of type T_MAP in this case key/value pairs of data that is about 
+									 // to be submitted. You can modify the data or discard submission by returning TRUE from the handler.
+	  BE_FORM_RESET,                    // behavior:form detected reset event (from button type=reset). BEHAVIOR_EVENT_PARAMS::data field contains data to be reset.
+									 // BEHAVIOR_EVENT_PARAMS::data is of type T_MAP in this case key/value pairs of data that is about 
+									 // to be rest. You can modify the data or discard reset by returning TRUE from the handler.
+                                   
+	  BE_DOCUMENT_COMPLETE,             // behavior:frame have complete document.
+
+	  BE_HISTORY_PUSH,                  // behavior:history stuff
+	  BE_HISTORY_DROP,                     
+	  BE_HISTORY_PRIOR,
+	  BE_HISTORY_NEXT,
+
+	  BE_HISTORY_STATE_CHANGED,         // behavior:history notification - history stack has changed
+
+
+	  BE_FIRST_APPLICATION_EVENT_CODE = 0x100 
+	  // all custom event codes shall be greater
+	  // than this number. All codes below this will be used
+	  // solely by application - HTMLayout will not intrepret it 
+	  // and will do just dispatching.
+	  // To send event notifications with  these codes use
+	  // HTMLayoutSend/PostEvent API.
+
+  } BehaviorEvents;
+
+  interface IElements;
+
+  [
+	  object,
+	  uuid(645B0717-C0AB-424D-B513-F083AD486BF1),
+	  dual,
+	  nonextensible,
+	  helpstring("IElement Interface"),
+	  pointer_default(unique)
+  ]
+  interface IElement : IDispatch{
+    [propget, id(1), helpstring("property Tag")] HRESULT Tag([out, retval] BSTR* pVal);
+    [propget, id(2), helpstring("property Value")] HRESULT Value([out, retval] VARIANT* pVal);
+    [propput, id(2), helpstring("property Value")] HRESULT Value([in] VARIANT newVal);
+    [id(3), helpstring("Find first element matching CSS selector")] HRESULT Select([in] BSTR cssSelector, [out, retval] IElement** el);
+    [id(4), helpstring("method SelectAll")] HRESULT SelectAll([in] BSTR cssSelector, [out, retval] IElements** coll);
+    [propget, id(5), helpstring("property Attr")] HRESULT Attr(BSTR name, [out, retval] VARIANT* pVal);
+    [propput, id(5), helpstring("property Attr")] HRESULT Attr(BSTR name, [in] VARIANT newVal);
+    [propget, id(6), helpstring("Get/Set style attrribute")] HRESULT StyleAttr(BSTR name,[out, retval] VARIANT* pVal);
+    [propput, id(6), helpstring("Get/Set style attrribute")] HRESULT StyleAttr(BSTR name,[in] VARIANT newVal);
+    [id(7), helpstring("get position of the element")] HRESULT Position([out] LONG* x, [out] LONG* y, [in] ElementBoxType ofWhat, [in] RelativeToType relTo);
+    [id(8), helpstring("method Dimension")] HRESULT Dimension([out] LONG* width, [out] LONG* height, ElementBoxType ofWhat);
+    [id(9), helpstring("Call behavior method"),vararg] HRESULT Call([in] BSTR methodName, [in] SAFEARRAY(VARIANT)* params, [out,retval] VARIANT* rv);
+    [propget, id(10), helpstring("Raw HELEMENT handle of the DOM element"), nonbrowsable] HRESULT HELEMENT([out, retval] LONG* pVal);
+  };
+
+  [
+	  object,
+	  uuid(FA63A755-C7B3-4DB6-833F-3D5FE102495E),
+	  dual,
+	  nonextensible,
+	  helpstring("ISciter Interface"),
+	  pointer_default(unique)
+  ]
+  interface ISciter : IDispatch{
+    [id(1), helpstring("Load html from memory, baseUrl is optional - used to resolve relative links")] 
+    HRESULT LoadHtml([in] BSTR html, [in] BSTR baseUrl);
+    [id(2), helpstring("Load file://... or remote http://... resource")] 
+    HRESULT LoadUrl([in] BSTR urlToLoad);
+    [propget, id(3), helpstring("property Root")] HRESULT Root([out, retval] IElement** pVal);
+    [id(4), helpstring("Calls function defined in document scope"),vararg] HRESULT Call([in] BSTR name, [in] SAFEARRAY(VARIANT)* params, [out,retval] VARIANT* rv);
+    [id(5), helpstring("Evaluates [ti]script in context of loaded document")] HRESULT Eval([in] BSTR script, [out,retval] VARIANT* rv);
+    [id(6), helpstring("DataReady() is used to report data availability in response of OnLoadData() event")] HRESULT DataReady([in] LONG requestId, [in] BYTE* data, [in] LONG dataLength);
+    [propget, id(7), helpstring("Reference to object implementing methods being invoked by script"), nonbrowsable] HRESULT Methods([out, retval] IDispatch** pVal);
+    [propputref, id(7), helpstring("Reference to object implementing methods being invoked by script"), nonbrowsable] HRESULT Methods([in] IDispatch* newVal);
+  };
+
+
+  [
+	  object,
+	  uuid(C7171909-9F92-48D7-8691-EFB3390DEE55),
+	  dual,
+	  nonextensible,
+	  helpstring("IElements Interface"),
+	  pointer_default(unique)
+  ]
+  interface IElements : IDispatch{
+    [id(DISPID_NEWENUM), helpstring("method _NewEnum"), restricted] HRESULT _NewEnum([out,retval] IUnknown** coll);
+    [propget, id(1), helpstring("property Count")] HRESULT Count([out, retval] LONG* pVal);
+    [propget, id(2), helpstring("method Item"), defaultcollelem] HRESULT Item([in] LONG index, [out,retval] IElement** el);
+  };
+
+
+	importlib("stdole2.tlb");
+
+
+	[
+		uuid(ED2316A7-3EB2-4C80-9146-600B408B08D8),
+		helpstring("_ISciterEvents Interface")
+	]
+	dispinterface _ISciterEvents
+	{
+		properties:
+		methods:
+      [id(1), helpstring("stdout script output")] HRESULT onStdOut([in] BSTR msg);
+      [id(2), helpstring("stderr script output")] HRESULT onStdErr([in] BSTR msg);
+      [id(3), helpstring("OnLoadData is generated when resource from the url is required")] HRESULT OnLoadData([in] BSTR url, [in] ResourceType resType, [in] LONG requestId, [out] VARIANT_BOOL* discard);
+      [id(4), helpstring("OnDataLoaded is called when resource is delivered to the engine")] HRESULT OnDataLoaded([in] BSTR url, [in] ResourceType resType, [in] BYTE* data, [in] LONG dataLength, [in] LONG requestId);
+  };
+	[
+		uuid(99829A7E-007E-4F60-AC36-31B646896593),
+		control,
+		helpstring("Sciter Class")
+	]
+	coclass Sciter
+	{
+		[default] interface ISciter;
+		[default, source] dispinterface _ISciterEvents;
+	};
+
+  coclass Element;
+
+	[
+		uuid(2A8AAFD6-6E87-4967-BF6D-C3F6BB9B3BD1),
+		helpstring("_IElementEvents Interface")
+	]
+	dispinterface _IElementEvents
+	{
+		properties:
+		methods:
+      [id(1), helpstring("method OnMouse")] HRESULT OnMouse([in] IElement* target, [in] LONG eventType, [in] LONG x, [in] LONG y, [in] LONG buttons, [in] LONG keys, [out,retval] VARIANT_BOOL* handled);
+      [id(2), helpstring("method OnKey")] HRESULT OnKey([in] IElement* target, [in] LONG eventType, [in] LONG code, [in] LONG keys, [out,retval] VARIANT_BOOL* handled);
+      [id(3), helpstring("method onFocus")] HRESULT OnFocus([in] IElement* target, [in] LONG eventType, [out,retval] VARIANT_BOOL* handled);
+      [id(4), helpstring("method onTimer")] HRESULT OnTimer([in] LONG timerId, [out,retval] VARIANT_BOOL* handled);
+      [id(5), helpstring("method OnSize")] HRESULT OnSize(void);
+      [id(6), helpstring("method OnControlEvent")] HRESULT OnControlEvent([in] IElement* target, [in] LONG eventType, [in] LONG reason, [in] IElement* source, [out,retval] VARIANT_BOOL* handled);
+      [id(7), helpstring("method OnScroll")] HRESULT OnScroll([in] IElement* target, [in] LONG eventType, [in] long pos, [in] VARIANT_BOOL isVertical, [out,retval] VARIANT_BOOL* handled);
+  };
+	[
+		uuid(53FB239D-7857-4F0D-9083-871D8C0EAE3A),
+		helpstring("Element Class")
+	]
+	coclass Element
+	{
+		[default] interface IElement;
+		[default, source] dispinterface _IElementEvents;
+	};
+	[
+		uuid(B1C8635C-12B4-40F7-8038-6134FC5D398F),
+		helpstring("Elements Class")
+	]
+	coclass Elements
+	{
+		[default] interface IElements;
+	};
+};

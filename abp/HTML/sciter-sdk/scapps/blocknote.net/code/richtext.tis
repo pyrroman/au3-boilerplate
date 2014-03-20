@@ -1,0 +1,195 @@
+
+include "xdom.tis";
+include "../config/key-map.tis";
+
+class RichText: HTML_WYSIWYG_BEHAVIOR
+{
+  function attached()
+  {
+    var tbselector = this.attributes#toolbar; 
+    if(!tbselector) /* no 'toolbar' attribute */ return;
+    var tb = self.select(tbselector);
+    if(tb) 
+	    this.bindToolbar(tb);
+	  else
+	    stderr << "toolbar " << tbselector << " not found!\n";
+  }
+
+  function loadHtml(html, baseUrl = "")
+  {
+    return this.xcall( #loadHTML, html, baseUrl );
+  }
+
+  function saveHtml(baseUrl = "")
+  {
+    return this.xcall( #saveHTML /*, baseUrl*/ );
+  }
+  
+  property readOnly(v)
+  {
+    get return this.xcall( #readOnly );
+    set this.xcall( #readOnly, v );
+  }
+
+  // basic actions.
+  function undo(doit = false)     { return this.xcall(#undo, true); }
+  function redo(doit = false)     { return this.xcall(#redo, true); }
+  function cut(doit = false)      { return this.xcall(#cut, true); } 
+  function copy(doit = false)     { return this.xcall(#copy, true); }
+  function paste(doit = false)    { return this.xcall(#paste, true); }
+  
+  // basic actions state indicators.
+  property canUndo(v)             { get return this.xcall(#undo, false); }
+  property canRedo(v)             { get return this.xcall(#redo, false); }
+  property canCut(v)              { get return this.xcall(#cut, false); } 
+  property canCopy(v)             { get return this.xcall(#copy, false); }
+  property canPaste(v)            { get return this.xcall(#paste, false); }
+  
+  // basic actions
+  
+  function openFile(fn)
+  {
+    if( fn ) 
+    {
+      //this.filename = fn;
+      return this.loadFile(fn);
+    }
+  }  
+ 
+  function saveFile(fn)
+  {
+    if(super.saveFile(fn)) // call of native method of the Richtext
+    {
+      this.onDocumentChanged(false); 
+      return true;
+    }
+  }
+ 
+  function insert(html)           { return this.xcall(#insert, html); }
+  property canInsert(v)           { get return this.xcall(#insert, false); }
+  
+  property blockType(v)           { get return this.xcall(#blockType, false); set this.xcall(#blockType, v); }
+  
+  function toggleRulers()         { this.cmdRulers.checked = !this.cmdRulers.checked; this.xcall( #showRulers, this.cmdRulers.checked ); }
+  
+  property currentObjects(v)      { get return this.xcall(#getCurrentObjects); }  
+
+  // bind actions with toolbar buttons
+  function bindToolbar(tb)
+  {
+    var rt = this;
+    function bind( selector, func, event_sym = #onClick)
+    {
+      var btn = tb.select(selector); if(!btn) return;
+      btn[event_sym] = func;
+      return btn;
+    }
+
+    /*
+    We do not need them as behavior:richtext does this for us automagically for us
+    
+    this.cmdUndo    = bind( #undo,   ::rt.undo() );
+    this.cmdRedo    = bind( #redo,   ::rt.redo() );
+    this.cmdCopy    = bind( #copy,   ::rt.copy() );
+    this.cmdCut     = bind( #cut,    ::rt.cut() );
+    this.cmdPaste   = bind( #paste,  ::rt.paste() );
+    this.cmdH1     = bind( #h1,     ::rt.blockType = "h1" );
+    this.cmdH2     = bind( #h2,     ::rt.blockType = "h2" );
+    this.cmdH3     = bind( #h3,     ::rt.blockType = "h3" );
+    this.cmdH4     = bind( #h4,     ::rt.blockType = "h4" );
+    this.cmdH5     = bind( #h5,     ::rt.blockType = "h5" );
+    this.cmdH6     = bind( #h6,     ::rt.blockType = "h6" );
+    this.cmdP      = bind( #p,      ::rt.blockType = "p" );
+    */
+
+    // var holding button | selector | function to do
+    this.cmdRulers  = bind( ".rulers", ::rt.toggleRulers() );
+    
+    function insertNewTable(rows, columns)
+    {
+      var html = Stream.openString();
+      html << "<table border='1'>";
+      for(var r = 0; r < rows; ++r)
+      {
+        html << "<tr>";
+        for(var c = 0; c < columns; ++c)  
+          html << "<td>&nbsp;</td>";
+        html << "</tr>";
+      }
+      html << "</table>";
+      rt.insert(html.toString());
+    }
+
+    this.cmdInsertTable = bind( "#insert-table",  insertNewTable, #onCreateNewTable ); // see toolbar.tis
+    this.cmdInsertHr = bind( "#insert-hr",  ::rt.insert("<hr/>") );
+    
+    self.$(#search-n-replace).view = this; // set us as current view for search-and-replace.
+   
+  }
+  
+  function onUpdateUI(currentObjects /*array of current objects*/)
+  {
+    // notification handler, placeholder function
+  }
+   
+  // sent by behavior:richtext to indicate that UI needs to be updated
+  function updateUI(  )
+  {
+    /*
+    this.cmdUndo.enabled    = this.canUndo;
+    this.cmdRedo.enabled    = this.canRedo;
+    this.cmdCopy.enabled    = this.canCopy;
+    this.cmdCut.enabled     = this.canCut;
+    this.cmdPaste.enabled   = this.canPaste;
+		var bt = this.blockType;
+	  this.cmdH1.checked = bt == "h1"; this.cmdH2.checked = bt == "h2"; this.cmdH3.checked = bt == "h3";
+	  this.cmdH4.checked = bt == "h4"; this.cmdH5.checked = bt == "h5"; this.cmdH6.checked = bt == "h6";
+	  this.cmdP.checked = bt == "p";
+    */
+    this.cmdInsertTable.enabled = this.canInsert;
+    this.onUpdateUI(this.currentObjects || []);
+  }
+  
+  function onDocumentChanged(onOff)
+  { 
+  }
+
+  function onControlEvent(evt)
+  {
+    if(/*evt.target === this && */
+        evt.type == Event.EDIT_VALUE_CHANGED) // document in the view was changed from or 
+                                              // restored to its initial (load) state.
+    {
+      this.onDocumentChanged(evt.reason != 0);
+      return true;
+    }
+    return false;
+  } 
+  
+  function testVisit()
+  {
+    view.clipboard(#put, GoogleCodeWiki.toText(this) );
+  
+    //stdout << GoogleCodeWiki.toText(this) << "\n";
+  
+    /*function elementStart(tag,atts,elementType,elementUID) 
+    {
+      stdout.printf("elementStart:%s %v #%s %V\n",tag,atts,elementType,elementUID);
+    }
+    function elementEnd(tag,elementType,elementUID) 
+    {
+      stdout.printf("elementEnd:%s #%s %V\n",tag,elementType,elementUID);
+    }
+    function elementText(txt) 
+    {
+      stdout.printf("elementText:%s\n",txt);
+    }
+    this.visit(#document, elementStart,elementEnd,elementText);
+    return false;*/
+  }
+  
+  
+  
+  
+ 
+}

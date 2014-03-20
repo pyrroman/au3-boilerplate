@@ -1,0 +1,187 @@
+class Sudoku: Behavior
+{
+        
+  function attached()
+  {
+    this.init();
+    on_restore();
+  }
+  
+  // button click handling    
+  function onControlEvent(evt)
+  {
+  }
+  
+  // keyboard clicks
+  function onKey(evt)
+  {
+  }
+  
+  function onSize()
+  {
+    var width = this.box(#width);
+  
+    if( width > 800 )
+    {  
+      if(this.attributes["factor"] != "large")
+      {
+        this.attributes["factor"] = "large";
+        this.update(true);
+      }
+    }  
+    else if( width > 500 )
+    {  
+      if(this.attributes["factor"] != "medium")
+      {
+        this.attributes["factor"] = "medium";
+        this.update(true);
+      }
+    }  
+    else
+    {
+      if(this.attributes["factor"] != "small")
+      {
+        this.attributes["factor"] = "small";
+        this.update(true);
+      }
+    }
+  }
+  
+  
+  function onMouse(evt)
+  {
+    if(evt.type == Event.MOUSE_DOWN && evt.mainButton)
+    {
+      try
+      {
+        this.showPopup(evt.target.selectParent("td"));
+        return true;
+      }
+      catch(ex)
+      { }
+      return false;
+    }
+  
+    return false;
+  }
+  
+  function showPopup(el)
+  {
+      var pe = this.getPopupElement();
+      pe.owner = el;
+      el.popup( pe, 6); 
+  }
+  
+  function getPopupElement()
+  { 
+    return self.select("popup.sudoku-selector");
+  }
+  
+  function init()
+  {
+    var rand = 13;
+    var tbl = self.select("#tbl");
+    var str = "";
+    
+    var idx = 0;
+    
+    for (var tr = 0; tr < 9; ++tr)
+    {
+      str += "<tr>";
+      for (var td = 0; td < 9; ++td)
+      {
+        str += "<td id=\"" + idx.toString() + "\"></td>";
+        ++idx;
+      }
+      str += "</tr>";
+    }
+    
+    tbl.html = str.toString();
+  }
+}
+  
+  /* popup */
+class Popup : Behavior
+{
+  
+  // button click handling    
+  function onControlEvent(evt)
+  {
+    if(evt.type == Event.SELECT_SELECTION_CHANGED)
+    {
+      this.owner.text = evt.target.value;
+      if(this.owner.tag == "td")
+      {
+        this.owner.attributes["class"] = "";
+        this.owner.update();
+      }
+      else if(this.owner.parent.tag == "td")
+      {
+        this.owner.parent.attributes["class"] = "";
+        this.owner.parent.update();
+      }
+  
+      this.clearState(Element.STATE_POPUP); // hide popup
+    }
+  }
+  
+
+}
+  
+  // --- toolbar ---
+type ToolbarButton : Behavior
+{  
+  function onMouse(evt)
+    {
+      if(!evt.mainButton) 
+          return false;
+  
+      switch(evt.type)
+      {
+        case Event.MOUSE_DOWN:
+          this.setState(Element.STATE_CURRENT, false);
+          return true;
+        case Event.MOUSE_UP:
+          if(this.getState(Element.STATE_CURRENT)) 
+          {
+            this.onClick();
+            return true;   
+          }
+          return false;
+      }       
+      return false;
+    }
+  // this method needs to be redefined for each button instance.
+  function onClick()
+  {
+    var fnName = String.printf("on_%s", this.attributes["id"]);
+    try
+    {
+      eval( fnName )();
+    }
+    catch(e)
+    {
+      stderr.printf("Exception in Toolbar action: %s: %s\n", this.attributes["id"], e.message);
+    }
+  }
+}
+  
+  // Toolbar selector handler
+type ToolbarSelector: Behavior
+{
+  function onControlEvent(evt)
+    {
+      if(evt.type == Event.SELECT_SELECTION_CHANGED)
+      {
+        this.onValueChanged(this.value); 
+        return true;
+      }       
+      return false;
+    }
+  // this method needs to be redefined for each selector instance.
+  function onValueChanged(val)
+  {
+  }
+}
+// --- eof toolbar ---
+  

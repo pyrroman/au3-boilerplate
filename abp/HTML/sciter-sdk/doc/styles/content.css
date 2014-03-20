@@ -1,0 +1,21 @@
+body 
+{ 
+  behavior: htmlarea; /* to make it selectable */
+  cursor:text;
+}
+
+pre
+{
+  background-color:#F5FFFA;
+  border:1px dashed gray;
+  padding:4px;
+  margin:4px;
+}
+
+[highlighted]
+{
+  color: white;
+  background-color: red;
+  assigned!: self.start-timer(800); /* red blink */
+  timer!: self.highlighted = null, return false;
+}

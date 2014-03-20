@@ -1,0 +1,78 @@
+include "colorslist.tis";
+
+class RSidebar: Behavior
+{
+  function attached()
+  {
+  }
+  
+  function activatePanel(panelId)
+  {
+    var panel = this.$("#%s",panelId);
+    if( panel )
+    {
+      panel.prior.value = true; // behavior:radio, set checked
+      panel.state.focus = true; // set focus on it
+    }
+  }
+}
+
+class CodeSnippets: Behavior
+{ 
+  
+  function onSelected(value) 
+  {
+    if( views[0] && views[0] instanceof Scintilla )
+    {
+      switch( value )
+      {
+        case "html":
+        {
+          views[0].selection = "<html>\n"
+          "<head>\n"
+          "  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>\n"
+          "  <style>\n  </style>\n  <script type=\"text/tiscript\">\n </script>\n</head>\n"
+          "<body>\n"
+          "</body>\n"
+          "</html>"
+          
+        }
+        break;
+        case "prototype": 
+          views[0].selection = "\n/* */\nclass New: Behavior\n{\n\n  function attached() {}\n\n  function onControlEvent(evt)\n  {\n     return false;\n  }\n\n}";
+        break;
+      }
+    }
+  }
+  
+  function onControlEvent(evt)
+  {
+    if( evt.type == Event.SELECT_SELECTION_CHANGED )
+    {
+      this.selectedValue = null;
+      if (evt.source.tag == "option")
+        this.selectedValue = evt.source.id;
+      return true;
+    }
+    return false;
+  }
+  
+  function onMouse(evt)
+  {
+    if( evt.type == Event.MOUSE_DCLICK && this.selectedValue)
+    {
+       this.onSelected(this.selectedValue);
+       return true;
+    }
+  }
+  
+  function onKey(evt)
+  {
+    if( evt.type == Event.KEY_UP && 
+        evt.keyCode == Event.VK_RETURN)
+    {
+       this.onSelected(this.$(":current").id);
+       return true;
+    }
+  }  
+}

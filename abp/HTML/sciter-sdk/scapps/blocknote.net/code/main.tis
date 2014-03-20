@@ -1,0 +1,69 @@
+
+include "../config/key-map.tis"; // keyboard shortcuts maps
+include "xdom.tis";
+include "layout-manager.tis";
+include "persistent.tis";
+include "toolbar.tis";
+include "statusbar.tis";
+include "richtext.tis";
+include "tabs.tis";
+include "sidebar.tis";
+include "searchbar.tis";
+
+// tabbed view widget:
+var gTabbedView = null; // assigned by TabView behavior
+var gSearchBar = null;  // assigned by SearchBar behavior
+
+function self.ready() // when application/UI-facade is loaded
+{ 
+  gTabbedView.addView(); // add empty view with tab "(new)";
+  restoreSettings();
+}
+
+function self.closing() // when application/UI-facade is about to close
+{
+  if(gTabbedView.closeAll())
+    storeSettings();
+  else
+    return false;
+}
+
+// global button bindings:
+self #file-open .onClick = :: openFile();
+self #file-save .onClick = :: saveFile();
+self #test-rt .onClick = :: currentView().testVisit(); 
+
+// global "OpenFile" filter 
+var gFileFilter = 
+    "HTML files (*.htm,*.html)|*.htm;*.html"
+    "All Files (*.*)|*.*";
+
+
+// current Doc widget, may have multiple views  
+function currentDoc()
+{
+  return gTabbedView.currentDoc;
+}
+  
+// current view of the current doc - e.g. could be richtext or plaintext widgets
+function currentView() 
+{
+  return currentDoc().currentView;
+}
+
+// open file in the new tab or switch to the tab if it was open already
+function openFile(filename = null)
+{ 
+  if(!filename)
+    filename = view.selectFile(#open, gFileFilter);
+  if(filename) 
+    gTabbedView.addView(filename);
+}  
+
+// save/saveAs current doc in the file
+function saveFile(saveAs = false)
+{ 
+  currentDoc().saveFile(saveAs);
+}  
+
+

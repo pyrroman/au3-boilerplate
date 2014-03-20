@@ -1,0 +1,21 @@
+#include <Logo_UDF.au3>
+
+$s_path = @ScriptDir & "\testlogo.png"
+$t = _Logo_Startup($s_path, 250, 220, 100, 10, 100, 182, 430, 25, True, 3)
+_Logo_Set_Label_Font()
+Sleep(1000)
+_Logo_Set_Data(50, "Autoit")
+SLeep(1000)
+_Logo_Set_Label_Font(8.5,800, 0, "Arial", 0xCE0000)
+SLeep(1000)
+_Logo_Set_Label_Font(8.5,800, 2, "Arial", 0xFF0000)
+Sleep(1000)
+_Logo_Set_Label_Font(8.5,800, 6, "Arial", 0xFFFF00)
+Sleep(1000)
+_Logo_Set_Data(80, "TheLuBu")
+Sleep(1000)
+_Logo_Set_Label_Font(8.5,800, 8, "Arial", 0xFFFFFF)
+_Logo_Set_Data(80)
+Sleep(1000)
+_Logo_Set_Data(False, "Logo UDF")
+Sleep(2000)

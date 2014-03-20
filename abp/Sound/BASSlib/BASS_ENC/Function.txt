@@ -1,0 +1,14 @@
+_BASS_Encode_GetVersion
+_BASS_Encode_Start
+_BASS_Encode_IsActive
+_BASS_Encode_Stop
+_BASS_Encode_SetPaused
+_BASS_Encode_Write
+_BASS_Encode_SetNotify
+_BASS_Encode_GetCount
+_BASS_Encode_SetChannel
+_BASS_Encode_GetChannel
+_BASS_Encode_CastInit
+_BASS_Encode_CastSetTitle
+_BASS_Encode_CastGetStats
+_BASS_Encode_Startup

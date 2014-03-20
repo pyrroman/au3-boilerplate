@@ -1,0 +1,39 @@
+/* context menu of richtext*/
+
+
+
+
+menu.richtext-context
+{
+  style-set: "menu-richtext-context"
+}
+
+@set menu-richtext-context < std-popup-menu 
+  /* note: it has to be derived from std-popup-menu */
+{
+  menu:root { padding:0; }
+  hr 
+  {
+    margin:0;
+    border-bottom: none;
+    border-top: 1px solid threedshadow;
+  }
+  div 
+  {
+    margin-top:2px;
+    border-top: 1px solid threedshadow;
+    border-bottom: none;
+    background-color: infobackground;
+    display: none;
+  }
+  div > caption
+  {
+    padding:2px 4px;
+    color: graytext;
+  }
+  
+  menu:root[has-cell-selection] > div.cell-selection
+  {
+    display: block;
+  }
+}

@@ -1,0 +1,76 @@
+<div id="my-contacts">
+  <div id="letter-strip">
+    <widget type="button"  name="list">*</widget>
+    <widget type="button"  name="letter-A">A</widget>
+    <widget type="button"  name="letter-B">B</widget>
+    <widget type="button"  name="letter-C">C</widget>
+    <widget type="button"  name="letter-D">D</widget>
+    <widget type="button"  name="letter-E">E</widget>
+    <widget type="button"  name="letter-F">F</widget>
+    <widget type="button"  name="letter-G">G</widget>
+    <widget type="button"  name="letter-H">H</widget>
+    <widget type="button"  name="letter-I">I</widget>
+    <widget type="button"  name="letter-J">J</widget>
+    <widget type="button"  name="letter-K">K</widget>
+    <widget type="button"  name="letter-L">L</widget>
+    <widget type="button"  name="letter-M">M</widget>
+    <widget type="button"  name="letter-N">N</widget>
+    <widget type="button"  name="letter-O">O</widget>
+    <widget type="button"  name="letter-P">P</widget>
+    <widget type="button"  name="letter-Q">Q</widget>
+    <widget type="button"  name="letter-R">R</widget>
+    <widget type="button"  name="letter-S">S</widget>
+    <widget type="button"  name="letter-T">T</widget>
+    <widget type="button"  name="letter-U">U</widget>
+    <widget type="button"  name="letter-V">V</widget>
+    <widget type="button"  name="letter-W">W</widget>
+    <widget type="button"  name="letter-X">X</widget>
+    <widget type="button"  name="letter-Y">Y</widget>
+    <widget type="button"  name="letter-Z">Z</widget>
+  </div>
+  <div id="contact-details">
+    <table><tr>
+      <td>(contact names)</td><td>(contact address)</td><td>(contact phone)</td>
+      <td href="action:contact-quick-view">Quick view</a></td>
+      <td href="action:contact-full-view">Full view</a></td>
+    </tr></table>
+    <div style="flow:horizontal">
+      <widget type="button" name="contact-info-prev-contact">&lt;</widget>
+      <div style="width:30%;height:100%%; text-align:center;">
+        <p><a href="#">(conatct names)</a></p>
+        <p>(conatct address)</p>
+        <p><img src="n-a" style="width:80px; height:80px" /></p>        
+      </div>
+      <div style="width:100%%;height:100%%">
+        <table width="100%" class="panel">
+          <tr>
+            <td nowrap>Contact phones:</td>
+            <td width=100%><widget type="textarea" style="width:100%%; height:2.5em">.</widget></td>
+          </tr>
+          <tr>
+            <td>Email addresses:</td>
+            <td><widget type="textarea" style="width:100%%; height:2.5em">.</widget></td>
+          </tr>
+          <tr>
+            <td nowrap>Contact type:</td>
+            <td><select size=1 style="width:100%%">
+              <option selected>Buyer</option>
+              <option>Investor</option>
+            </select></td>
+          </tr>
+          <tr>
+            <td nowrap>Source:</td>
+            <td name="contact-info-source">Scitems DB</td>
+          </tr>
+          <tr>
+            <td nowrap>Next activity date:</td>
+            <td name="contact-info-next-activity">02/10/2002 Listing Call</td>
+          </tr>
+        </table>
+        <text><a href="#">Show/Add notes</a><button name="contact-info-close" style="margin-left:100%%">Close</button></text>
+      </div>
+      <widget type="button" name="contact-info-next-contact">&gt;</widget>
+    </div>
+  </div>
+  
+</div>

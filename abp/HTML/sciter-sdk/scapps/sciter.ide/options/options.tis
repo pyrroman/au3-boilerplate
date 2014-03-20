@@ -1,0 +1,23 @@
+
+type Options: Behavior 
+{
+   function Load(fn)
+   {
+      var el = Element.create { #widget, class:"options tabview", filename:fn };
+      return el;
+   }
+
+   function Fill(el)
+   {
+      el.insert(
+        "<text> TODO! </text>"
+      );
+   }
+
+   function close() { return true; }
+
+   function save() { return true; }
+
+   function activate() { return true; }
+   function deactivate() { return true; }
+}

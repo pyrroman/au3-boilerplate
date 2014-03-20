@@ -1,0 +1,6 @@
+
+0.2 : 	Add _StDebug() for display css/html error in scite console.
+		Correct some error in Sciter-constants
+		Add taskbar and title param in _StCreate
+		Add skin gui exemple
+0.1 : First release

@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <meta name="GENERATOR" content="BLOCKNOTE.NET"/>
+    <meta name="source"/>
+    <meta name="source"/>
+    <basefont face="Verdana" size="2"/>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>Sciter object</h1>
+  <p>Represents current instance of Sciter application.</p>
+  <div align="left">
+    <table border="0" cellspacing="4" width="100%">
+      <tr>
+        <td colspan="2" valign="top">
+          <h2>Constants</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>VERSION</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">version of the Sciter, integer. High word is version number, low word is a sub-version number</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>REVISION</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">revision of the Sciter, integer. High word is a revision number and low word is a sequential build number.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>LICENSEE</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">string, name of licensee organization/person of the Sciter.</td></tr>
+      <tr>
+        <td colspan="2" valign="top">
+          <h2>Methods</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em>this</em></td>
+        <td bgcolor="#fffff0" valign="middle"><strong>N/A, </strong>non constructible for a while.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>userName</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong>()</strong> returns: <em>string</em></div>
+          <p>Returns string - name of the user logged in the system running this sciter.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>machineName</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong>(</strong>[full]<strong>) </strong>returns: <em>string</em></div>
+          <p>Returns name of the machine running this sciter. If <em>full</em> parameter provided and equals to <em>true</em> then this function returns fully qualified network domain name of the machine.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>home</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong>(</strong>[rel:string]<strong>)</strong> returns: <em>string</em></div>
+          <p>Returns home folder of the sciter - folder where sciter started from. If <em>rel</em> is some string then it will be appended to the return value. Use this if you need to find fully qualified file name residing in sciter folder or subfolder.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>launch</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong>( </strong>filename: string<strong> ) </strong>returns: <em>true/false</em></div>
+          <p>Launches external application on this machine<em>. Filename </em>is a filename of executable or document to open.</p></td></tr></table></div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<html>
+<head>
+  <style>
+  
+    widget[type="ferry"]
+    {
+      width: 50%;
+      height: 50%;
+      style-set:"ferry";
+    }
+  
+    @set ferry
+    {
+      :root 
+      {
+        flow:grid;
+      }
+      :root > div.editor
+      {
+        behavior: sciter-ferry\:editor; /* behavior editor in sciter-ferry.dll */ 
+        left:1#; right:2#;
+        top:1#; bottom:1#;
+        width:*;
+        height:*;
+      }
+      :root > widget[type="vscrollbar"]
+      {
+        left:3#; right:3#;
+        top:1#; bottom:1#;
+      }
+      :root > widget[type="hscrollbar"]
+      {
+        left:2#; right:2#;
+        top:2#; bottom:2#;
+      }
+      :root > text
+      {
+        width:3em;
+        left:1#; right:1#;
+        top:2#; bottom:2#;
+      }
+      :root > text > span.line-no { display:inline-block; width:*; text-align:right;}
+      :root > text > span.col-no  { display:inline-block; width:*;}
+      
+    }    
+  </style>  
+  <script type="text/tiscript">
+  
+    self.select("button#set-text").onClick = function()
+    {
+      var text = self.select("input#text").value;
+      var ferryEditor = self.select("widget[type='ferry']>.editor");
+      ferryEditor.textToDraw = text; // textToDraw is defined as scripting method of the behavior.
+    }
+  
+  </script>  
+<head>
+<body>
+  <p>sciter-ferry behavior:</p>
+  <widget type="ferry">
+    <div .editor /><widget type="vscrollbar" bound="<div.editor" tabindex="-1" />
+    <text><span .line-no>0</span>:<span .col-no>0</span></text><widget type="hscrollbar" bound="<div.editor" />
+  </widget>
+  <p>click on it to start its timer.</p>
+  <p>Text to draw <input #text type="text"> <button #set-text>Update</button>.</p>
+</body>
+</html>

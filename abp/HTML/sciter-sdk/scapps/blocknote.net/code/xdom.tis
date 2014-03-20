@@ -1,0 +1,28 @@
+//|
+//| xdom - DOM extenders 
+//|
+
+// decorators are also dom extenders:
+include "decorators.tis";
+
+// Element class extras
+
+// property 'enabled' 
+property Element.enabled(on)
+{
+  get return this.getState( Element.STATE_DISABLED) == 0;
+  set on ? this.clearState( Element.STATE_DISABLED) : this.setState(Element.STATE_DISABLED);
+}
+
+// property 'checked' 
+property Element.checked(on)
+{
+  get return this.getState(Element.STATE_CHECKED) != 0;
+  set on ? this.setState(Element.STATE_CHECKED) : this.clearState(Element.STATE_CHECKED);
+}
+
+function Element.setFocus()
+{
+  this.setState(Element.STATE_FOCUS);
+}
+

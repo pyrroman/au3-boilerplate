@@ -1,0 +1,65 @@
+
+// handler of the Log view
+
+class Log: Behavior
+{
+  const MAX_LOG_MSG_COUNT = 1024;  
+  const RE_FILE_LINE = /[(](file:.+[(](\d+)[)])[)]/g;
+  
+  var log = null;
+  
+  function attached()
+  {
+    log = this;
+  }
+ 
+  function scrollToLast() { this.last.scrollToView(false,false); }
+  
+  // static method
+  function purge()
+  { 
+    log.clear(); 
+  }
+  
+  // static method
+  function print(data, isErr) 
+  {   
+    var text = data.toString().split("\n");
+    for( var line in text) 
+    {
+        
+      line = line.htmlEscape();
+      var el; 
+      if(log.length > MAX_LOG_MSG_COUNT)
+        el = log[0];
+      else 
+        el = new Element("text");
+    
+      if( isErr )
+      {
+        el.@#class = "error";
+        function wrapFileLine(str,g,n) { return "(<a href='" + (g /~ "(") + "' line=" + n + " >" + (g %~ "/") + "</a>)"; }
+        line = line.replace(RE_FILE_LINE, wrapFileLine);
+        view.focus = log; // to activate the window
+      }
+      else
+        el.@#class = "message";
+      log.insert(el);
+      if(!line)
+        el.text = " "; 
+      else
+        el.html = line; 
+    }
+    log.post( scrollToLast );
+  }
+  function onControlEvent( evt )
+  {
+    if( evt.type == Event.HYPERLINK_CLICK )
+    {
+      var fileName = evt.target.@#href;
+      var lineNo = evt.target.@#line.toInteger();
+      views.openView(fileName, false, lineNo);
+      return true;
+    }
+  }
+}

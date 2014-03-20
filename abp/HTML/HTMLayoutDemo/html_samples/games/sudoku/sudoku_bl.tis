@@ -1,0 +1,194 @@
+
+function on_save()
+{
+  var db = null;
+  try
+  {
+    var data = [];
+    function callbackGetData(el)
+    {
+      var idx = el.attributes["id"].toInteger();
+      data[idx] = (el.text || 0).toInteger();
+    }
+    self.select(callbackGetData, "#tbl td");
+    
+    db = Storage.open("sudoku.db");
+    db.root = { dataset: data };
+    db.commit();
+    db.close();
+    setMessage("Game saved.");
+  }
+  catch(ex)
+  { 
+    setMessage("Error during saving data.");
+    if(db) 
+    {
+      db.rollback();
+      db.close();
+    }
+  }
+}
+
+
+function on_restore()
+{
+  var db = null;
+  try
+  {
+    db = Storage.open(self.url("sudoku.db"));
+    var data = db.root.dataset;
+    
+    if (data)
+    {
+      function callbackSetData(el)
+      {
+        var idx = el.attributes["id"].toInteger();
+        el.text = (data[idx] || "").toString();
+      }
+      self.select(callbackSetData, "#tbl td");
+      self.select("#tbl").update(true);
+    }
+    
+    setMessage("Game loaded.");
+    resetHighlights();
+  }
+  catch(ex)
+  { 
+    setMessage("Cannot load saved game. Do you have one?");
+    stderr.printf("exception in on_restore: %V\n", ex.toString()); 
+  }
+  if(db) db.close();
+}
+
+
+function on_new()
+{
+  function callbackInitTd(el)
+  {
+    el.text = "";
+    el.attributes["class"] = "";
+  }
+  self.select(callbackInitTd, "#tbl td");
+  self.select("#tbl").update(true);
+  setMessage("New game.");
+}
+
+
+var aData = [];
+function initData()
+{
+  aData = [];
+}
+
+function getDups(coll)
+{
+  var a = [];
+  var atmp = {};
+  
+  for(var el in coll)
+  {
+    if(el.value != "")
+    {
+      if(atmp[el.value] == #undefined || atmp[el.value] == null)
+        atmp[el.value] = el;
+      else
+      {
+        a.push(el);
+        a.push(atmp[el.value]);
+      }
+    }
+  }
+  return a;
+}
+
+function checkRows()
+{
+  for(var row = 0; row < 9; ++row)
+  {
+    // do slice
+    var a = aData[(row*9)..((row+1)*9)];
+    var dups = getDups(a);
+    if(dups.length)
+      highlightInvalids(dups);
+  }
+}
+
+function checkColumns()
+{
+  for(var col = 0; col < 9; ++col)
+  {
+    // do slice
+    var a = [];
+    for(var row = 0; row < 9; ++row)
+      a.push(aData[row*9 + col]);
+      
+    var dups = getDups(a);
+    if(dups.length)
+      highlightInvalids(dups);
+  }
+}
+
+function checkSegments()
+{
+  for(var segX = 0; segX < 3; ++segX)
+  {
+    for(var segY = 0; segY < 3; ++segY)
+    {
+      // do slice
+      var a = [];
+      for(var x = 0; x < 3; ++x)
+        for(var y = 0; y < 3; ++y)
+          a.push(aData[(segY*3+y)*9 + (segX*3+x)]);
+        
+      var dups = getDups(a);
+      if(dups.length)
+        highlightInvalids(dups);
+    }
+  }
+}
+
+function on_check()
+{
+  initData();
+  
+  function collectDataAndReset(el)
+  {
+    aData.push(el);
+    el.attributes["class"] = "";
+    el.update();
+  }
+  
+  self.select(collectDataAndReset, "#tbl td");
+  
+  checkRows();
+  checkColumns();
+  checkSegments();
+  
+  setMessage("Validation completed.");
+}
+
+
+function highlightInvalids(a)
+{
+  if(!a.length)
+    return;
+  
+  for(var el in a)
+  {
+    el.attributes["class"] = "invalid";
+    el.update();
+  }
+}
+
+function resetHighlights()
+{
+  function resetHighlightTd(el) { el.attributes["class"] = ""; }
+  self.select(resetHighlightTd, "#tbl td");
+  self.select("#tbl").update(true);
+}
+
+function setMessage(msg)
+{
+  var msgEl = self.select("#message");
+  msgEl.text = msg;
+}

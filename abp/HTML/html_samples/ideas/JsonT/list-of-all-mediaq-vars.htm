@@ -1,0 +1,34 @@
+<html>
+<head>
+  <style>
+    
+    table.list { border-spacing:-1px; }
+    table.list td { border:1px solid gray; padding:2px 4px;}
+    table.list td.value { font-family:monospace; }
+ 
+  </style>  
+  <script type="text/tiscript">
+    include "jsont.tis";
+    var mvars = view.mediaVars();
+    var mvars_ordered = [];
+    for( var (name,v) in mvars)
+      mvars_ordered.push({name:name,value:v}); 
+    mvars_ordered.sort(:a,b:a.name<b.name?-1:1);
+
+    function rules($,d)
+    {
+      return 
+      { 
+        ""         : $(<table.list><tr><th>name</th><th>value</th></tr>{d}</table>),
+        "[]"       : $(<tr><td.name>{d.name}</td><td.value>{d.value}</td></tr>),
+      };
+    }   
+    var r = JSONT.transform(mvars_ordered,rules);  
+    self.$(body).append(r);
+    
+  </script>  
+</head>
+<body>
+  <p>List of all MQ variables:</p>
+</body>
+</html>

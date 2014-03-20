@@ -1,0 +1,7 @@
+// that is manifest file defining Sciter Application
+{
+  main : "/main.htm", // main layout
+  icon : "/styles/blocknote.ico", // icon
+  label: "BlockNote", // label and window title.
+  description: "BlockNote WYSIWYG Editor" // its description 
+}

@@ -1,0 +1,43 @@
+<html>
+<head>
+  <style>
+    picture 
+	{ 
+	  behavior:button;
+	  margin:*; 
+	  outline:6px glow #004488;
+	  outline-shift:4px;
+    }
+	picture:hover
+	{
+	  cursor:pointer;
+	  outline-color:#0077AA;
+	  foreground-image-transformation: contrast-brightness-gamma(0.5,0.5, 1.2);
+	}
+	picture:active
+	{
+	  outline:none;
+	  position:relative;
+	  left:2px;
+	  top:2px;
+	}
+  </style>
+  <script type="text/tiscript">
+
+    const file_filter = "files *.htm,*.html,*.zip,*.scapp|*.HTM;*.HTML;*.ZIP;*.SCAPP|"
+				 "HTML files only(*.htm,*.html)|*.HTM;*.HTML|"
+				 "SCAPP files only (*.zip,*.scapp)|*.ZIP;*.SCAPP|"
+				 "All Files (*.*)|*.*";
+    
+    function self#go .onClick()
+	{
+		var fn = view.selectFile(#open, file_filter);
+		if( fn ) 
+			view.load(fn);
+	}
+  </script>
+</head>
+<body>
+<picture #go src="app:go.png" />
+</body>
+</html>

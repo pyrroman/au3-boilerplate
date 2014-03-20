@@ -1,0 +1,49 @@
+
+type FolderView: Behavior
+{
+
+  function scan( pnode, path )
+  {
+    //stdout << ""
+    var me = this;
+    function w( name, flags )
+    {
+      if(name == "." || name == "..") return true;
+      if(flags & (System.IS_HIDDEN | System.IS_SYSTEM)) return true; // skip it
+      if(flags & System.IS_DIR)
+      {
+        var node = new Element( "options" );
+        var node_text = new Element( "text",name); 
+            node.insert(node_text);
+            node.expanded = false;
+        pnode.insert(node);
+        me.scan( node, path + "/" + name ); // call it again for the folder, recursive
+      }
+      else //file 
+      {
+        var node = new Element( "option", name);
+            node.@#filename = path + "/" + name;
+        pnode.insert(node);
+      }
+      return true;
+    }
+    System.scanFiles(path + "/*.*", w);
+  }
+  
+  function onMouse(evt)
+  {
+    if( evt.type == Event.MOUSE_DCLICK) 
+    {
+      var opt = evt.target.selectParent("option");
+      if( opt && opt.@#filename )
+        openFile(opt.@#filename);
+    }
+  }
+  
+  function show(path)
+  {
+    this.clear();
+    this.scan(this, path);
+    this.update();
+  }
+}

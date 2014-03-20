@@ -1,0 +1,87 @@
+<html>
+<head>
+  <title>Sciter Calc</title>
+  <script type="text/tiscript" src="calc-behavior.tis" />
+  <script type="text/tiscript">
+    view.caption = $(head > title).text;
+  </script>
+  <style> 
+  
+    table.calculator
+    {
+      prototype:Calc;
+      border-spacing:2px;
+      background-color:threedface;
+      width: 100%%;
+    }
+    table.calculator input.result
+    { 
+      font-size: 20pt;
+      font-family: "Arial Black", Arial, Verdana;
+      ovrflow:hidden;
+      width:100%%; 
+    }
+    table.calculator td
+    { 
+      width:25%%;
+    }
+    table.calculator widget
+    { 
+      font-size: 20pt;
+      font-family: "Arial Black", Arial, Verdana;
+      text-align: center;
+      vertical-align: middle;
+      width:100%%;
+      height:100%%; 
+    }
+    table.calculator td.error
+    { 
+      color:red;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Sciter Calc.</h1>
+
+<table class="calculator" tabindex=0>
+<tr>
+  <th colspan=4><input type="text" class="result" size=1 /></th>
+</tr>
+<tr>
+  <td colspan=4 class="error"></td>
+</tr>
+<tr>
+  <td><widget type="button">C</widget></td>
+  <td><widget type="button" >/</widget></td>
+  <td><widget type="button" >*</widget></td>
+  <td><widget type="button" >-</widget></td>
+</tr>
+<tr>
+  <td><widget type="button" >7</widget></td>
+  <td><widget type="button" >8</widget></td>
+  <td><widget type="button" >9</widget></td>
+  <td rowspan=2><widget type="button" >+</widget></td>
+</tr>
+<tr>
+  <td><widget type="button" >4</widget></td>
+  <td><widget type="button" >5</widget></td>
+  <td><widget type="button" >6</widget></td>
+</tr>
+<tr>
+  <td><widget type="button" >1</widget></td>
+  <td><widget type="button" >2</widget></td>
+  <td><widget type="button" >3</widget></td>
+  <td rowspan=2><widget type="button" >=</widget></td>
+</tr>
+<tr>
+  <td colspan=2><widget type="button" >0</widget></td>
+  <td><widget type="button" >.</widget></td>
+</tr>
+
+</table>
+
+</body>
+
+</html>

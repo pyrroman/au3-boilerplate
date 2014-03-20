@@ -1,0 +1,115 @@
+widget#toolbar
+{
+  style-set: "toolbar";
+}
+
+@set toolbar
+{
+  :root /* element itself */
+  {
+    flow:h-flow;
+    height:24px;
+    background-color: threedhighlight threedhighlight threedface threedface;
+    padding:2px;
+  }
+      
+  widget.tb-button
+  {
+    font-family:tahoma arial;
+    behavior: clickable;
+    padding:3px;
+    width:20px;
+    height:*;
+    text-align:center;
+    vertical-align:middle;
+    background: @TB_BUTTON_BACK_NORMAL;
+  }
+  
+  widget.tb-button:disabled
+  {
+    background: @TB_BUTTON_BACK_DISABLED;
+    color:threedshadow;
+  }    
+  
+  widget.tb-button:disabled img
+  {
+    foreground-image-transformation: contrast-brightness-gamma(0.15,0.75,1.0);
+  }    
+
+  widget.tb-button:hover:not(:disabled)         { background: @TB_BUTTON_BACK_HOVER; }    
+  widget.tb-button:active:not(:disabled)        { background: @TB_BUTTON_BACK_ACTIVE; padding:4px 2px 2px 4px; }    
+  widget.tb-button:checked:not(:disabled)       { background: @TB_BUTTON_BACK_CHECKED; }    
+  widget.tb-button:checked:hover:not(:disabled) { background: @TB_BUTTON_BACK_CHECKED_HOVER; }    
+
+  widget.tb-button.h:not(:disabled) { color:threedshadow; }    
+  widget.tb-button.h:not(:disabled) b { color:windowtext; }    
+  
+  widget.tb-button.menu
+  {
+    prototype: ToolbarMenuButton;
+  }
+  widget.tb-button.menu:hover,
+  widget.tb-button.menu:owns-popup
+  {
+    foreground: url(stock:arrow-down) no-repeat;
+    foreground-position-right: 2px;
+    foreground-position-bottom: 2px;
+  }
+
+  widget.tb-button.menu:owns-popup
+  {
+    background: @TB_BUTTON_BACK_ACTIVE;
+  }
+  
+  div.tb-button-group-v
+  {
+    width:max-intrinsic;
+    flow:vertical;
+    height:*;
+  }
+  div.tb-button-group-v > widget.tb-button
+  {
+    overflow:hidden;
+  }
+  
+
+  hr
+  {
+    width:0;
+    height:*;
+    margin: 0 2px;
+    border: 1px solid;
+    border-color: @COLOR_SHADOW @COLOR_LIGHT @COLOR_LIGHT @COLOR_SHADOW;
+  }    
+
+  widget#insert-table
+  {
+    prototype:TableButton;
+  }
+  
+  popup.new-table table
+  {
+    width:*;
+    height:*;
+    border-spacing:2px;
+    padding:1px;
+  }
+  popup.new-table td
+  {
+    width:12px;
+    height:12px;
+    border:1px solid threedshadow;
+    hit-margin:1px; /* to accomodate border-spacing */
+  }
+  popup.new-table td:checked
+  {
+    background-color:threedshadow;
+  }
+  popup.new-table td:active
+  {
+    background-color:threedlight;
+  }
+  
+} /* end of @set toolbar */
+
+

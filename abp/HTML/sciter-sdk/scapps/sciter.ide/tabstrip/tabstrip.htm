@@ -1,0 +1,50 @@
+<html>
+<head>
+  <style>
+
+    @import "tabstrip.css";
+  
+    html 
+    {
+      background-color:threedface;
+    }
+    
+    widget.tab-strip
+    {
+      style-set: "tab-strip";
+    }
+   
+    
+    richtext { width:*; height:*; }
+  </style>  
+  <script type="text/tiscript">
+    include "tabstrip.tis";
+    var ts = self.select("widget.tab-strip");
+    function self.ready()
+    {
+      ts.addTab( "tab item #1", "item1.htm" );
+      ts.addTab( "tab item #2", "item2.htm" );
+      ts.addTab( "tab item #3", "item3.htm" );
+      ts.addTab( "tab item #4", "item4.htm" );
+      ts.addTab( "tab item #5", "item5.htm" );
+      ts.addTab( "tab item #6", "item6.htm" );
+      ts.addTab( "tab item #7", "item7.htm" );
+      ts.addTab( "tab item #8", "item8.htm" );
+      ts.addTab( "tab item #9", "item9.htm" );
+      ts.addTab( "tab item #10", "item10.htm" ); 
+      ts.update();
+    }
+
+    function ts.onTabSwitch(oldtab, newtab)    
+    {
+      stdout.printf("Tab switch from '%s'(%s) to '%s'(%s)\n", oldtab.text, oldtab.@#value , newtab.text, newtab.@#value);
+    }
+    
+  </script>  
+</head>
+<body>
+  TabStrip sample. When there is not enough space tabs go to popup menu (under button "1").
+  <widget .tab-strip > </widget>
+  <richtext><em>Sample!</em></richtext>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<html>
+<head>
+  <style>
+  
+    div { min-width:10px; min-height:10px; border:1px solid; }
+    div.first { background-color: yellow; behavior:clickable; }
+    div.second { background-color: cyan; }
+  </style>  
+  <script type="text/tiscript">
+  
+    
+    include "$.tis";
+    
+    function handleClick() { stdout << "got click\n"; }
+        
+    $(div#demo).content(
+        $.div{ class:"first", onClick: handleClick }, 
+        $.div{ class:"second" }.$content
+        (
+          <p>hello world</p> 
+          <p>hello under world<p>
+        )
+      );
+  </script>  
+</head>
+<body>
+  <h1>runtime DOM creation a la jQuery</h1>
+  Code used to create elements below:
+  <pre>
+    include "$.tis";
+    
+    $(div#demo).content(
+        $.div{ class:"first", onClick: handleClick }, 
+        $.div{ class:"second" }.$content
+        (
+          &lt;p>hello world&lt;/p> 
+          &lt;p>hello under world&lt;p>
+        )
+      );
+  </pre>
+  <div#demo/>
+</body>
+</html>

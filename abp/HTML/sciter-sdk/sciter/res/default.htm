@@ -1,0 +1,339 @@
+<html>
+<head>
+<style>
+
+	@const BUTTON_BACK_HOVER: url(theme:toolbar-button-hover) stretch;
+	@const BUTTON_BACK_ACTIVE: url(theme:toolbar-button-pressed) stretch;
+	@const BUTTON_BACK_CHECKED: url(theme:toolbar-button-checked) stretch;
+	@const BUTTON_BACK_CHECKED_HOVER: url(theme:toolbar-button-checked-hover) stretch;
+	@const BUTTON_BACK_DISABLED: url(theme:toolbar-button-disabled) stretch;
+
+	html { background-color: window; color: windowtext; margin:0; padding:0; }
+	body { margin:0; padding:0; height:*; width:*; }
+	#content { width:*; height:*; border-left: 1px solid threedshadow; border-bottom: 1px solid threedshadow;}
+	#cmdbar  
+	{ 
+		height:*; 
+		width:max-intrinsic; 
+		background-color: threedface;
+		
+		/* background-image:url(theme:rebar-band); background-repeat:stretch; */
+	}
+	#cmdbar > widget[type="button"]  
+	{ 
+	   width:28px; height:28px; 
+	   foreground-repeat:no-repeat;
+	   foreground-position:50% 50%;
+	   padding:0;
+	   margin:2px;
+	   text-align:center;
+	   vertical-align:middle;
+	   font: 12pt "Arial Black", Verdana;
+	   color: threeddarkshadow;
+	   transition:none;
+	   background-image: none;
+	}
+	#cmdbar > widget[type="button"]:hover
+	{
+		background: @BUTTON_BACK_HOVER;
+	}
+	#cmdbar > widget[type="button"]:active
+	{
+		background: @BUTTON_BACK_ACTIVE;
+	}
+	#cmdbar > widget[type="button"]:checked
+	{
+		background: @BUTTON_BACK_CHECKED;
+	}
+	#cmdbar > widget[type="button"]:checked:hover
+	{
+		background: @BUTTON_BACK_CHECKED_HOVER;
+	}
+
+	/*#cmdbar > widget#open { 
+	  font:8.5pt Marlett;
+	  text-align:right; vertical-align:bottom; 
+	}*/
+	
+	#cmdbar > widget#open > text
+	{
+	  font:8.5pt Marlett;
+	  margin:* 0 0 *;
+	}
+
+	#cmdbar > widget#dom-inspector
+	{
+	  behavior:check;
+	}
+
+	popup[role="tooltip"] 
+	{ 
+	  font:system;
+	}
+
+	div#status
+	{
+	  background-color: infobackground;
+	  display:none;
+	  font:system;
+    overflow:hidden;
+	}
+	div#workarea[inspector]
+	{
+	  behavior:frame-set;
+	  border-spacing:3px;
+	}
+
+  div#workarea[allow-drop]
+  {
+    outline:2px orange solid -2px;
+  }
+
+	div#workarea[inspector] > frame#content
+	{
+	  prototype:DOMonitor;
+	}
+
+	div#workarea[inspector] > div#status
+	{
+	  border: 1px solid threedshadow;
+	  display:block;
+	  prototype:DOMinspector;
+    min-height:96px;
+	}
+	div#elements
+	{
+	  flow:horizontal;
+	}
+  div#elements > caption
+	{
+	  width:max-intrinsic;
+	  padding:2px 4px;
+    color:threedshadow;
+	}
+  div#workarea > div#status	caption
+	{
+    color:threedshadow;
+	}
+  
+	div#elements > ul#current-tags 
+	{
+	  width:*;
+	  height:*;
+	  flow:h-flow;
+	  padding:0;
+	  margin:0;
+	  //background-color: scrollbar;
+	  //border-left:1px solid threedshadow;
+	  //border-bottom:1px solid threedshadow;
+	  padding:1px;
+	}
+	div#elements > ul#current-tags > text 
+	{
+	  color:threedshadow;
+	}
+	div#elements > ul#current-tags > li
+	{
+	  width:max-intrinsic;
+	  display:block;
+	  behavior:check;
+	  padding:2px 4px;
+	}
+	div#elements > ul#current-tags > li:hover
+	{
+		background: @BUTTON_BACK_HOVER;
+	}
+	div#elements > ul#current-tags > li:active
+	{
+	    padding:3px 3px 1px 5px;
+		background: @BUTTON_BACK_ACTIVE;
+	}
+	div#elements > ul#current-tags > li:checked
+	{
+		background: @BUTTON_BACK_CHECKED;
+	}
+	div#elements > ul#current-tags > li:checked:hover
+	{
+		background: @BUTTON_BACK_CHECKED_HOVER;
+	}
+  frameset#inspector-info
+  {
+    background-color: transparent;
+    padding:3px;
+  }
+  frameset#inspector-info > *
+  {
+    height:*;
+  }
+  frameset#inspector-info .list
+  {
+    width:*;
+    height:*;
+  }
+  frameset#inspector-info span.name
+  {
+    display:inline-block;
+    font-weight:bold;
+    white-space:nowrap;
+    margin-right:10px;
+    color:windowtext;
+  }
+  frameset#inspector-info span.value
+  {
+    display:inline-block;
+    white-space:nowrap;
+    margin-left:*;
+  }
+  frameset#inspector-info table caption
+  {
+    border-bottom: scrollbar;
+  }
+  frameset#inspector-info table 
+  { 
+    padding:2px;
+    overflow-y:auto; 
+    background:url(theme:edit-normal) stretch; 
+  }
+  frameset#inspector-info table td 
+  {
+    white-space:nowrap;
+  }
+  frameset#inspector-info table td.attr-value 
+  {
+    font-weight:bold;
+    overflow-x: hidden;
+    text-overflow:ellipsis;
+  }
+  frameset#inspector-info table td.attr-name 
+  {
+    text-align:right;
+  }
+ 
+  
+</style>
+<script type="text/tiscript">
+
+    include "res:inspector.tis";
+
+	var filename = null;
+    var file_filter = "files *.htm,*.html,*.zip,*.scapp|*.HTM;*.HTML;*.ZIP;*.SCAPP|"
+				 "HTML files only(*.htm,*.html)|*.HTM;*.HTML|"
+				 "SCAPP files only (*.zip,*.scapp)|*.ZIP;*.SCAPP|"
+				 "All Files (*.*)|*.*";
+
+	function self#open.onClick()
+	{
+		var fn = view.selectFile(#open);
+		if( fn ) 
+		{
+		  filename = fn;
+		  var content = self.select("#content");
+		  content.load(fn);
+		}
+	}
+	function self#reopen.onClick()
+	{
+		if( filename ) 
+		{
+			var content = self.select("#content");
+			content.load(filename);
+		}
+	}
+	function self#open-here.onClick()
+	{
+		var fn = view.selectFile(#open, file_filter);
+		if( fn ) 
+		{
+			view.load(fn);
+		}
+	}
+	function self#open-new.onClick()
+	{
+	   var fn = view.selectFile(#open, file_filter);
+	   if( fn ) view.open(fn);
+	}
+	function self#help.onClick()
+	{
+	   view.open(System.home("doc/main.htm"));
+	}
+
+	function self#dom-inspector.onClick()
+	{
+	    var workarea = self.$("div#workarea");
+	    var status = workarea.$("div#status");
+	    var content = workarea.$("frame#content");
+	    if(this.value)
+	    {
+		    status.load("res:dom-inspector.htm");
+		    workarea.@#inspector = true; // this has to be after load() as it will trigger Behaviors attachments.
+	    }
+	    else 
+	    {
+        workarea.@#inspector = undefined;
+		    status.style.clear();
+		    content.style.clear();
+	    }
+	}
+
+  function self#workarea.onExchange(evt)
+  {
+     if( evt.type == Event.X_DRAG_ENTER && evt.draggingDataType == #file)
+     {
+       this.@#allow-drop = true;
+       return true;
+     }
+     else if( evt.type == Event.X_DRAG_LEAVE )
+     {
+       this.@#allow-drop = undefined;
+       return true;
+     }
+     else if( evt.type == Event.X_DRAG && evt.draggingDataType == #file)
+     {
+       return true;
+     }
+     else if( evt.type == Event.X_DROP && evt.draggingDataType == #file)
+     {
+       this.@#allow-drop = undefined;
+       if(typeof evt.dragging == #array)
+         filename = evt.dragging[0];
+       else
+  		   filename = evt.dragging;
+		   var content = self.select("#content");
+		   content.load(filename);
+       return true;
+     }
+  }
+  /*self.timer(1, function() {
+    stdout.println("start event loop...");
+    view.doEvent();
+    stdout.println("finished.");
+    return false;
+  }); */
+  
+  function view.onStateChanged() {
+    //stdout.println("start event loop...");
+    //view.doEvent();
+    stdout.println("finished.");
+    //return false;
+  }
+    
+  
+
+</script>
+</head>
+<body style="flow:horizontal">
+<div #cmdbar>
+	<widget type="button" id="open" style="foreground-image:url(res:file-open.png)"  title="Open in the frame on the right">8</widget>
+	<widget type="button" id="reopen" style="foreground-image:url(res:file-refresh.png)"  accesskey="!F5" title="F5 - reopen in the frame on the right"></widget>
+	<widget type="button" id="open-here" style="foreground-image:url(res:file-open.png)" title="Open in the current window" />
+	<widget type="button" id="open-new" style="foreground-image:url(res:file-new.png)" title="Open in a new window" />
+	<widget type="button" id="help" title="Open Sciter Help browser">?</widget>
+	<widget type="button" id="dom-inspector" title="DOM inspector" style="font:16pt Webdings">L</widget>
+</div>
+<div style="width:*;height:*" #workarea>
+ <frame #content src="res:sys-info.htm"  /> <!-- content-style="inspector.css"-->
+ <div #status></div>
+</div>
+</body>
+
+</html>

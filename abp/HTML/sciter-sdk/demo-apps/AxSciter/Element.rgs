@@ -1,0 +1,27 @@
+HKCR
+{
+	AxSciter.Element.1 = s 'Element Class'
+	{
+		CLSID = s '{53FB239D-7857-4F0D-9083-871D8C0EAE3A}'
+	}
+	AxSciter.Element = s 'Element Class'
+	{
+		CLSID = s '{53FB239D-7857-4F0D-9083-871D8C0EAE3A}'
+		CurVer = s 'AxSciter.Element.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {53FB239D-7857-4F0D-9083-871D8C0EAE3A} = s 'Element Class'
+		{
+			ProgID = s 'AxSciter.Element.1'
+			VersionIndependentProgID = s 'AxSciter.Element'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			val AppID = s '%APPID%'
+			'TypeLib' = s '{25D9681B-32F2-44C9-B94F-5E82E7ED0C75}'
+		}
+	}
+}

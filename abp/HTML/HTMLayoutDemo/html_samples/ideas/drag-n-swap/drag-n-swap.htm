@@ -1,0 +1,86 @@
+<html>
+<head>
+  <style>
+    table.swap 
+    {
+      prototype: SwapTable;
+    } 
+    table.swap td > div 
+    {
+      width:300px;
+      height:300px;
+      font:3cm Verdana;
+      border:1px solid black;
+      draggable: only-move;
+    }
+    table.swap td
+    {
+      accept-drop:selector(table.swap td > div);
+      drop:append; // droped element is appended at the end of this td.
+    }
+    table.swap td:drag-over
+    {
+      outline: 2px solid orange -2px;
+    }   
+    table.swap div:moving 
+      {
+        background-color:yellow;
+        opacity:0.75;
+      } 
+    
+  </style>  
+  <script type="text/tiscript">
+  
+    class SwapTable: Behavior
+    {
+      var srcContainer = null;
+      
+      function onMouse(evt)
+      {
+        if( evt.type == Event.MOUSE_MOVE )
+          return;
+        if( evt.type == (Event.MOUSE_MOVE | Event.SINKING))
+          return;
+          
+        if( evt.type == Event.DRAG_REQUEST )
+        {
+          srcContainer = evt.target.selectParent("td");
+          //stdout << "drag rq " << srcContainer << "\n";
+        }
+        else if( evt.type == Event.DROP )
+        {
+          var dstContainer = evt.target.selectParent("td"); 
+          if( srcContainer !== dstContainer )
+          {
+            // stdout.printf("drop %s %d\n", srcContainer, srcContainer.length);
+            // as we use drop:append then
+            // first element (at index 0) of the dstContainer is what was there before
+            srcContainer.insert(dstContainer[0]); // so move it to the cell where drop came from - that is swap.
+            srcContainer = null;
+          }
+        }
+      }
+    }
+  </script>  
+<head>
+<body>
+  Try to move cells in different places:
+  <table .swap>
+    <tr>
+      <td><div>1</div></td>
+      <td><div>2</div></td>
+      <td><div>3</div></td>
+    </tr>
+    <tr>
+      <td><div>4</div></td>
+      <td><div>5</div></td>
+      <td><div>6</div></td>
+    </tr>
+    <tr>
+      <td><div>7</div></td>
+      <td><div>8</div></td>
+      <td><div>9</div></td>
+    </tr>
+  </table>
+</body>
+</html>

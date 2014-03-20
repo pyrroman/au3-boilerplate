@@ -1,0 +1,48 @@
+<html>
+<head>
+<style> 
+  @import url(styles.css); 
+  @import url(modules/create-new.css); 
+  @import url(modules/my-contacts.css); 
+  @import url(modules/right-sb.css); 
+  
+/* top banner */
+  #banner {
+    background-color: #02679B;
+    background-image: url(images/top-banner.png);
+    background-repeat:expand;
+	  background-position:0px 80px 0px 0px; /* 80px block at the left and fill the rest */
+    height:66px;
+  }
+  
+  body { behavior:htmlarea; }
+
+    
+</style>
+
+<script src="sciter:/lib/behaviors/grid.tis" type="text/tiscript" /> <!-- grid implementation -->
+
+</head>
+
+<body>
+<div id="banner"> </div>
+<div id="mainarea">
+  <div id="left-sb">
+    <include src="modules/left-sb.htm">
+      <p>no left-sb.htm yet</p>
+    </include>
+  </div>
+  <div id="sandbox">
+    <include src="modules/sandbox.htm">
+      <p>no sandbox.htm yet</p>
+    </include>
+  </div>
+  <div id="right-sb">
+    <include src="modules/right-sb.htm" >
+      <p>no right-sb.htm yet</p>
+    </include>
+  </div>
+</div>
+</body>
+
+</html>

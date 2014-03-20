@@ -1,0 +1,45 @@
+<html>
+<head>
+  <style>
+    @import "styles/main.css";
+    @import "styles/richtext.css";
+    @import "styles/toolbar.css";
+    @import "styles/sidebar.css";
+    @import "styles/propbar.css";
+    @import "styles/tabs.css";
+  </style>
+  <script type="text/tiscript" >
+    include "code/main.tis";
+    include "formats/google-code-wiki.tis";
+  </script>
+</head>
+<body>
+<widget #toolbar><include src="layouts/toolbar.htm" /></widget> 
+<frameset #main cols="100px,*,100px" >
+  <widget #sidebar>
+      <include src="layouts/sidebar.htm" />
+  </widget>
+  <widget #tab-view>
+    <widget .tab-strip />
+    <!-- each view here is:
+      <widget .view mode="wysiwyg">
+        <widget .wysiwyg toolbar="widget#toolbar" />
+        <widget .source type="textarea" toolbar="widget.toolbar" />
+      </widget> -->
+    <div #search-n-replace>  
+      <include src="layouts/search-bar.htm" />
+    </div>
+    <widget #status>
+      <div .current-objects>.</div> 
+      <div .switches>
+        <widget name="view-switch" type=radio >WYSIWYG</widget>
+        <widget name="view-switch" type=radio >source</widget>
+      </div> 
+    </widget>
+  </widget>
+  <widget #propbar>
+      <include src="layouts/propbar.htm" />
+  </widget>
+</frameset>
+</body>
+</html>

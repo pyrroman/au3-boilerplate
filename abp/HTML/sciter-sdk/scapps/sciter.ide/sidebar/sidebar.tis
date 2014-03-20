@@ -1,0 +1,93 @@
+include "folderview.tis";
+
+class FoldersPanel: Behavior
+{
+  const FOLDERS_MRU_SIZE = 4;
+  
+  function attached()
+  {
+    // register this as a pesistable object. see: (re)storeSettings()
+    persistent["FoldersPanel"] = this;
+ 
+    var selbtn = self.select("#select-folder");
+    this.folderView = self.select("#folder-view"); 
+    
+    var me = this;
+   
+    selbtn.onClick = function()
+    {
+      var folder = view.selectFolder("Select project folder");
+      if( folder )
+        me.showFolder(folder);
+    }
+  }
+  
+  property folderList(v) { get return this.select("ul#folder-list"); }
+  
+  function showFolder(path)
+  {
+    var fl = this.folderList; 
+    for( var li in fl )
+    {
+      if( li instanceof Element && li.@#path == path)
+      {
+        //there is such folder in the list
+        fl.insert(li,0); // move it to the top
+        fl.update();
+        this.folderView.show(path);
+        return;
+      }
+    }
+    // brand new folder, add it to the mru list
+    if(fl.length >= FoldersPanel.FOLDERS_MRU_SIZE)   
+      this.folderList.last.detach(); // there too many of them already
+    
+    var li = new Element("li", path);
+    li.@#path = path;    
+    fl.insert(li,0);    
+    fl.update(true);
+    this.folderView.show(path);
+  }
+  
+  function onControlEvent(evt)  
+  {
+    if(evt.type == Event.HYPERLINK_CLICK )
+    {
+      var path = evt.target.@#path; // click on MRU list
+      if( path ) this.showFolder(path);
+      return true;
+    }
+  }
+  
+  function storeSettings()
+  {
+    var fl = this.folderList; 
+    var data = [];
+    for( var li in fl )
+    {
+      if( li instanceof Element )
+        data.push( li.@#path );
+    }
+    return data;
+  }
+  function restoreSettings(data)
+  {
+    var fl = this.folderList; 
+    fl.clear();
+    var toload = null;
+    for( var path in data )
+    {
+      var li = new Element("li", path);
+      li.@#path = path;
+      fl.insert(li);
+      toload = toload || path;
+    }
+    if( toload )
+    {
+      fl.update(true);
+      this.folderView.show(toload);
+    }
+    return false;
+  }
+  
+}

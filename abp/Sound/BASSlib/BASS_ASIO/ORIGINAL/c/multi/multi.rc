@@ -1,0 +1,21 @@
+#include <windows.h>
+
+1000 DIALOG DISCARDABLE  100, 100, 201, 63
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "BASS+ASIO multiple output example"
+FONT 8, "MS Sans Serif"
+BEGIN
+    GROUPBOX        "",20,5,0,190,29
+    PUSHBUTTON      "click here to open a file...",10,10,10,180,14
+    GROUPBOX        "",21,5,31,190,29
+    PUSHBUTTON      "click here to open a file...",11,10,40,180,14
+END
+
+// Device selector dialog
+2000 DIALOG DISCARDABLE  115, 100, 170, 60
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION
+FONT 8, "MS Sans Serif"
+BEGIN
+    LISTBOX         10,5,5,160,35,LBS_NOINTEGRALHEIGHT | WS_VSCROLL|WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,100,44,60,12,WS_TABSTOP
+END

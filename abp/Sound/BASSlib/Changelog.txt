@@ -1,0 +1,55 @@
+Version 9
+/> Fixed _BassRecordGetInputName (updated production versions)
++> Added Memory Examples of Bass (Thanks ProgAndy and UEZ)
++> Added BassVST (Not 100% complete)
++> Added BassFX Examples showing use of most functions:
+	Pitch.au3
+	Reverse.au3
+	Tempo.au3
+/> Fixed error with calling _BASS_ErrorGetCode in BASSCD.au3
+/> Fixed startup functions return the wrong value (Thanks ProgAndy!)
++> Added helper functions _BASS_ChannelSetVolume, _BASS_ChannelGetVolume (Thanks ProgAndy)
+
+Version 8
+/> Fixed BassEnc.au3
+/> Fixed _Bass_RecordGetInputName
+/> Updated BassEnc Example
+/> Updated BassFx.au3
++> Added BassTags
+
+Version 7
+/> Slight Restructure of folders.
+/> Updated version of Bass.dll to 2.4.5.
+/> Updated version of BassEnc.dll to 2.4.6.
+/> Updated version of BassASIO.dll to 1.0.1.
+/> Updated version of BassFX.dll to 2.4.4.1.
+/> Added modifications of BASS.au3.  Thanks ProgAndy for making these modifications.
+/> Modified BASS_Startup() to use some addition error checking.  Also added UDF function header.
+/> Modified BassAsio.au3 to reflect same structure as Bass.au3.
+/> Modified BassEnc.au3 to reflect same structure as Bass.au3.
+/> Modified BassFx.au3  to reflect same structure as Bass.au3.
++> Added BassCD.au3
++> Added BassVIS.au3
+/> Update all examples to reflect changes in UDFs.
+
+Version 6
+/> Fixed Many Bass.au3 Functions
++> Added BASSASIO, BASSENC, BASSFX (Thanks eukalyptus)
+
+Version 5
+/> Fixed _BASS_StreamCreateURL() (Thanks Hofi)
+
+Version 4
++> Added _BASS_FXSetParameters() (Thanks eukalyptus)
++> Added _BASS_FXGetParameters() (Thanks eukalyptus)
+
+Version 3
++> Fixed more general  errors.
+/> Updated all functions relating to song positioning.
+
+Version 2
+/> Fixed General  errors (Thanks ProgAndy and Trancexx)
++> Added _BASS_ChannelSeconds2Bytes()
+
+Version 1
++> Initial version was released.

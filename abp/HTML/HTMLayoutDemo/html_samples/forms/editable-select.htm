@@ -1,0 +1,93 @@
+<html>
+<head>
+  <style>
+  
+    widget.editable[type="select"]
+    {
+      prototype: EditableList;
+    }
+    widget.editable[type="select"] caption[editor]
+    {
+      behavior:edit;
+      cursor:text;
+      outline:1px solid red;
+    }
+  
+  </style>  
+  <script type="text/tiscript">
+  
+  class EditableList
+  {
+    function attached()
+    {
+      this.editorCandidate = null;
+      this.preValue = null;
+    }
+    
+    function onOptionTextChanged(option, previousText, newText) {}
+  
+    function onControlEvent(evt)
+    {
+      if( evt.type == Event.SELECT_SELECTION_CHANGED )
+      {
+        var editor = this.$(caption[editor]);
+        if( editor ) this.removeEditor(editor);
+      }
+    }
+    
+    function onFocus(evt)
+    {
+      if( evt.type == (Event.LOST_FOCUS | Event.SINKING ) &&
+        view.focus.parent.$p(widget) === this )
+          this.removeEditor(view.focus);
+    }
+    
+    function onMouse(evt)
+    {
+      switch( evt.type )
+      {
+        case Event.MOUSE_DOWN:
+          if(evt.target.$is(option:current>caption)) // tick on <caption> in current option
+            this.editorCandidate = evt.target;
+          else
+            this.editorCandidate = null;
+          break;
+        case Event.MOUSE_UP:
+          if(evt.target === this.editorCandidate) // tick on <caption> in current option
+            this.setupEditor(evt.target);
+          this.editorCandidate = null;
+          break;
+      }
+    }
+    function setupEditor(textEl)
+    {
+      this.preValue = textEl.text;
+      textEl.attributes["editor"] = true;
+      textEl.style#display; // force style to be updated and behavior:edit; to be removed.
+      textEl.xcall(#selectAll,true);
+      view.focus = textEl;
+      
+    }
+    function removeEditor(editor)
+    {
+      var text = editor.value;
+      editor.attributes["editor"] = undefined;
+      editor.style#display; // force style to be updated and behavior:edit; to be removed.
+      if( text != this.preValue )
+        this.onOptionTextChanged(editor.parent, this.preValue, text);
+      return true;
+    }
+  }
+  
+  </script>  
+</head>
+<body>
+  <p>Second click on selected option starts caption editing:</p>
+  <widget .editable type="select" multiple >
+    <option><caption>One</caption></option>
+    <option><caption>Two</caption></option>
+    <option><caption>Three</caption></option>
+  </widget>
+
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Function _Excel_RangeCopyPaste</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="../css/default.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h1>Function Reference</h1>
+<font size="+1">_Excel_RangeCopyPaste</font>
+<hr size="2">
+<p>Cuts or copies one or multiple cells, rows or columns to a range or from/to the clipboard.<br></p>
+
+<p class="codeheader">
+#Include &lt;Excel Rewrite.au3&gt;<br>
+_Excel_RangeCopyPaste($oWorksheet, $vSourceRange[, $vTargetRange = Default[, $bCut = False[, $iPaste = Default[, $iOperation = Default[, $bSkipBlanks = False[, $bTranspose = False]]]]]])<br>
+</p>
+<p>&nbsp;</p>
+
+<p><b>Parameters</b></p>
+<table border="1" width="100%" cellspacing="0" cellpadding="3" bordercolor="#C0C0C0">
+  <tr>
+    <td width="15%">$oWorksheet</td>
+    <td width="85%">Excel worksheet object</td>
+  </tr>
+  <tr>
+   <td>$vSourceRange</td>
+   <td>Source range to copy/cut from. Can be a range object or an A1 range.<br>
+       If set to keyword Default then the range will be copied from the clipboard.</td>
+  </tr>
+  <tr>
+   <td>$vTargetRange</td>
+   <td>Optional: Target range to copy/cut to. Can be a range object or an A1 range.<br>
+       If set to keyword Default then the range will be copied to the clipboard (default = keyword Default)</td>
+  </tr>
+  <tr>
+   <td>$bCut</td>
+   <td>Optional: If set to True the source range isn't copied but cut out (default = False)<br>
+       This parameter is ignored when $vSourceRange is set to keyword Default.</td>
+  </tr>
+  <tr>
+   <td>$iPaste</td>
+   <td>Optional: The part of the range to be pasted from the clipboard (formulas, formats ...). Must be a value of the XlPasteType enumeration<br>
+       (default = keyword Default)</td>
+  </tr>
+  <tr>
+   <td>$iOperation</td>
+   <td>Optional: The paste operation (add, divide, multiply ...). Must be a value of the XlPasteSpecialOperation enunmeration<br>
+       (default = keyword Default)</td>
+  </tr>
+  <tr>
+   <td>$bSkipBlanks</td>
+   <td>Optional: If set to True blank cells from the clipboard will not be pasted into the target range (default = False)</td>
+  </tr>
+  <tr>
+   <td>$bTranspose</td>
+   <td>Optional: Set to True to transpose rows and columns when the range is pasted (default = False)</td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p><b>Return Value</b></p>
+Success: Returns the object of the target range if $vTargetRange <> Default, else 1<br>
+Failure: Returns 0 and sets @error:<br>
+&nbsp;&nbsp;&nbsp; 1 - $oWorksheet is not an object or not a worksheet object<br>
+&nbsp;&nbsp;&nbsp; 2 - $vSourceRange is invalid. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 3 - $vTargetRange is invalid. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 4 - Error occurred when pasting cells. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 5 - Error occurred when cotting cells. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 6 - Error occurred when copying cells. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 7 - $vSourceRange and $vTargetRange can't be set to keyword Default at the same time<br>
+<p>&nbsp;</p>
+
+<p><b>Remarks</b></p>
+$vSourceRange and $vTargetRange can't be set to keyword Default at the same time.<br>
+If $vSourceRange = Default then:<br>
+* the range will be copied from the clipboard using the PasteSpecial method<br>
+* $bCut will be ignored<br>
+* $iPaste, $iOperation, $bSkipBlanks and $bTranspose will be honored<br>
+If $vSourceRange and $vTargetRange are specified parameters $iPaste, $iOperation, $bSkipBlanks and $bTranspose are ignored<br>
+<br>
+<p>&nbsp;</p>
+
+<p><b>Related</b></p>
+
+<p>&nbsp;</p>
+
+<p><b>Example</b></p>
+<p class="codebox">
+<br>
+<span><span class="S12">#AutoIt3Wrapper_AU3Check_Stop_OnWarning=Y</span><br>
+<span class="S12">#AutoIt3Wrapper_AU3Check_Parameters=-d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6</span><br>
+<br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Excel Rewrite.au3&gt;</span><br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Constants.au3&gt;</span><br>
+<br>
+<span class="S1">; Create application object and open an example workbook</span><br>
+<span class="S5">Global</span><span class="S0"> </span><span class="S9">$oAppl</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_Open</span><span class="S8">()</span><br>
+<span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Exit</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error creating the Excel application object."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S1">; Open Workbook 2</span><br>
+<span class="S5">Global</span><span class="S0"> </span><span class="S9">$oWorkbook2</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_BookOpen</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">,</span><span class="S0"> </span><span class="S6">@ScriptDir</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"\_Excel3.xls"</span><span class="S8">)</span><br>
+<span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error opening workbook '_Excel2.xls'."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_Close</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Exit</span><br>
+<span class="S5">EndIf</span><br>
+<span class="S1">; Open Workbook 1</span><br>
+<span class="S5">Global</span><span class="S0"> </span><span class="S9">$oWorkbook1</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_BookOpen</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">,</span><span class="S0"> </span><span class="S6">@ScriptDir</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"\_Excel1.xls"</span><span class="S8">)</span><br>
+<span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error opening workbook '_Excel1.xls'."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_Close</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Exit</span><br>
+<span class="S5">EndIf</span><br>
+<br>
+<span class="S0">Example1</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$oWorkbook1</span><span class="S8">)</span><br>
+<span class="S0">Example2</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$oWorkbook2</span><span class="S8">)</span><br>
+<span class="S0">Example3</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">)</span><br>
+<span class="S0">Example4</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">)</span><br>
+<span class="S0">Example5</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">)</span><br>
+<br>
+<span class="S5">Exit</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 1</span><br>
+<span class="S1">; Copy a range with 3 rows and 2 columns on the active worksheet.</span><br>
+<span class="S1">; Pass the source range as object.</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example1</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$oWorkbook1</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$oRange</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S9">$oAppl</span><span class="S8">.</span><span class="S14">ActiveSheet</span><span class="S8">.</span><span class="S14">Range</span><span class="S8">(</span><span class="S7">"A2:B4"</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeCopyPaste</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">.</span><span class="S14">ActiveSheet</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$oRange</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"G7"</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error copying cells."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Range 'A2:B4' successfully copied to 'G7'."</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example1</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 2</span><br>
+<span class="S1">; Copy a single cell from another workbook. Pass the source range as object.</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example2</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$oWorkbook2</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$oRange</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S9">$oWorkbook2</span><span class="S8">.</span><span class="S14">Worksheets</span><span class="S8">(</span><span class="S3">1</span><span class="S8">).</span><span class="S14">Range</span><span class="S8">(</span><span class="S7">"A1"</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeCopyPaste</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">.</span><span class="S14">Worksheets</span><span class="S8">(</span><span class="S3">1</span><span class="S8">),</span><span class="S0"> </span><span class="S9">$oRange</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"G15"</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example 2"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error copying cells."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example 2"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Range 'A1' from workbook _Excel3.xls successfully copied to 'G15'."</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example2</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 3</span><br>
+<span class="S1">; Copy 2 rows (1 and 2) from worksheet 2 to the clipboard</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example3</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeCopyPaste</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">.</span><span class="S14">Worksheets</span><span class="S8">(</span><span class="S3">2</span><span class="S8">),</span><span class="S0"> </span><span class="S7">"1:2"</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example 3"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error copying rows."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example 3"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Rows 1+2 successfully copied from worksheet 2 to the clipboard."</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example3</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 4</span><br>
+<span class="S1">; Paste the range written by Example 3 from the clipboard to the active worksheet.</span><br>
+<span class="S1">; Only values without formatting will be pasted.</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example4</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeCopyPaste</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">.</span><span class="S14">Activesheet</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"1:1"</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlPasteValues</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example 4"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error copying rows."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example 4"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"2 Rows successfully pasted from the clipboard to row 1."</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example4</span><br>
+<br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 5</span><br>
+<span class="S1">; Paste the format of a cell to other cells</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example5</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeCopyPaste</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">.</span><span class="S14">Activesheet</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"A1"</span><span class="S8">)</span><span class="S0"> </span><span class="S1">; Copy the cell to the clipboards</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example5"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error copying rcell A1."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeCopyPaste</span><span class="S8">(</span><span class="S9">$oWorkbook1</span><span class="S8">.</span><span class="S14">Activesheet</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"B1:E16"</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlPasteFormats</span><span class="S8">)</span><span class="S0"> </span><span class="S1">; paste the format to the target range</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example5"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error pasting cells."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeCopy Example 5"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Format of cell 'A1' successfully pasted to 'B1:E16'."</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example5</span></span><br>
+<br><OBJECT id=hhctrl type="application/x-oleobject" classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11" width=58 height=57>
+<PARAM name="Command" value="ShortCut">
+<PARAM name="Button" value="Text:Open this Script">
+<PARAM name="Item1" value=",Examples\HelpFile\_Excel_RangeCopyPaste.au3,">
+</OBJECT>
+<p>&nbsp;</p>
+
+</body>
+</html>

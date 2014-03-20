@@ -1,0 +1,80 @@
+<html>
+  <head>
+  <title></title>
+<style>
+
+  ul#arrows > li
+  {
+    list-style-image:url(dynamic:arrow);
+    line-height:18px;
+  }
+  ul#stars > li
+  {
+    list-style-image:url(dynamic:star);
+    line-height:18px;
+  }
+
+
+</style>
+<script type="text/tiscript">
+  
+  function generateArrow()
+  {
+    // binding "dynamic:arrow" image with the img:
+    var img = self.loadImage("dynamic:arrow"); 
+    const width = 16;
+    const height = 16;
+    img.size(width,height);
+    var gfx = img.graphics;
+    gfx.lineWidth(2);
+    gfx.lineJoin = Graphics.JOIN_ROUND;
+    gfx.lineColor(color(0x7F,0,0));
+    gfx.fillRadialGradient(width/2.5, height/2, height/2, color(0xFF,0xFF,0), color(0xFF,0,0) );
+    //var r = height/2;
+    gfx.polygon( 1,1,
+                 width - 1, height/2,
+                 1, height - 1);
+  }
+  generateArrow();
+  
+  function generateStar()
+  {
+    // binding "dynamic:star" image with the img:
+    var img = self.loadImage("dynamic:star"); 
+    const angle = - Math.PI/2;
+    const width = 16;
+    const height = 16;
+    img.size(width,height);
+    var gfx = img.graphics;
+    gfx.lineWidth(2);
+    gfx.lineJoin = Graphics.JOIN_ROUND;
+    gfx.lineColor(color(0x7F,0,0));
+    gfx.fillRadialGradient(width/2, height/2, height/2, color(0xFF,0xFF,0), color(0xFF,0,0) );
+    var r = height/2;
+    gfx.star(width/2, height/2, r/2,r, angle, 5 );
+  }
+  generateStar();
+  
+  function self.ready()
+  {
+    self.refresh();
+  }
+  
+</script>
+  </head>
+<body>
+
+ <ul #arrows>
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+ </ul>
+
+ <ul #stars>
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+ </ul>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+
+include "utils/decorators.tis";
+
+// global key map 
+@key Event.VK_F5 @NOCTRL @NOSHIFT @NOALT: { self#run .onClick() ; return true; } // F5
+@key Event.VK_F1 @NOCTRL @NOSHIFT @NOALT: { self#help .onClick() ; return true; } // F5
+@key Event.VK_F7 @NOCTRL @NOSHIFT @NOALT: { self#run-current .onClick(); return true; } // F7
+@key Event.VK_F7 @NOCTRL @NOSHIFT @ALT: { views.openOptions(); return true; } // Alt-F7
+@key Event.VK_F3 @NOCTRL @NOSHIFT @NOALT: { self#do-search-next.sendEvent(Event.BUTTON_CLICK); return true; } // F3
+@key 'F' @CTRL @NOSHIFT @NOALT: { if( views[0] && views[0] instanceof Scintilla) views[0].onSearchRequest(); return true; } // Ctrl+F
+@key 'H' @CTRL @NOSHIFT @NOALT: { if( views[0] && views[0] instanceof Scintilla) views[0].onReplaceRequest(); return true; } // Ctrl+H
+
+@key 'O' @CTRL @NOSHIFT @NOALT: 
+{ 
+  self.post(onOpenFile); /* scintilla does not like Ctrl+O and loosing focus */
+  return true; 
+}
+
+@key 'N' @CTRL @NOSHIFT @NOALT: { openFile(); return true; } // Ctrl+N
+@key 'S' @CTRL @SHIFT @NOALT: { saveAllDocuments(); return true; } // Ctrl+Shift+S
+@key 'S' @CTRL @NOSHIFT @NOALT: { var views = self.selectAll(".tabview"); if( views[0] ) views[0].save(); return true; } // Ctrl+S
+
+@key 'L' @CTRL @NOSHIFT @NOALT: // Ctrl+L - color list on
+{ 
+   self.$("#r-sidebar").activatePanel(#color-list);
+   return true; 
+} 
+@key 'D' @CTRL @NOSHIFT @NOALT: // Ctrl+D - code outline on
+{ 
+   self.$("#r-sidebar").activatePanel(#code-outline);
+   return true; 
+} 
+@key 'K' @CTRL @NOSHIFT @NOALT: // Ctrl+K - code snippets
+{ 
+   self.$("#r-sidebar").activatePanel(#code-snippets);
+   return true; 
+} 
+

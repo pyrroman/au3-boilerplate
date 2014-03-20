@@ -1,0 +1,14 @@
+<html>
+<head>
+  <script type="text/tiscript">
+    var status = self.select("#status");
+    status.text = String.printf("self.parent.dataForScriptInFrame=%v", self.parent.dataForScriptInFrame );
+    status.update();
+  </script>
+
+</head>
+<body>
+Sample 2
+<p id="status">&nbsp;</p>
+</body>
+</html>

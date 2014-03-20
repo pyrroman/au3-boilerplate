@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <style>
+      @import url(lightbox.css); 
+      html 
+      {
+        background: #BBB;
+      }
+      body 
+      {
+        background: url(images/sand.gif) repeat;
+      }
+      #image-list 
+      {
+        flow:h-flow;
+        width:50%;
+        margin:*;
+      }
+      #image-list > picture
+      {
+        margin:10px;
+        width:calc(50% - 15px);
+        behavior:button;
+        prototype:Picture;
+      }
+      #image-list > picture:nth-child(2n)
+      {
+        clear:left; // two images per row
+      }
+      
+    </style>
+    <script type="text/tiscript">
+      include "lightbox.tis"
+    </script>
+  </head>
+<body>
+  <div #image-list>
+    <picture src="images/image1.jpg" tooltip="Sunset"/>
+    <picture src="images/image2.jpg" tooltip="Water lilies"/>
+    <picture src="images/image3.jpg" tooltip="Winter"/>
+    <picture src="images/image4.jpg" tooltip="Blue hills"/>
+  </div>
+</body>
+</html>

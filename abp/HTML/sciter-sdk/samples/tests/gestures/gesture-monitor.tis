@@ -1,0 +1,56 @@
+
+
+class GestureMonitor: Behavior
+{
+
+  function onGesture(evt)
+  {
+    var out = $(pre#out);
+    if( out.length > 100 ) out.last.remove();
+    var msg;
+	
+    switch( evt.type )
+    {
+      case Event.GESTURE_REQUEST: msg = String.$(Request...); 
+	    evt.reason = 0; // Event.GESTURE_FLAGS_ALL; /*all gestures*/ 
+      evt.reason |= Event.GESTURE_FLAG_ZOOM;             
+      evt.reason |= Event.GESTURE_FLAG_ROTATE;           
+		  evt.reason |= Event.GESTURE_FLAG_PAN_VERTICAL ;    
+		  evt.reason |= Event.GESTURE_FLAG_PAN_HORIZONTAL ;  
+		  evt.reason |= Event.GESTURE_FLAG_TAP1;             // single finger tap
+		  evt.reason |= Event.GESTURE_FLAG_TAP2;             // two fingers tap
+
+		  evt.reason |= Event.GESTURE_FLAG_PAN_WITH_GUTTER;   // PAN_VERTICAL and 
+		  //evt.reason |= Event.GESTURE_FLAG_PAN_WITH_INERTIA;  // PAN_HORIZONTAL modifiers
+		  break;
+      case Event.GESTURE_PAN: msg = String.$(PAN: delta x={ evt.deltaX } delta y={ evt.deltaY } flags={ evt.reason }); break;
+      case Event.GESTURE_ZOOM: msg = String.$(ZOOM: delta zoom={ evt.deltaV }); break;
+	    case Event.GESTURE_ROTATE: msg = String.$(ROTATE: delta zoom={ evt.deltaV }); break;
+      case Event.GESTURE_TAP1: msg = String.$(TAP1: delta x={ evt.deltaX } delta y={ evt.deltaY } flags={ evt.reason }); break;
+      case Event.GESTURE_TAP2: msg = String.$(TAP2: delta x={ evt.deltaX } delta y={ evt.deltaY } flags={ evt.reason }); break;
+      
+	  default: 
+	    return false;
+    }
+    out.insert( new Element("text", msg), 0 );
+    view.update();
+    return true;  
+  }
+  function onMouse(evt)
+  {
+    var out = $(pre#out);
+    if( out.length > 100 ) out.last.remove();
+    var msg;
+    switch( evt.type )
+    {
+      case Event.MOUSE_DOWN: msg = String.$(MOUSE_DOWN); break;
+      case Event.MOUSE_UP: msg = String.$(MOUSE_UP); break;
+      case Event.MOUSE_WHEEL: msg = String.$(MOUSE_WHEEL); break;
+      default: 
+	    return false;
+    }
+    out.insert( new Element("text", msg), 0 );
+    view.update();
+    return false;  
+  }
+}

@@ -1,0 +1,48 @@
+
+// a la jquery thing.
+
+// selector function
+$ = function( params.. ) { return self.select(params.join("")); }
+
+// block element generator
+$._ = function(tag, atts)  
+  { 
+    var el = new Element(tag); for(var (n,v) in atts) if( typeof v == #function  ) el[n] = v; else el.attributes[n] = v; return el; 
+  }
+
+$.div    = function (atts) { return this._(#div  ,atts); }
+$.p      = function (atts) { return this._(#p    ,atts); }
+$.table  = function (atts) { return this._(#table,atts); }
+$.tr     = function (atts) { return this._(#tr   ,atts); }
+$.td     = function (atts) { return this._(#td   ,atts); }
+$.th     = function (atts) { return this._(#th   ,atts); }
+$.tbody  = function (atts) { return this._(#tbody,atts); }
+$.thead  = function (atts) { return this._(#thead,atts); }
+$.tfoot  = function (atts) { return this._(#tfoot,atts); }
+ 
+
+// extending the Element class.
+// Element.content accepts list of DOM Elements and inserts them into the DOM:
+
+function Element.content( elements.. )
+{
+  this.clear();
+  for( var element in elements )
+  {
+    this.insert( element );
+    if( element._html ) { element.html = element._html; element._html = undefined; }
+  }
+  return this;
+}
+
+// Element.$content stingizer accepts literal HTML:
+function Element.$content( markup.. )
+{
+  for(var (n,e) in markup) if(n & 1) markup[n] = e.toHtmlString(); 
+  if( this.parent ) // it is in the DOM already
+    this.html = markup.join("");
+  else
+    this._html = markup.join(""); // postpone html creation until insert
+  return this;
+}
+

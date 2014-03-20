@@ -1,0 +1,33 @@
+// TODO: not finished....
+
+type IMAPClient
+{
+  function this() 
+  {
+    this.socket = null;
+    this.messageID = 0;
+  }
+  
+  function connect( hostname, port = 143, timeout = 5000)
+  {
+    var addr = String.printf("%s:%d", hostname, port);
+    this.socket = Stream.openSocket(addr,timeout); 
+    if( !this.socket ) throw "Unable to connect to " + addr;
+  }
+  
+  function send( cmd )
+  {
+    var mid = "$" + ++this.messageID;
+    this.socket.printf("$%s %s\r\n", mid, cmd); 
+    var resp = this.socket.readln();
+    var r = resp.split(" ");
+    if( r[0] != mid ) throw "Bad sequence";
+    return symbol(r[1]);
+  }
+  
+  function authenticate(username, password)
+  {
+    this.send( "LOGIN " + username + " " + password );
+  }
+  
+}

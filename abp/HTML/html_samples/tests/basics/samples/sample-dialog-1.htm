@@ -1,0 +1,28 @@
+<html>
+<head>
+  <title>Simple dialog</title>
+  <style>
+    html 
+    { 
+      width:max-intrinsic; 
+      height:max-intrinsic; 
+      overflow:hidden; 
+    }
+  </style>
+  <script src="sciter:lib/root-extender.tis" type="text/tiscript"/> 
+  <script type="text/tiscript">
+
+    function on_CloseDialog_click(btn)
+    {
+      view.close("Hello from Dialog");
+      stdout << "This line will never be executed!";
+    }
+    </script>
+</head>
+<body>
+<h1>Sample dialog</h1>
+
+<button id="CloseDialog">Close Dialog and return value</button>
+
+</body>
+</html>

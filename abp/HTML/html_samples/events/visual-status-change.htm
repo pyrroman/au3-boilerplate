@@ -1,0 +1,37 @@
+<html>
+<head>
+  <style>
+    caption#toggle
+    {
+      behavior:check;
+      cursor:pointer;
+      border:1px solid;
+    }
+    caption#toggle:checked
+    {
+      background:gold;
+    }
+    caption + div { visibility:collapse; }
+    caption:checked + div { visibility:visible; }
+  </style>  
+  <script type="text/tiscript">
+  
+    function report(evt)
+    {
+      $(#out).text = evt.reason?"Shown":"Hidden";  
+    }  
+    $(div#collapsible).subscribe(report, 
+                                 Event.BEHAVIOR_EVENT, 
+                                 Event.VISUAL_STATUS_CHANGED );
+  
+  </script>  
+</head>
+<body>
+  <p>Demonstration of subscription to VISUAL_STATUS_CHANGED event of some contauner:</p>
+  <caption #toggle>click here to Show/Hide</caption> 
+  <div #collapsible>
+    content
+  </div>
+  <p #out />
+</body>
+</html>

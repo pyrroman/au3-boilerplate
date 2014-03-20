@@ -1,0 +1,7 @@
+// that is manifest file defining Sciter Application
+{
+  main : "/main.htm", // main layout
+  icon : "/res/browse.ico", // icon
+  label: "Sample Scapp", // label and window title.
+  description: "Sample scapp demonsrating use of manifest.scapp files" // its description 
+}

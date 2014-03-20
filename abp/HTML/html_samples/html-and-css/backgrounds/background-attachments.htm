@@ -1,0 +1,74 @@
+<html>
+<head>
+  <style>
+  
+    div.h-cont
+    {
+      flow:horizontal;
+      size:*;
+    }
+    div.h-cont > div 
+    {
+      margin:10px;
+      background-color:gold;
+      background-image:url(nt-back.png);
+      height:*;
+      min-height:200px;
+      overflow:scroll;
+    }
+    div.h-cont > div > p:last-child 
+    {
+      margin-top:400px;
+      width:500px;
+      text-align: right;
+    }
+        
+    div.h-cont > div.no-repeat { background-repeat: no-repeat; }
+    div.h-cont > div.repeat-x { background-repeat: repeat-x; }
+    div.h-cont > div.repeat-y { background-repeat: repeat-y; }
+    div.h-cont > div.repeat { background-repeat: repeat; }
+    div.h-cont > div.expand { background-image:url(nt-expandable.png); background-repeat: expand; background-position:10 10 10 10; }
+    
+    div.h-cont.fixed > div
+    {
+      background-attachment:fixed;
+    }
+    div.h-cont.scroll > div
+    {
+      background-attachment:scroll;
+    }
+    div.h-cont.local > div
+    {
+      background-attachment:local;
+    }
+  
+  </style>  
+</head>
+<body>
+  <h1>Demo of <code>background-attachment: fixed | scroll | local</code></h1>
+  <h2><code>background-attachment:fixed</code></h2>
+  <div .h-cont.fixed>
+    <div .no-repeat><p>first</p><p>last</p></div>
+    <div .repeat-x><p>first</p><p>last</p></div>
+    <div .repeat-y><p>first</p><p>last</p></div>
+    <div .repeat><p>first</p><p>last</p></div>
+    <div .expand><p>first</p><p>last</p></div>
+  </div>
+  <h2><code>background-attachment:scroll</code></h2>
+  <div .h-cont.scroll>
+    <div .no-repeat><p>first</p><p>last</p></div>
+    <div .repeat-x><p>first</p><p>last</p></div>
+    <div .repeat-y><p>first</p><p>last</p></div>
+    <div .repeat><p>first</p><p>last</p></div>
+    <div .expand><p>first</p><p>last</p></div>
+  </div>
+  <h2><code>background-attachment:local</code></h2>
+  <div .h-cont.local>
+    <div .no-repeat><p>first</p><p>last</p></div>
+    <div .repeat-x><p>first</p><p>last</p></div>
+    <div .repeat-y><p>first</p><p>last</p></div>
+    <div .repeat><p>first</p><p>last</p></div>
+    <div .expand><p>first</p><p>last</p></div>
+  </div>
+</body>
+</html>

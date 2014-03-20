@@ -1,0 +1,126 @@
+<html>
+  <head>
+    <style>
+      body { height:100%%; }
+      
+      .analog-clock
+      {
+        border:1px dotted silver;
+        background-color: window;
+        prototype:Clock;
+        height:100%%; 
+        width:100%%; 
+      }
+    </style>
+    <script type="text/tiscript">
+    
+    // Here is our Clock behavior. 
+    // To attach it to the particular element (e.g. id="clock") I use CSS:
+    // #clock 
+    // {  ... 
+    //    prototype:clock;
+    // }
+    
+    class Clock: Behavior
+    {
+
+      function attached() 
+      {
+        // setup timer for 1 second period
+        this.timer(1000, this.onTimer);
+        this.timezone = toInteger(this.attributes["timezone"],0);
+        this.refresh();
+      }
+      
+      function onSize()
+      {
+        this.draw();
+        this.refresh();
+      }
+  
+      function draw() 
+      {
+        var gfx = this.graphics(0xFFFFFFFF); // init graphics     
+        
+        var width = this.box(#width);
+        var height = this.box(#height);
+        
+        var radii = (width < height? width: height) / 2 - 10;
+        var cx = width / 2;
+        var cy = height / 2;
+        
+        // drawing face:
+        
+        gfx.noFill();
+        gfx.lineWidth(1);
+        gfx.lineColor(Graphics.RGBA(126,126,126));
+        gfx.ellipse(cx, cy, radii + 5);
+        
+        gfx.textAlignment(Graphics.ALIGN_CENTER,Graphics.ALIGN_CENTER);
+        gfx.font("Verdana", radii * 0.20);
+        
+        for( var i = 1; i <= 12; ++i )
+        {
+          var a = i * 2 * Math.PI / 12;
+          gfx.text( 
+            cx + radii * 0.8 * Math.cos(a - Math.PI/2),
+            cy + radii * 0.8 * Math.sin(a - Math.PI/2),
+            String.printf("%d",i) );
+        }
+              
+        // drawing hands:
+        
+        var now = new Date();
+        
+        var second_angle  = ( 2 * Math.PI / 60 ) * now.second;
+        var minute_angle  = ( 2 * Math.PI / 60 ) * now.minute; 
+        var hour_angle    = ( 2 * Math.PI / 12) * ( now.hour > 12? now.hour-12 : now.hour ); 
+        
+        gfx.lineCap = Graphics.CAP_ROUND;
+        
+        // draw hour hand 
+        gfx.lineWidth(radii * 0.20);
+        gfx.lineColor(Graphics.RGBA(126,126,126));
+        
+        gfx.line(cx, cy,
+            cx + radii * 0.60 * Math.cos(hour_angle - Math.PI/2),
+            cy + radii * 0.60 * Math.sin(hour_angle - Math.PI/2));
+  
+        gfx.lineWidth(radii * 0.10);
+        gfx.lineColor(Graphics.RGBA(0,0,0));
+  
+        gfx.line(cx, cy,
+            cx + radii * 0.80 * Math.cos(minute_angle - Math.PI/2),
+            cy + radii * 0.80 * Math.sin(minute_angle - Math.PI/2));
+            
+        gfx.lineWidth(radii * 0.04);          
+        gfx.lineColor(Graphics.RGBA(0x7F,0,0));
+  
+        gfx.line(cx, cy,
+            cx + radii * 0.95 * Math.cos(second_angle - Math.PI/2),
+            cy + radii * 0.95 * Math.sin(second_angle - Math.PI/2));
+  
+        var cap_radii = radii * 0.18;
+  
+        gfx.noLine();
+        gfx.fillRadialGradient(cx - cap_radii / 3, cy - cap_radii / 3, cap_radii * 0.75, Graphics.RGBA(0xFF,0xFF,0xFF), Graphics.RGBA(0,0x4F,0x7F));      
+        gfx.ellipse(cx, cy, cap_radii);
+  
+      }
+  
+      function onTimer()
+      {
+        this.draw();
+        this.refresh();
+        return true;
+      }
+    }
+      
+    </script>
+  </head>
+  <body>
+    <h1>Graphics functions test. The clock sample</h1>
+    <div class="analog-clock" ></div> 
+  </body>
+</html>
+  

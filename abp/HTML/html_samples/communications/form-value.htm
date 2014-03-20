@@ -1,0 +1,49 @@
+<html>
+<head>
+  <style>
+    frame#response 
+    {
+      border:1px dashed red;
+    }
+    form
+    {
+      background-color: khaki;
+      padding:10px;
+    }
+  </style>  
+  <script type="text/tiscript">
+  
+    function self#the-form.onControlEvent(evt)
+    {
+      if(evt.type == Event.FORM_SUBMIT)
+      {
+        var s = String.printf("%V",this.value);
+        self#response.value = s;
+        return true;
+      }
+    }
+  
+  </script>  
+<head>
+<body>
+  The form:
+  <form #the-form>
+    text1 = <input name="text1" type="text" /> <br/>
+    radio1 = <button name="radio1" type="radio" value="on">On</button> <button name="radio1" type="radio" value="off">Off</button><br/>
+    checkbox1 = <button name="checkbox1" type="checkbox" value="fire-on">Fire-on</button> 
+    checkbox2 = <button name="checkbox2" type="checkbox" value="alarm-on">Alarm-on</button><br/>
+    plaintext1 = 
+    <plaintext name="plaintext1" style="height:4em">
+      Hello <em>world</em>!
+    </plaintext>
+    richtext1 = 
+    <richtext name="richtext1" style="height:4em">
+      <strong>Hello</strong> <em>world</em>!
+    </richtext>
+    <button type="submit">Submit</button>
+    <button type="reset">Reset</button>
+  </form>
+  Value of the form is:
+  <div #response></div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<html>
+  <head>
+  <style>
+    @import url(styles/main.css);
+  </style>
+  <script type="text/tiscript">
+    include "toc.tis";
+    var back      = self.$(#toolbar>widget.back);
+    var forward   = self.$(#toolbar>widget.forward);
+    var frameset  = self.$(frameset#body);
+    var contentFrame = self.$(frame#content);
+    var toc = self.$(#toc);
+    back.onClick    = :: frameset.goBack();  
+    forward.onClick = :: frameset.goForward();  
+    
+    frameset.onControlEvent = function(evt)
+    {
+      if( evt.type == Event.HISTORY_STATE_CHANGED )
+      {
+        back.state.disabled = !frameset.canGoBack();
+        forward.state.disabled = !frameset.canGoForward();
+        return true;
+      }
+    }
+    contentFrame.onControlEvent = function(evt)
+    {
+      if( evt.type == Event.DOCUMENT_COMPLETE )
+        makeToc(this,toc);
+      else if(evt.type == (Event.HYPERLINK_CLICK | Event.SINKING))
+      {
+        var url = evt.target.@["href"];
+        if( url like "http:*" || url like "https:*" )
+        {
+          Sciter.launch(url); // show external URLs in system browser.
+          return true;
+        }
+      }
+    }
+    
+  </script>
+  </head>
+  <body>
+  <div #toolbar>
+    <widget type="button" accesskey="LEFT" .back disabled />
+    <widget type="button" accesskey="RIGHT" .forward disabled />
+  </div>
+  <frameset #body history>
+    <div #index >
+      <include src="help-index.htm">
+        help-index.htm not found!  
+      </include>
+    </div>
+    <frame #content src="" src="content/preface.htm" content-style="styles/content.css"/>
+    <div #toc />
+  </frameset>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+
+// Statusbar
+type Statusbar: Behavior
+{
+  function attached()
+  {
+    
+  }
+
+  // see function DocView.activate(tab)
+  // shows current objects under the caret in the editor.
+  function showCurrentObjects(currentObjects)
+  {
+    var cobj = this.select("div.current-objects") || this;
+    cobj.clear();
+    for(var objn in currentObjects)
+      cobj.insert( new Element("option", objn) );
+    cobj.update();
+  }
+}

@@ -1,0 +1,140 @@
+
+@set r-side-bar 
+{
+  :root
+  {
+    prototype: RSidebar;    
+    background:window;
+    padding:0;
+    margin:0;
+    height:*;
+    overflow:hidden;
+  }
+
+  :root > caption
+  {
+    behavior:radio; /* only one checked at a time */
+    padding:4px 4px 4px 4px;
+    background-color: threedface;
+    border-top:1px solid transparent;
+    border-left:1px solid threedhighlight;
+    border-right:1px solid threedshadow;
+    border-bottom:1px solid threedshadow;
+  }
+  :root > caption:active
+  {
+    padding:5px 3px 3px 5px;
+  }
+    
+  :root > caption:checked
+  {
+    background-color: scrollbar scrollbar window window;
+  }
+
+  :root > widget,
+  :root > div
+  {
+    width:*;
+    visibility:collapse;
+  }
+  
+  :root > caption:checked + widget,
+  :root > caption:checked + div
+  {
+    visibility:visible;
+    height:*;
+  }
+  
+  widget#code-outline option:has-children-of-type(option) > :first-child /* caption */
+  {
+    padding-top:2px;
+    padding-bottom:2px;
+    font-weight:bold;
+    margin:0;
+  }
+      
+  /* all options with more than one child (that is caption) 
+     uncomment this if you need tree lines. */
+  widget#code-outline option:has-children-of-type(option) > * 
+  {
+    display: list-item;
+    list-style-type: tree-line;
+    list-marker-color: threedface;
+  } 
+  
+  widget#code-outline option:has-children-of-type(option)
+	{
+		padding-left:1.2em;
+    foreground-position-top: 0.5em;
+	}
+	widget#code-outline option:has-children-of-type(option):rtl
+	{
+    padding-right:1.2em;
+		padding-left:0;
+	}  
+        
+  widget#code-outline option
+  {
+    min-width:max-intrinsic;
+    margin:0;
+    line-height:1.4em;
+  }
+  
+  widget#code-outline option[type="function"]
+  {
+    color: darkblue;
+  }
+  widget#code-outline option[type="property"],
+  widget#code-outline option[type="property-undefined"]
+  {
+    color: darkred;
+  }
+  widget#code-outline option span.id {
+    font-weight: normal; 
+    color: darkred;
+    margin-left:.2em;
+  }
+  widget#code-outline option span.cls {
+    font-weight: normal; 
+    margin-left:.2em;
+    color: darkblue;
+  }
+
+  widget#code-outline option img.icon {
+    vertical-align: middle;
+    background:url(theme:edit-normal) stretch;
+    width: 1.2em;
+    height: 1.2em;
+    margin-right:2px;
+  }
+  widget#code-outline option img.icon[type="button"] 
+  {
+    background-image:url(theme:toolbar-button-hover);
+  }
+  widget#code-outline option img.icon[type="checkbox"] 
+  {
+    background-image:url(theme:check-checked-normal);
+  }
+  widget#code-outline option img.icon[type="radio"] 
+  {
+    background-image:url(theme:radio-checked-normal);
+  }
+ 
+  widget#color-list
+  {
+    prototype: ColorsList;
+  }
+  widget#color-list option img
+  {
+    vertical-align:middle;
+    width:1.2em;
+    height:1.2em;
+    border:1px solid gray;
+    margin:0px 3px 0px 0px;
+  }
+  
+  widget#code-snippets {
+    prototype: CodeSnippets;
+  }
+  
+}

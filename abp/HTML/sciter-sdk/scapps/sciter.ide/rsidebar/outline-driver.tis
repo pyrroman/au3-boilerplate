@@ -1,0 +1,61 @@
+namespace Driver 
+{
+  var w_outline = self.$("widget#code-outline");
+  var f_outline = null; // outliner function ref
+  
+  // main thing, builds outline in 'outlineWidget' from text of 'scintilla'
+  function buildCodeOutline(scintilla, outlineWidget) {} // has to be overriden
+  
+  function attach( scintilla )
+  {
+    var me = this;
+    //debug stacktrace;
+    w_outline.clear();
+    
+    f_outline = function()
+    {
+      me.buildCodeOutline(scintilla,me.w_outline);
+      return false;
+    }
+        
+    scintilla.onDocumentChange = function() // connect outliner with the Scintilla event
+    {
+      this.timer(3000, f_outline); // 3 seconds threshold to reduce greenhouse gas emissions
+    }
+    // setup onControlEvent handler for our tree view (it is widget[type=select])
+    this.w_outline.onControlEvent = function(evt)
+    {
+      switch(evt.type)
+      {
+        case Event.VISUAL_STATUS_CHANGED: 
+          if( this.isVisible && evt.target === this)
+            me.buildCodeOutline(scintilla,me.w_outline);
+          return true; 
+        case Event.SELECT_SELECTION_CHANGED: 
+          me.navigateScintillaTo( scintilla, this.$(":current") );
+          return true;
+      }
+    }
+    me.buildCodeOutline(scintilla,w_outline);
+  }
+  function detach( scintilla )
+  {
+    //stdout << "un-bound!\n";
+    scintilla.timer(0, f_outline); // remove that timer
+    scintilla.onDocumentChange = null; // disconnect the event
+    w_outline.clear();
+    w_outline.onControlEvent = null;
+  }
+  
+  function navigateScintillaTo(scintilla, opt)
+  {
+    if( !opt.endLineNo )
+      return true;
+    scintilla.gotoLine(opt.endLineNo - 1);
+    var lineNoZ = opt.startLineNo - 1;
+    var startPos = scintilla.linePos(lineNoZ);
+    var endPos = startPos + scintilla.lineLength(lineNoZ);
+    scintilla.setSelection( endPos, startPos );
+  }
+ 
+}

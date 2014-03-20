@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title></title>
+    <style>
+      @include "text/tiscript" url(script-for-include.tis) screen;
+      
+      div.test 
+      { 
+        prototype: "Tests.Passed";
+        width:100px; height:100px; border:1px solid red; 
+      }
+      
+    </style>
+    <script type="text/tiscript">
+      //debug namespace;
+    </script>
+  </head>
+<body>
+  <p>Test of <code>@include</code> statement in H-SMILE core.</p>
+  <p>The element should contain "Passed!" text inside:</p>
+  <div .test />
+  Notation of the @include statement in CSS:
+  <pre>@include mime-type url [media list];</pre>
+  Where:
+  <ul>
+    <li><code>mime-type</code> - string, mime type, e.g. <code>"text/tiscript"</code>;</li>
+    <li><code>url</code> - url(), url of script file to include, e.g. <code>url(script-for-include.tis)</code>;</li>
+    <li><code>media list</code> - whitespace separated list of nmtokens - media types.</li>
+  </ul>
+  
+
+</body>
+</html>

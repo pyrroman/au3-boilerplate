@@ -1,0 +1,83 @@
+
+class FolderView: Behavior
+{
+  
+  function isRunnable(name)
+  {
+     var ext = name %~ ".";
+     return //ext == "tis" ||
+            ext == "htm" || 
+            ext == "html";
+  }
+  
+  function scan( pnode, path )
+  {
+    //stdout << ""
+    var me = this;
+    function w( name, flags )
+    {
+      if(name == "." || name == "..") return true;
+      if(flags & (System.IS_HIDDEN | System.IS_SYSTEM)) return true; // skip it
+      if(flags & System.IS_DIR)
+      {
+        var node = new Element( "options" );
+        var node_text = new Element( "text",name); 
+            node.insert(node_text);
+            node.expanded = false;
+        pnode.insert(node);
+        me.scan( node, path + "/" + name ); // call it again for the folder, recursive
+      }
+      else //file 
+      {
+        var node = new Element( "option", name);
+            node.@#filename = "file://" + path.toLowerCase() + "/" + name.toLowerCase();
+        pnode.insert(node);
+
+        if( isRunnable(name) )
+        {
+          var btn = new Element("widget");
+          btn.@#class = "run-button";
+          node.insert(btn);
+        }
+
+        if(flags & System.IS_READONLY)
+          node.state.readonly = true;
+      }
+      return true;
+    }
+    System.scanFiles(path + "/*.*", w);
+  }
+  
+  function onMouse(evt)
+  {
+    if( evt.type == Event.MOUSE_DCLICK) 
+    {
+      var opt = evt.target.selectParent("option");
+      if( opt && opt.@#filename )
+      {
+        openFile(opt.@#filename, opt.state.readonly);
+        return true;
+      }
+    }
+  }
+
+  function onControlEvent(evt)
+  {
+    if(evt.type == Event.BUTTON_CLICK)
+    {    
+      var opt = evt.target.selectParent("option");
+      if( opt && opt.@#filename && saveAllDocuments())
+      {
+        runFile(opt.@#filename);
+        return true;
+      }
+    }
+  }
+  
+  function show(path)
+  {
+    this.clear();
+    this.scan(this, path);
+    this.update();
+  }
+}

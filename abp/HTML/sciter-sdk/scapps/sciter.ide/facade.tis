@@ -1,0 +1,196 @@
+
+var views = self#views;
+var toolbar = self#toolbar;
+var front = null; // editor in front
+
+// window finished loading the facade.
+function self.ready()
+{
+  //bind toolbar "open" button with this function: 
+  toolbar#open.onClick = onOpenFile;  
+  // bind views with the tab strip
+  views.bind( self#tab-strip );
+  // open default (empty) file  
+  openFile();
+  restoreSettings();
+  
+  self.$("widget#color-list").onSelected 
+    = function(value)
+     { 
+       if( views[0] && views[0] instanceof Scintilla) 
+       { 
+          views[0].selection = value; 
+          views[0].focus = true; 
+       }
+     }
+}
+
+// window is about to close.
+function self.closing()
+{
+  storeSettings();
+  if(views.closeAll())
+    return true;
+  return false;
+}
+
+function saveAllDocuments()
+{
+   var views = self.selectAll(".tabview");
+
+   var success = true;
+   for( var v in views )
+   {
+     var result = v.save();
+     success = success && result;
+   }
+
+   return success;
+}
+
+function self#options .onClick() { views.openOptions(); }
+
+function self#master-css .onClick() { views.openMasterCSS(); }
+
+function self#new .onClick() 
+{
+  // open default (empty) file  
+  openFile();
+}
+
+function runFile(f)
+{
+  Log.purge();
+  
+  function receiverOut(data) { Log.print(data,false); }
+  function receiverErr(data) { Log.print(data,true); }
+  
+  // callback interface (it is here for testing purposes solely).
+  var iface = 
+  {
+    foo: function(v1,v2) { stdout.printf("call of foo with %V,%V\n",v1,v2); return v1 + v2; } 
+  };
+ 
+  view.open(f,
+      Stream.openPipe( null, iface ), // call interface for the alien
+      Stream.openPipe( receiverOut ), // stdout
+      Stream.openPipe( receiverErr )  // stderr
+  );
+}
+
+function self#run-current .onClick() 
+{
+  if( views[0] )
+  {
+    if( saveAllDocuments() )
+    {
+      if( views[0].@#filename )
+      {
+        runFile(views[0].@#filename);
+      }
+      else
+        view.msgbox( #alert, "Cannot run the empty file!" );
+    }
+  }
+}
+
+function self#help .onClick() 
+{
+   view.open(System.home("doc/main.htm"));
+}
+
+function self#run .onClick() 
+{ 
+  var fl = self#sidebar.folderList;
+
+  if( fl.length && fl[0].@#path != undefined )
+  {
+     if( saveAllDocuments() )
+     {
+       var path = fl[0].@#path + "/index.htm";
+       runFile(path);
+     }
+  }
+}
+
+function view.activated(mode)
+{
+  if(mode && (mode !== #by-mouse) && views.current) // activated by something but not the mouse
+  {
+    views.current.state.focus = true;
+  }
+}
+
+function getFileLabel(filename)
+{
+  var label;
+  if( filename )
+  {
+    var u = crackUrl(filename);
+    label = u.name_ext;
+  }
+  else
+    label = "(new)";
+  return label;
+} 
+
+function openFile(filename = "", readonly = false, lineNo = undefined)
+{
+  views.openView(filename, readonly, lineNo);
+}
+
+function onOpenFile()
+{
+  var fn = self#views.fileToOpen();
+  if(fn)
+    openFile( fn );
+}
+
+// called by Scintilla on Ctrl-F/Ctrl-H
+function showSearchReplace(forReplace = false)
+{
+  var sr = self#search-n-replace;
+  sr.activate(forReplace);
+}
+
+// place where components may register themselves to be persistable
+var persistent = {};
+const SETTINGS_FILE = "scide-settings.js";
+
+function storeSettings() 
+{
+  var data = {};
+  for(var pn in persistent)
+  {
+    var p = persistent[pn];
+    //stdout.printf("%V\n",persistent);
+    data[pn] = p.storeSettings();
+  }
+  var path = System.path(#USER_APPDATA, SETTINGS_FILE);
+  var stream = Stream.openFile(path,"uw");
+  stream.printf("%V",data);
+  stream.close();
+}
+
+function restoreSettings() 
+{
+  var path = System.path(#USER_APPDATA, SETTINGS_FILE);
+  var stream = Stream.openFile(path,"ur");
+  if( !stream )
+    return false;
+  var data = parseData( stream );
+  stream.close();
+  var cnt = 0;
+  for(var pn in persistent)
+  {
+    var p = persistent[pn];
+    if( !p ) continue;
+    var pdata = data[pn];
+    if( !pdata ) continue;
+    if(p.restoreSettings(pdata))
+      ++cnt;
+  }
+  return cnt > 0;
+}
+
+

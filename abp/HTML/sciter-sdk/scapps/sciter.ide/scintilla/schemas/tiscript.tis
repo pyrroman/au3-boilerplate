@@ -1,0 +1,72 @@
+include "common.tis";
+include "../../rsidebar/tis-driver.tis";
+
+Scintilla.lexers["tiscript"] =
+{
+  base: "cpp",
+  files:
+  {
+    "TIScript": {
+      ext: "tis",
+      color:darkBlue,
+    },
+    "JavaScript": {
+      ext: "js",
+      color:darkBlue,
+    },
+    "JSON": {
+      ext: ["json", "scapp"],
+      color:darkBlue,
+    },
+  },
+  properties: 
+  {
+    "fold": 1,
+    "fold.compact": 1,
+    "fold.comment": 1,
+  },
+  keywords: 
+  {
+    #java-script: 
+    { 
+      id:0, 
+      list:
+        "break case catch " 
+        "const continue debugger default delete do else " 
+        "false finally for function if in instanceof " 
+        "new null "  
+        "return super switch this throw " 	
+        "true try typeof var while with "        
+    },
+    #ti-script:  
+    { 
+      id:1, //#js-keyword-ext
+      list:
+      	"type namespace class include undefined like property get set assert otherwise"        
+    },
+  },
+  styles:
+  {
+ 
+    #js-default:      { id:0,  fore: black },
+    #js-comment:      { id:1,  fore: CODE_COLOR_COMMENT },
+    #js-comment-line: { id:2,  fore: CODE_COLOR_COMMENT },
+    
+    #js-number:       { id:4,  fore: CODE_COLOR_LITERAL },
+    #js-keyword:      { id:5,  fore: CODE_COLOR_KEYWORD },
+    #js-string:       { id:6,  fore: CODE_COLOR_STRING },
+    #js-character:    { id:7,  fore: CODE_COLOR_LITERAL },
+    
+    #js-operator:     { id:10, fore: CODE_COLOR_OPERATOR },
+    #js-identifier:   { id:11, fore: CODE_COLOR_IDENTIFIER },    
+    #js-string-eol:   { id:12, fore: RGB(0xDF, 0xDF, 0x7F) },
+    #js-regex:        { id:14, fore: black, back:RGB(0xFE, 0xE0 , 0xEF) },
+    #js-keyword-ext:  { id:16, fore: CODE_COLOR_KEYWORD_EXT },
+    #js-stringizer-body:  { id:20, fore: CODE_COLOR_STRING, back:RGB(0xEC,0xEC,0xDC) },
+    #js-stringizer-incl:  { id:21, fore: black },
+
+  },
+  
+  driver: TISDriver,
+  
+};

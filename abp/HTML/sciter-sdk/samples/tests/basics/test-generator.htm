@@ -1,0 +1,39 @@
+<html>
+<head>
+  <style></style>  
+  <script type="text/tiscript">
+    
+    function backward(a)
+    {
+      var n = a.length;
+      return // return function that will supply value on each call. return undefined to stop enumeration
+        function() { if(--n >= 0) return a[n]; }
+    }
+
+    function even(a)
+    {
+      var n = -2;
+      return :{ n += 2; if(n < a.length) return a[n]; }
+    }
+    function odd(a)
+    {
+      var n = -1;
+      return :{ n += 2; if(n < a.length) return a[n]; }
+    }
+
+    function self #test .onClick()
+    {
+      var a = [0,1,2,3,4,5,6,7,8,9];
+      stdout << "backward\n";
+      for(var n in backward(a)) 
+        stdout.printf("%d\n", n);
+      stdout << "each second\n";
+      for(var n in odd(a)) 
+        stdout.printf("%d\n", n);
+    }
+  </script>  
+<head>
+<body>
+  <button #test>Test</button>
+</body>
+</html>

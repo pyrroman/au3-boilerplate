@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <title>TIScript - Date object</title>
+    <meta name="GENERATOR" content="BLOCKNOTE.NET"/>
+    <basefont face="Verdana" size="2"/>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>Integer object</h1>
+  <p>Integer values are &quot;objects&quot; of this class.</p>
+  <div align="left">
+    <table border="0" cellpadding="4" cellspacing="0" width="100%">
+      <tr>
+        <td colspan="2">
+          <h2>Constants</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MIN</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, minimal value of integer type.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MAX</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, maximal value of integer type.</td></tr>
+      <tr>
+        <td colspan="2" valign="top">
+          <h2>Methods</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toFloat</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p>( ) : float</p>
+          <p>Converts this integer value to float.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toInteger</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p>( ) : int</p>
+          <p>Simply returns value of the integer.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toString</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>( [<strong>radix</strong>: int] ) : string</div>
+          <p>Returns string representation of the integer using one of radix value: 10(default), 8 or 16.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toHtmlString</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p><strong>( </strong>[<strong>radix</strong>: int]<strong> )</strong> : string</p>
+          <p>Returns string escaped by html rules. Is an alias of the toString() method here.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toUrlString</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p><strong>( </strong>[<strong>radix</strong>: int]<strong> )</strong> : string</p>
+          <p>Returns string escaped by url rules. Is an alias of the toString() method here.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>valueOf</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong>()</strong> : int</div>
+          <p>Simply returns value of the integer itself.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>min</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p><strong>( ... )</strong> : int</p>
+          <p>Static method - returns minimum value of arguments. E.g. Integer.min(1, 2, 3) will return 1.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>max</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p><strong>( ... )</strong> : int</p>
+          <p>Static method - returns maximum value of arguments. E.g. Integer.min(1, 2, 3) will return 1.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>limit</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <p>( min:int, max:int ) : int</p>
+          <p>This is exactly the following:</p>
+          <pre>function Integer.limit(min, max) 
+{
+   if( this &lt; min ) return min;
+   if( this &gt; max ) return max;
+   return this;
+}
+</pre></td></tr></table></div>
+</body>
+</html>

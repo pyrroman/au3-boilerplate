@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Function _Excel_FilterSet</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="../css/default.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h1>Function Reference</h1>
+<font size="+1">_Excel_FilterSet</font>
+<hr size="2">
+<p>Sets/unsets filter definitions and filters the range.<br></p>
+
+<p class="codeheader">
+#Include &lt;Excel Rewrite.au3&gt;<br>
+_Excel_FilterSet($oWorkbook, $vWorksheet, $vRange, $iField[, $sCriteria1 = Default[, $iOperator = Default[, $sCriteria2 = Default]]])<br>
+</p>
+<p>&nbsp;</p>
+
+<p><b>Parameters</b></p>
+<table border="1" width="100%" cellspacing="0" cellpadding="3" bordercolor="#C0C0C0">
+  <tr>
+    <td width="15%">$oWorkbook</td>
+    <td width="85%">Excel workbook object</td>
+  </tr>
+  <tr>
+   <td>$vWorksheet</td>
+   <td>Name, index or worksheet object to be filtered. If set to keyword Default the active sheet will be filtered</td>
+  </tr>
+  <tr>
+   <td>$vRange</td>
+   <td>A range object or an A1 range to specify the columns to filter on.<br>
+       Use keyword Default to filter on all used columns of the specified worksheet</td>
+  </tr>
+  <tr>
+   <td>$iField</td>
+   <td>Integer offset of the field on which you want to base the filter (the leftmost field is field one).<br>
+       If set to 0 all Autofilters on the worksheet will be removed</td>
+  </tr>
+  <tr>
+   <td>$sCriteria1</td>
+   <td>Optional: The criteria (a string or an array of strings). Use "=" to find blank fields, or use "<>" to find nonblank fields.<br>
+       If this argument is omitted, the criteria is All.<br>
+       If Operator is xlTop10Items, Criteria1 specifies the number of items (for example, "10")</td>
+  </tr>
+  <tr>
+   <td>$iOperator</td>
+   <td>Optional: One of the constants of the XlAutoFilterOperator enumeration specifying the type of filter</td>
+  </tr>
+  <tr>
+   <td>$sCriteria2</td>
+   <td>Optional: The second criteria (a string). Used with Criteria1 and Operator to construct compound criteria</td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p><b>Return Value</b></p>
+Success: Returns 1<br>
+Failure: Returns 0 and sets @error:<br>
+&nbsp;&nbsp;&nbsp; 1 - $oWorkbook is not an object or not a workbook object<br>
+&nbsp;&nbsp;&nbsp; 2 - $vWorksheet name or index are invalid or $vWorksheet is not a worksheet object. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 3 - $vRange is invalid. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 4 - Error returned by the Filter method. @extended is set to the COM error code<br>
+<p>&nbsp;</p>
+
+<p><b>Remarks</b></p>
+Dynamic filter:<br>
+To filter data columns you set $iOperator to $xlFilterDynamic and $sCriteria1 to any of the XlDynamicFilterCriteria enumeration.<br>
+See example 5 for details.<br>
+<br>
+<p>&nbsp;</p>
+
+<p><b>Related</b></p>
+<a href="_Excel_FilterGet.htm">_Excel_FilterGet</a>
+<p>&nbsp;</p>
+
+<p><b>Example</b></p>
+<p class="codebox">
+<br>
+<span><span class="S12">#AutoIt3Wrapper_AU3Check_Stop_OnWarning=Y</span><br>
+<span class="S12">#AutoIt3Wrapper_AU3Check_Parameters=-d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6</span><br>
+<br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Excel Rewrite.au3&gt;</span><br>
+<span class="S1">;-----------------------------------------------</span><br>
+<span class="S1">; http://www.contextures.com/xlautofilter01.html</span><br>
+<span class="S1">;-----------------------------------------------</span><br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Constants.au3&gt;</span><br>
+<br>
+<span class="S1">; Create application object and open an example workbook</span><br>
+<span class="S5">Global</span><span class="S0"> </span><span class="S9">$oAppl</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_Open</span><span class="S8">()</span><br>
+<span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Exit</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error creating the Excel application object."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S5">Global</span><span class="S0"> </span><span class="S9">$oWorkbook</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_BookOpen</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">,</span><span class="S0"> </span><span class="S6">@ScriptDir</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"\_Excel1.xls"</span><span class="S8">)</span><br>
+<span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error opening workbook '_Excel1.xls'."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_Close</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Exit</span><br>
+<span class="S5">EndIf</span><br>
+<br>
+<span class="S0">Example1</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">Example2</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">Example3</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">Example4</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">Example5</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">Example6</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">Example7</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<br>
+<span class="S5">Exit</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 1</span><br>
+<span class="S1">; Filter the complete active worksheet on column 1.</span><br>
+<span class="S1">; Only show rows with content &gt;20 and &lt;40 in the specified column.</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example1</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_FilterSet</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"A1:E30"</span><span class="S8">,</span><span class="S0"> </span><span class="S3">1</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"&gt;20"</span><span class="S8">,</span><span class="S0"> </span><span class="S3">1</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"&lt;40"</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error filtering data."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Filtered on column 'A'. Only show rows with values &gt;20 and &lt;40."</span><span class="S8">)</span><br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example1</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 2</span><br>
+<span class="S1">; Add a filter to column 2.</span><br>
+<span class="S1">; Only show rows with content &lt;310 in the specified column.</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example2</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_FilterSet</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S3">2</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"&lt;310"</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 2"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error filtering data."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 2"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Added filter on column 'B'. Only show rows with values &lt;310."</span><span class="S8">)</span><br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example2</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 3</span><br>
+<span class="S1">; Remove the filter from column 1.</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example3</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_FilterSet</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S3">1</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 3"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error filtering data."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 3"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Removed filter from column 'A'."</span><span class="S8">)</span><br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example3</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 4</span><br>
+<span class="S1">; Only display selected values (20, 40 and 60) of column 2.</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example4</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$aShow</span><span class="S8">[]</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S8">[</span><span class="S7">"20"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"40"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"60"</span><span class="S8">]</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_FilterSet</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S3">2</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$aShow</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlFilterValues</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 4"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error filtering data."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 4"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Set filter in column 'B' to only display selected values (20, 40 and 60)."</span><span class="S8">)</span><br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example4</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 5</span><br>
+<span class="S1">; Remove all filters.</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example5</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_FilterSet</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S3">0</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 5"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error filtering data."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 5"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"All filters removed."</span><span class="S8">)</span><br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example5</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 6</span><br>
+<span class="S1">; Filter Column M by date. Show all dates in october of 2013 and 2014.</span><br>
+<span class="S1">; 0-year, 1-month, 2-day, 3-hour, 4-minute, 5-second</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example6</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$aShow</span><span class="S8">[]</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S8">[</span><span class="S3">1</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"01/10/2013"</span><span class="S8">,</span><span class="S0"> </span><span class="S3">1</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"01/10/2014"</span><span class="S8">]</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_FilterSet</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S3">13</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlFilterValues</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$aShow</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 6"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error filtering data."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 6"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Column 'M' filtered by date. Show all dates in October of 2013 and 2014."</span><span class="S8">)</span><br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example6</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 7</span><br>
+<span class="S1">; Filter Column M by date. Show all dates of last year.</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example7</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_FilterSet</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S3">13</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlFilterLastYear</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlFilterDynamic</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 7"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error filtering data."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_FilterSet Example 7"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Column 'M' filtered by date. Show all dates of last year."</span><span class="S8">)</span><br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example7</span></span><br>
+<br><OBJECT id=hhctrl type="application/x-oleobject" classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11" width=58 height=57>
+<PARAM name="Command" value="ShortCut">
+<PARAM name="Button" value="Text:Open this Script">
+<PARAM name="Item1" value=",Examples\HelpFile\_Excel_FilterSet.au3,">
+</OBJECT>
+<p>&nbsp;</p>
+
+</body>
+</html>

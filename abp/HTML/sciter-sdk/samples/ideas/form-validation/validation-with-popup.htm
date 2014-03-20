@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <script type="text/tiscript" language="tiscript">
+    
+      var firstInput = self.select("[name='first']");
+      var secondInput = self.select("[name='second']");
+
+      function firstInput.validate()
+      {
+        var v = this.value;
+        return v like "A*B"; // accepts only strings like AB, AxB, AxxB, etc.
+      }
+      
+      function Element.isChildOf(parentElement)
+      {
+        var t = this;
+        while(t)
+        {
+          if( t === parentElement ) return true;
+          t = t.parent;
+        }
+        return false;
+      }
+
+      type Form: Behavior
+      {
+        function onFocus(evt)
+        { 
+            if( evt.type == (Event.LOST_FOCUS | Event.SINKING))
+            {
+                var currentFocus = self.select(":focus");
+                //evt.target here is the new focus element.
+                if( evt.target !instanceof Element || evt.target.isChildOf(currentFocus) )
+                    return; // focus goes to some element inside currentFocus element
+                var msg = currentFocus.select("popup.error")
+                if( typeof currentFocus.validate == #function && !currentFocus.validate())
+                {
+                    currentFocus.post( :: currentFocus.focus = true ); // set focus back to it
+                    if(!msg)
+                    {
+                        msg = new Element("popup");
+                        msg.@#class = "error"
+                        msg.@#disabled = true;
+                        currentFocus.insert(msg);
+                    }
+                    msg.html = "Aa-aa-aa-agrh!!!";
+                    currentFocus.popup(msg);
+                }
+                else
+                {
+                    if(msg)
+                    {
+                        msg.closePopup()
+                        msg.detach()
+                    }
+                }
+            }
+        }
+      }
+    </script>
+    <style>
+    
+      form 
+      {
+        padding:10px;
+        width:max-intrinsic;
+        prototype:Form;
+        border: 1px dashed threedshadow;
+      }
+    </style>
+  
+  </head>
+<body>
+  <form>
+    <p>First: <input type="text" name="first" value="AttB" /> (accepts only strings like AB, AxB, AxxB, etc.)</p>
+    <p>Second: <input type="number" name="second" step=1 /> </p>
+    <hr/>
+    <button #save>Save</button>  
+  </form>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<html>
+<head>
+  <style>
+  
+  @const IMG1:url(svg/longhorn.svg);
+  
+  widget#svg 
+  {
+    //background-color:white;
+    background-repeat:stretch;
+    //background-image:url(svg/longhorn.svg);
+    width:*;
+    height:*;
+  }
+  widget#sel
+  {
+    height:*;
+  }
+  
+  </style>
+  
+  <script type="text/tiscript">
+  
+    self.select("#sel").onValueChanged = 
+      function()
+      { 
+        stdout.println(this.value);
+        var svg = self.select("#svg");
+        svg.style#background-image = String.printf("url(%s)",this.value); 
+      };
+  
+  </script>
+  
+</head>
+<body>
+<frameset cols=200,* >
+  <widget #sel type="select" >
+    <option value="svg/longhorn.svg">longhorn.svg</option>
+    <option value="svg/flower.svg">flower.svg</option>
+    <option value="svg/clinton.svg">clinton.svg</option>
+    <option value="svg/tiger.svg">tiger.svg</option>
+    <option value="svg/cube.svg">cube.svg</option>
+    <option value="svg/mona.svg">mona.svg</option>
+    <option value="svg/lion.svg">lion.svg</option>
+    <option value="svg/cowboy.svg">cowboy.svg</option>
+  </widget>
+  
+  <widget #svg />
+</frameset>
+
+</body>
+</html>
+

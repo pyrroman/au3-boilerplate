@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <style>
+      body { height:100%%; }
+      #output 
+      { 
+        margin: 25%% 25%%; width:50%%; height:50%%; 
+        border:1px dotted silver; 
+        padding: 3em;
+        text-align:center; vertical-align:middle; 
+      }
+    </style>
+    <script type="text/tiscript">
+    
+    var output = self.$("#output");
+    
+    function check( v1, v2 )
+    {
+      return " - " + (v1 == v2? "<b>passed</b>":"<b>failed!</b>");
+    }
+    
+    if( !output ) throw "select is not working or bad DOM";
+     
+    var s =  "output.style#margin-left=" + output.style#margin-left + check(output.style#margin-left, "25%%") + "<br/>";
+        s += "output.style#border-bottom-width=" + output.style#border-bottom-width + check(output.style#border-bottom-width, "1px") + "<br/>";
+        s += "output.style[\"border-bottom-width\"]=" + output.style["border-bottom-width"] + check(output.style["border-bottom-width"], "1px") + "<br/>";
+    output.html = s;
+    
+    output.style#border-bottom-width = 4;
+    output.style#border-top-width = "4px";
+    output.style#border-right-width = px(4);
+    output.style#border-left-width = em(0.5);
+    
+    output.update();
+ 
+    </script>
+  </head>
+  <body>
+    <h1>Element.style test</h1>
+    <div id="output">
+    </div>
+  </body>
+</html>
+  

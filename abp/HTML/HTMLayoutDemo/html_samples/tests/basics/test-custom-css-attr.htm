@@ -1,0 +1,39 @@
+<html>
+<head>
+  <title>View (window) events</title>
+  <style>
+    p
+    {
+      border: 1px solid red;
+      -something: hello-world; 
+    }
+    #status2
+    {
+      border: 1px solid green;
+      -something: "hello world"; 
+    }
+  </style>
+
+  <script src="sciter:lib/root-extender.tis" type="text/tiscript"/> 
+  <script type="text/tiscript">
+
+   var status1 = self.select("#status1");
+       status1.value = status1.style["-something"]; 
+       // or status1.value = status1.style#-something; 
+
+   var status2 = self.select("#status2");
+       status2.value = status2.style["-something"]; 
+       
+    </script>
+    
+</head>
+
+<body>
+  <h1>Custom CSS attributes</h1>
+  <p id="status1">.</p>
+  Patagraph above should have text "hello-world".
+  <p id="status2">.</p>
+  Patagraph above should have text "hello world".
+</body>
+
+</html>

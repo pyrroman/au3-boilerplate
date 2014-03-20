@@ -1,0 +1,33 @@
+
+type Plaintext: Behavior
+{
+  property readOnly(v)
+  {
+    get return this.xcall( #readOnly );
+    set this.xcall( #readOnly, v );
+  }
+
+  // basic actions.
+  function undo(doit = false)     { return this.xcall(#undo, true); }
+  function redo(doit = false)     { return this.xcall(#redo, true); }
+  function cut(doit = false)      { return this.xcall(#cut, true); } 
+  function copy(doit = false)     { return this.xcall(#copy, true); }
+  function paste(doit = false)    { return this.xcall(#paste, true); }
+  
+  // basic actions state indicators.
+  property canUndo(v)             { get return this.xcall(#undo, false); }
+  property canRedo(v)             { get return this.xcall(#redo, false); }
+  property canCut(v)              { get return this.xcall(#cut, false); } 
+  property canCopy(v)             { get return this.xcall(#copy, false); }
+  property canPaste(v)            { get return this.xcall(#paste, false); }
+ 
+  function insert(text)           { return this.xcall(#insert, text); }
+  property canInsert(v)           { get return this.xcall(#insert, false); }
+  
+  property selectionStart(v)      { get return this.xcall(#selectionStart); }
+  property selectionEnd(v)        { get return this.xcall(#selectionEnd); }
+  property selectionText(v)       { get return this.xcall(#selectionText); }
+  function select(start, end = 0xfffffff)  { return this.xcall(#setSelection,start,end); }
+  
+  
+}

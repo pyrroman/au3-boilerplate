@@ -1,0 +1,267 @@
+2014-01-05 - Version: Beta 4
+
+FIXED BUGS
+==========
+* _Excel_BookOpenText didn't return a workbook object because MS doesn't too.
+  Thanks to user FlashpointBlack for reporting the bug!
+* _Excel_RangeWrite: Wrote invalid data when an 1D array was specified and flag $bForceFunc was set
+  Thanks to user FlashpointBlack for reporting the bug!
+
+GENERAL
+=======
+* Enhanced documentation, removed documentation bugs
+
+NEW FUNCTIONS
+=============
+* _Excel_RangeLinkAddRemove: Adds or removes a hyperlink to/from a specified range
+
+-------------------------------------------------------------------------------------------------------------------------------
+2013-10-31 - Version: Beta 3 - Downloads: 379
+
+GENERAL
+=======
+* Enhanced documentation, removed documentation bugs
+
+CHANGED FUNCTIONS
+=================
+* _Excel_PictureAdd: Parameter $bScale renamed to $bKeepRatio
+* _Excel_RangeDelete: Added parameter $iEntireRowCol to delete the entire row(s)/column(s) for a specified range
+
+NEW FUNCTIONS
+=============
+* _Excel_RangeValidate: Adds data validation to the specified range
+
+-------------------------------------------------------------------------------------------------------------------------------
+2013-09-21 - Version: Beta 2 - Downloads: 294
+
+GENERAL
+=======
+* Enhanced documentation, removed documentation bugs
+
+CHANGED FUNCTIONS
+=================
+* _Excel_BookOpenText: Parameter $iOrigin allows to set the origin or code page number for the input file
+
+NEW FUNCTIONS
+=============
+* _Excel_FilterGet: Returns a list of set filters for the specified worksheet
+* _Excel_FilterSet: Sets/unsets filter definitions and filters the range
+* _Excel_PictureAdd: Add a picture on the specified workbook and worksheet
+* _Excel_RangeSort: Now supports Excel 2003 too
+
+-------------------------------------------------------------------------------------------------------------------------------
+2013-08-12 - Version: Beta 1 - Downloads: 264
+
+SCRIPT BREAKING CHANGES
+=======================
+* All functions now return zero based arrays. That is (should) be the AutoIt default.
+  Affected: _Excel_BookList, _Excel_RangeFind, _Excel_SheetList
+* _Excel_RangeRead: First parameter $oExcel no longer needed
+* _Excel_RangeWrite: First parameter $oExcel no longer needed
+* _Excel_ErrorNotify: Removed. Is now part of the Debug UDF as function _DebugCOMError
+
+GENERAL
+=======
+* Enhanced documentation, removed documentation bugs
+
+CHANGED FUNCTIONS
+=================
+* _Excel_BookList: Returns the result in a zero based array. Was one based in the last version
+* _Excel_RangeFind: Returns the result in a zero based array. Was one based in the last version
+* _Excel_RangeRead: First parameter $oExcel no longer needed.
+  Parameter $bForceFunc added. If the Excel transpose method doesn't work you can force the function to use _ArrayTranspose.
+* _Excel_RangeWrite: First parameter $oExcel no longer needed.
+  Parameter $bForceFunc added. If the Excel transpose method doesn't work you can force the function to use _ArrayTranspose.
+* _Excel_SheetList: Returns the result in a zero based array. Was one based in the last version
+
+REMOVED FUNCTIONS
+=================
+* _Excel_ErrorNotify: Is now part of the Debug UDF as function _DebugCOMError
+
+-------------------------------------------------------------------------------------------------------------------------------
+2013-08-04 - Version: Alpha 8 - Downloads: 78
+
+SCRIPT BREAKING CHANGES
+=======================
+* _Excel_RangeReplace: Parameter $oExcel dropped, $vWorksheet added, $vRange moved.
+  Function now returns a range object and sets @extended to 1 if cells have been changed
+* _Excel_RangeSort. Parameter $oExcel dropped, $vWorksheet added. Sort key parameters reordered
+  The function moved from the sort method to the sort object (means this function won't work with Excel 2003)
+  Function now returns a range object
+* _Excel_RangeWrite: Always writes the whole array to to a sheet. Parameters to select a subaray have been dropped
+  Function now returns a range object
+
+GENERAL
+=======
+* Enhanced error checking
+* Enhanced documentation
+
+CHANGED FUNCTIONS
+=================
+* _Excel_RangeRead: Parameter $vRange no longer accepts "Selection", Parameter $vWorksheet accepts Default for the active sheet.
+  Uses function _ArrayTranspose if the limit of the Excel transpose method is exceeded - experimental, needs more testing because the 
+  limits are unknown for different Excel versions
+* _Excel_RangeReplace: Parameter $oExcel dropped, $vWorksheet added, $vRange moved.
+  Function now returns a range object and sets @extended to 1 if cells have been changed
+* _Excel_RangeSort. Parameter $oExcel dropped, $vWorksheet added. Sort key parameters reordered
+  The function moved from the sort method to the sort object (means this function won't work with Excel 2003)
+  Function now returns a range object
+* _Excel_RangeWrite: Always writes the whole array to to a sheet. Parameters to select a subaray have been dropped
+  Function now returns a range object
+
+-------------------------------------------------------------------------------------------------------------------------------
+2013-07-26 - Version: Alpha 7 - Downloads: 48
+
+SCRIPT BREAKING CHANGES
+=======================
+* _Excel_Open: Parameter $iCalculation (suppresses calculation) removed. Isn't sensible here.
+* _Excel_BookOpen: The first visible worksheet is no longer selected and displayed
+* _Excel_Export: On success now the object of the exported range is returned (was 1 before)
+* _Excel_Print: Parameter $vObject is no longer optional.
+  On success now the object of the printed range is returned (was 1 before)
+* _Excel_RangeCopyPaste: Now returns the object of the target range if $vTargetRange <> Default, else 1 (Was always 1 before)
+* _Excel_RangeRead: Parameter $oWorkbook is no longer optional
+* _Excel_SheetAdd: Parameters have been changed. Now you pass sheet where to add the new sheet and a before/after flag
+* _Excel_SheetCopyMove: The default for flag $fMove (now $bCopy) has been changed from False to True. No problem if you didn't specify the flag.
+  Returns object of the copied/moved sheet (was 1 before)
+
+GENERAL
+=======
+* Added more examples scripts
+* Removed types, enhanced documentation
+* Better error checking of the parameter that specifies which object to process using ObjName
+* Each WorkSheet parameter is now accepted as index, name or object
+
+FIXED BUGS
+==========
+* _Excel_BookList: Typo prevented the function from returning the correct result for # of workbooks > 1
+* _Excel_SheetAdd: Returned an error when no sheet names were provided
+
+NEW FUNCTIONS
+=============
+* _Excel_ColumnToNumber: Converts the column letter(s) to a number.
+* _Excel_ColumnToLetter: Convert the column number to letter(s)
+
+CHANGED FUNCTIONS
+=================
+* _Excel_BookAttach: You can now specify the Excel instance to be searched (default = all instances)
+* _Excel_BookList: Parameter $oExcel is optional now. Default = Process all Excel instances
+* _Excel_BookOpen: The first visible worksheet is no longer selected and displayed
+* _Excel_BookSave: @extended set to 1 if the workbook really needed to be saved, else @extended is 0
+* _Excel_Export: On success now the object of the exported range is returned (was 1 before)
+* _Excel_Print: Parameter $vObject is no longer optional.
+  On success now the object of the printed range is returned (was 1 before)
+* _Excel_RangeCopyPaste: Now returns the object of the target range if $vTargetRange <> Default, else 1 (Was always 1 before)
+* _Excel_RangeRead: Parameter $oWorkbook is no longer optional. _Excel_RangeRead: Now accepts name and index for the worksheet to read from
+* _Excel_SheetAdd: Parameters have been changed. Now you pass sheet where to add the new sheet and a before/after flag
+* _Excel_SheetCopyMove: The default for flag $fMove (now $bCopy) has been changed from False to True. No problem if you didn't specify the flag
+  Returns object of the copied/moved sheet (was 1 before)
+
+INTERNAL FUNCTIONS
+==================
+* __Excel_CloseOnQuit: Now supports more than one application object
+
+-------------------------------------------------------------------------------------------------------------------------------
+2013-06-24 - Version: Alpha 6 - Downloads: 161
+
+GENERAL
+=======
+* Enhanced documentation
+* The UDF no longer supports R1C1 notation. A1 notation is to be used. Use function _Excel_ConvertFormula to convert formats
+
+FIXED BUGS
+==========
+* _Excel_RangeFind crashed when searching the whole workbook and hits were found on multiple worksheets. Thanks to Valnurat for helping me find the problem!
+
+NEW FUNCTIONS
+=============
+* _Excel_ConvertFormula: Converts cell references in a formula between A1 and R1C1 reference styles, relative and absolute reference type, or both.
+* _Excel_Print: Prints a workbook, worksheet, chart or range.
+* _Excel_SheetAdd: Add new sheet(s) to a workbook and set their names.
+* _Excel_SheetDelete: Delete the specified sheet by string name or by number.
+* _Excel_SheetList: Returns a list of all sheets in the specified workbook.
+
+-------------------------------------------------------------------------------------------------------------------------------
+2013-05-29 - Version: Alpha 5 - Downloads: 200
+
+GENERAL
+=======
+* Enhanced documentation
+
+NEW FUNCTIONS
+=============
+* _Excel_RangeCopyPaste: Cuts or copies one or multiple cells, rows or columns to a target range or from/to the clipboard
+* _Excel_RangeDelete: Deletes one or multiple cells, rows or columns from the specified worksheet
+* _Excel_RangeInsert: Inserts one or multiple empty cells, rows or columns into the specified worksheet
+
+-------------------------------------------------------------------------------------------------------------------------------
+2013-05-11 - Version: Alpha 4 - Downloads: 62
+
+SCRIPT BREAKING CHANGES
+=======================
+* _Excel_BookClose: Parameter 1 ($oExcel - Excel application object) has been removed. Error codes modified.
+* _Excel_BookOpen: Parameter $bVisible inserted as #4. 
+* _Excel_BookOpenText: Default for $sDelimiter changed from ";" to ","
+* _Excel_BookSave: $oExcel parameter dropped. If you pass the Excel application object as parameter the active workbook is saved. Error codes modified.
+* _Excel_BookSaveAs: $oExcel parameter dropped. If you pass the Excel application object as parameter the active workbook is saved. Error codes modified.
+* _Excel_RangeFind: $oExcel parameter dropped. Error codes modified.
+* _Excel_Open: Parameters $bInteractive and $iCalculation inserted, Parameter bForceNew is now parameter 6 (was 4 in last version).
+
+GENERAL
+=======
+* Definition of Constants moved to <ExcelConstants.au3>
+* Enhanced documentation
+
+NEW FUNCTIONS
+=============
+* _Excel_BookList: Returns a list of all workbooks of an Excel instance.
+* _ExcelSheetCopyMove: Copy or move the specified sheet before or after a specified sheet in the same or a different workbook
+
+CHANGED FUNCTIONS
+=================
+* _Excel_BookClose: No longer needs the Excel application object as first parameter. Error codes modified.
+* _Excel_BookOpen: Parameter $bVisible inserted as #4. 
+* _Excel_BookOpenText: Default for $sDelimiter changed from ";" to ","
+* _Excel_BookSave: $oExcel parameter dropped. If you pass the Excel application object as parameter the active workbook is saved. Error codes modified.
+* _Excel_BookSaveAs: $oExcel parameter dropped. If you pass the Excel application object as parameter the active workbook is saved. Error codes modified.
+* _Excel_RangeFind: $oExcel parameter dropped. Error codes modified.
+* _Excel_RangeRead: If parameter $vRange is set to "Selection" or an abbreviation of it all selected cells of the active sheet will be used
+* _Excel_Open: Parameters $bInteractive (blocks all keyboard and mouse input by the user) and $iCalculation (suppresses calculation to speed up your script) added. 
+
+-------------------------------------------------------------------------------------------------------------------------------
+2012-11-03 - Version: Alpha 3 - Downloads: 530
+
+NEW FUNCTIONS
+=============
+* _Excel_OpenText: Import (CSV) text files
+* _Excel_Export: Exports a range, worksheet, workbook, chart as PDF
+* _Excel_RangeSort: Sorts a range
+
+CHANGED FUNCTIONS
+=================
+* _Excel_Cell functions renamed to _Excel_Range
+
+-------------------------------------------------------------------------------------------------------------------------------
+2012-10-27 - Version: Alpha 2
+
+As most of the users have (nearly) no problem with script breaking changes I have dropped everything I have done so far and started from scratch. 
+The following (design) changes have been implemented:
+
+* Works with as many instances of Excel as you like - not just one
+* Works with any Workbook - not just the active one
+* Works with any Worksheet - not just the active one
+* Only does what you tell it to do - no implicit "actions"
+* Only one function to read from a cell or a range
+* Only one function to write a string, an 1D or 2D array to a cell or a range
+* Find function has been added
+* Replace function has been added
+
+-------------------------------------------------------------------------------------------------------------------------------
+2012-10-06 - Version: Alpha 1
+
+* All: Enhanced error handling. The functions now verify that the executed method was successfull. Now @error is set to explain where the error happened and @extended is set to the COM error
+* _ExcelBookSaveAs: Now accepts "xlsx" as a valid filetype and all numeric values of the XlFileFormat enumeration
+* _ExcelReadCell: A flag has beend added so you can decide what should be returned: Value (Default as it is now), Formula or Text (what you see on the screen) of a cell
+* _ExcelReadSheetToArray: Create a 2D array from the rows/columns of the active worksheet. Version with improved performance. Already went into production as of Beta 3.3.9.5 per BugTrack #2219.
+* Time to process a workbook with 2000 rows and 5 colums dropped from 32 seconds to 0.1 second.
+* _ExcelSheetAddNew: Trac ticket #2199 (reported by spiff59) solved. AutoIt crashed when a sheet with the specified name already existed

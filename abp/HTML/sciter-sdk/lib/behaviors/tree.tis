@@ -1,0 +1,49 @@
+//|
+//| Tree behavior, must be applied <widget>s.
+//|
+//| NOTIFICATIONS:
+//|
+
+type Tree: Behavior
+{
+
+  function attached()
+  {
+      if( this.tag != "widget" && this.tag != "select" )
+        stderr.printf("widget: attached to wrong element - %s\n", this.tag );
+  }
+  
+  function append(val, caption, parentNode)
+  {
+    var node = null;
+    switch( typeof val )
+    {
+      case #object: 
+        node = new Element(#options );  node.setState(Element.STATE_EXPANDED);
+        parentNode.insert(node);
+        node.html = String.printf("<caption><var>%s</var>:{}</caption>", caption);
+        for( var k in val)
+          this.append(val[k], k, node);
+        break;
+      case #array:
+        node = new Element(#options);  node.setState(Element.STATE_EXPANDED);
+        parentNode.insert(node);
+        node.html = String.printf("<caption><var>%s</var>:[]</caption>", caption);
+        for( var i = 0; i < val.length; ++i )
+          this.append(val[i], i.toString() , node);
+        break;
+      default:
+        node = new Element(#option);
+        parentNode.insert(node);
+        node.html = String.printf("<caption><var>%s</var>:%v</caption>", caption, val);
+        break;
+    }
+  }
+  
+  function show(val, caption = "/")
+  {
+    this.clear();
+    this.append(val, caption, this);
+    this.update(true);
+  }
+}

@@ -1,0 +1,198 @@
+<html>
+  <head>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>Events in the Sciter.</h1>
+  <h2>DOM element events.</h2>
+  <div align="left">
+    <table border="0" cellpadding="4" cellspacing="0" width="100%">
+      <tr>
+        <td width="200">handler function name</td>
+        <td width="210"><em>event.type</em> field</td>
+        <td colspan="2">Comment</td></tr>
+      <tr>
+        <td colspan="4"><strong>Sinking/Bubbling Events:</strong></td></tr>
+      <tr>
+        <td rowspan="9" bgcolor="#ffffe8" valign="top"><strong>onMouse</strong>(event) : true|false</td>
+        <td bgcolor="#ffffe8" valign="top">MOUSE_ENTER</td>
+        <td colspan="2" bgcolor="#ffffe8">Mouse/Pointer enters the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">MOUSE_LEAVE</td>
+        <td colspan="2" bgcolor="#ffffe8">Mouse/Pointer leaves the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">MOUSE_MOVE</td>
+        <td colspan="2" bgcolor="#ffffe8">Mouse/Pointer moves over the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">MOUSE_DOWN</td>
+        <td colspan="2" bgcolor="#ffffe8">One of mouse buttons pressed in the element. <em>event.mainButton</em> and <em>event.</em>propButton will tell what button was pressed.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">MOUSE_UP</td>
+        <td colspan="2" bgcolor="#ffffe8">
+          <div>One of mouse buttons released in the element. <em>event.mainButton</em> and <em>event.</em>propButton will tell what button was pressed. To detect single MOUSE CLICK event use following condition:</div>
+          <pre><font face="monospace" size="2">event.type == Event.MOUSE_UP &amp;&amp;
+this.getState(Element.STATE_PRESSED)
+</pre></font></td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">MOUSE_DCLICK</td>
+        <td colspan="2" bgcolor="#ffffe8">Double mouse click in the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">MOUSE_WHEEL</td>
+        <td colspan="2" bgcolor="#ffffe8">Mouse wheel rotation. <em>event.wheelDelta</em> is a number of wheel ticks made.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">MOUSE_TICK</td>
+        <td colspan="2" bgcolor="#ffffe8">Repeatable event that is generated when one of mouse button pressed.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">MOUSE_IDLE</td>
+        <td colspan="2" bgcolor="#ffffe8">Pulsed event, is generated when mouse is not moving some short period of time. If it is not handled in the code then it is used by the engine to popup tooltip for the element.</td></tr>
+      <tr>
+        <td rowspan="3" bgcolor="#ffffe8" valign="top"><strong>onKey</strong>(event) : true|false</td>
+        <td bgcolor="#ffffe8" valign="top">KEY_DOWN</td>
+        <td colspan="2" bgcolor="#ffffe8">Keyboard key pressed. <em>event.keyCode</em> is virtual key code of the key.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">KEY_UP</td>
+        <td colspan="2" bgcolor="#ffffe8">Keyboard key released. <em>event.keyCode</em> is virtual key code of the key.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">KEY_CHAR</td>
+        <td colspan="2" bgcolor="#ffffe8">Character key pressed. <em>event.keyCode</em> is a value of UNICODE codepoint.</td></tr>
+      <tr>
+        <td rowspan="2" bgcolor="#ffffe8" valign="top"><strong>onFocus</strong>(event) : true|false</td>
+        <td bgcolor="#ffffe8" valign="top">GOT_FOCUS</td>
+        <td colspan="2" bgcolor="#ffffe8">Focusable element got input focus.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">LOST_FOCUS</td>
+        <td colspan="2" bgcolor="#ffffe8">Elements lost input focus.</td></tr>
+      <tr>
+        <td rowspan="5" bgcolor="#ffffe8" valign="top"><strong>onExchange</strong>(event) : true|false</td>
+        <td colspan="3" bgcolor="#ffffe8" valign="top"><strong>System shell drag and drop events</strong></td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">X_DRAG_ENTER</td>
+        <td bgcolor="#ffffe8">System dragging pointer (cursor) enters the element.</td>
+        <td rowspan="4" valign="middle">
+          <div>In this events following attributes of the Event object are used: </div>
+          <ul>
+            <li><code>evt.dragging</code> - data being dragged: string | object</li>
+            <li><code>evt.draggingDataType</code> - <code>#text</code> | <code>#html</code> | <code>#url</code> | <code>#file</code> | <code>#json</code></li>
+            <li><code>evt.draggingMode</code> - <code>#move</code> | <code>#copy</code> | <code>#link</code></li>
+            <li><code>evt.x</code> and <code>evt.y</code> - report position of the mouse cursor.</li></ul></td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">X_DRAG_LEAVE</td>
+        <td bgcolor="#ffffe8">System dragging pointer (cursor) leaves the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">X_DRAG</td>
+        <td bgcolor="#ffffe8">System dragging pointer is moving over the the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">X_DROP</td>
+        <td bgcolor="#ffffe8">User releases mouse - drops data into the element.</td></tr>
+      <tr>
+        <td rowspan="23" bgcolor="#ffffe8" valign="top">
+          <div><strong>onControlEvent</strong>(event):true|false</div>
+          <div>Synthetic (logical) events</div></td>
+        <td bgcolor="#ffffe8" valign="top">BUTTON_CLICK</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">Click on button, generated by behaviors: <em>button, checkbox, radio</em>.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">BUTTON_PRESS</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">Mouse/Key pressed in button, generated by behaviors: <em>button, checkbox, radio</em>.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">BUTTON_STATE_CHANGED</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">State (value) of button was changed, generated by behaviors: <em>checkbox, radio</em>.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">EDIT_VALUE_CHANGING</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">Value of editbox is about to be changed, generated by behaviors: <em>edit, number, decimal, date, masked</em>. <em>element.value</em> reflects old value.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">EDIT_VALUE_CHANGED</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">Value of editbox was just changed, generated by behaviors: <em>edit, number, decimal, date, masked</em>. <em>element.value</em> reflects new value.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">SELECT_SELECTION_CHANGED</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">Selection was changed in elements-selectors. generated by behaviors: <em>select, dropdown-select, calendar</em>.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">SELECT_STATE_CHANGED</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">State of item was changed in elements-selectors. generated by behaviors: <em>select</em> when some of the &lt;options&gt; are expanded/collapsed, <em>event.target</em> is the item that changed its state. <em>behavior: calendar</em> sends this event after calendar was switched to show another month so by handling this event you can update DOM inside the calendar. &nbsp;</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">HYPERLINK_CLICK</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">Click on hyperlink. <em>event.target</em> is that hyperlink element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">ACTIVATE_CHILD</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">Request to container to activate child. <em>accesskey</em> processor post this message if accesskey is defined for the element but element is passive, e.g. tab on Tabs control. See: extenders.js / type Tabs.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">POPUP_REQUEST</td>
+        <td colspan="2" rowspan="3" bgcolor="#ffffe8" valign="top">Secret stuff.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">POPUP_READY</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">POPUP_DISMISSED</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">MENU_ITEM_ACTIVE</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">Happens when menu item is highlighted.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">MENU_ITEM_CLICK</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">Click on menu item. <em>event.target</em> is the item <em>event.owner</em> is an owner of the popup menu.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">ELEMENT_COLLAPSED</td>
+        <td colspan="2" rowspan="2" bgcolor="#ffffe8" valign="top">These two events are sent by behavior:expandable-list to notify about closed/open sections of expandable lists.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">ELEMENT_EXPANDED</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">FORM_SUBMIT</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">behavior:form is about to submit values.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">FORM_RESET</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">behavior:form is about to reset inputs.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">DOCUMENT_COMPLETE</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">document is complete notification - all resources requested by the document are delivered at this point.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">HISTORY_NEXT</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">Request to behavior:history to navigate to next document in browsing history.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">HISTORY_PRIOR</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">Request to behavior:history to navigate to previous document in browsing history.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">HISTORY_STATE_CHANGED</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">Notification posted by behavior:history after executing navigation.</td></tr>
+      <tr>
+        <td bgcolor="#ffffe8" valign="top">range 0x1000 .. 0x7FFF</td>
+        <td colspan="2" bgcolor="#ffffe8" valign="top">Custom control events. Any code from this range can be used in <em>element.sendEvent(code,...)</em> calls. If behavior class is designed to behave like for example a button then you may use <em>element.postEvent(Event.BUTTON_CLICK,...)</em> to notify all parties about clicks.</td></tr>
+      <tr>
+        <td colspan="4"><strong>Non-bubbling events</strong></td></tr>
+      <tr>
+        <td rowspan="7" bgcolor="#ffffcc" valign="top"><strong>onScroll</strong>(event) : true|false</td>
+        <td bgcolor="#ffffcc" valign="top">SCROLL_HOME</td>
+        <td colspan="2" rowspan="7" bgcolor="#ffffcc" valign="top">
+          <div>Requests to scroll, typically are coming from &lt;input type=vscrollbar&gt; or &lt;input type=hscrollbar&gt;.</div>
+          <div>In case of SCROLL_POS use <em>event.scrollPos</em> field to get requested position to scroll.</div></td></tr>
+      <tr>
+        <td bgcolor="#ffffcc" valign="top">SCROLL_END</td></tr>
+      <tr>
+        <td bgcolor="#ffffcc" valign="top">SCROLL_STEP_PLUS</td></tr>
+      <tr>
+        <td bgcolor="#ffffcc" valign="top">SCROLL_STEP_MINUS</td></tr>
+      <tr>
+        <td bgcolor="#ffffcc" valign="top">SCROLL_PAGE_PLUS</td></tr>
+      <tr>
+        <td bgcolor="#ffffcc" valign="top">SCROLL_PAGE_MINUS</td></tr>
+      <tr>
+        <td bgcolor="#ffffcc" valign="top">SCROLL_POS</td></tr>
+      <tr>
+        <td bgcolor="#ffffcc" valign="top"><strong>attached</strong>() : void</td>
+        <td colspan="3" bgcolor="#ffffcc" valign="top">Method of behavior class (type). If defined in the type definition then it will be invoked by the engine when DOM element will be subclassed by this class. Variable <em>this</em> inside this function is a reference to the DOM element this behavior was just attached to. Consider <em>attached</em>() as an equivalent of constructor function for other classes.</td></tr>
+      <tr>
+        <td bgcolor="#ffffcc" valign="top"><strong>onTimer</strong>() : true|false</td>
+        <td colspan="3" bgcolor="#ffffcc" valign="top">Timer tick. To start timer on the element use <em>element.timer(milliseconds)</em> call. Return <em>false</em> from this method to stop the timer.</td></tr>
+      <tr>
+        <td bgcolor="#ffffcc" valign="top"><strong>onSize</strong>() : void</td>
+        <td colspan="3" bgcolor="#ffffcc" valign="top">Size of the element was changed. To get dimensions use <em>this.box()</em> function.</td></tr></table></div>
+  <h2>View events</h2>
+  <div align="left">
+    <table border="0" cellpadding="4" cellspacing="0" width="100%">
+      <tr>
+        <td width="200" bgcolor="#fff3c6"><strong>view.onSize</strong>() : void</td>
+        <td bgcolor="#fff3c6" valign="top">This function is invoked by the engine after dimensions of the view (window) was changed. Use view.box() method to get dimensions.</td></tr>
+      <tr>
+        <td bgcolor="#fff3c6"><strong>view.onMove</strong>() : void</td>
+        <td bgcolor="#fff3c6" valign="top">Invoked by the engine after position of the view (window) was changed. Use view.box() method to get dimensions and positions.</td></tr>
+      <tr>
+        <td bgcolor="#fff3c6"><strong>view.onStateChanged</strong>():void</td>
+        <td bgcolor="#fff3c6" valign="top">Invoked when state of the view (window) was changed. See <a href="View.htm">View</a><em>.state</em> property.</td></tr></table></div>
+</body>
+</html>

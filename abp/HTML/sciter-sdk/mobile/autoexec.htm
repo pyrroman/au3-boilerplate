@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <style>
+      body { height:100%%; margin:0; }
+      #sandbox 
+      { 
+        height:*; 
+        border:1px dotted silver; 
+        margin:4px;
+        overflow:auto;
+      }
+      #output 
+      { 
+        height:25px; 
+        border-top:1px solid threedshadow;
+        background-color:window threedface threedface window;
+        vertical-align:middle;
+        overflow:hidden;
+      }
+
+    @media hires
+    {
+      #output { height:50px; }
+    }
+      
+      
+    </style>
+    <script type="text/tiscript">
+    
+    var sandbox = self.select("#sandbox");
+    var output = self.select("#output");
+    
+    if( !sandbox || !output ) throw "select is not working or bad DOM";
+	
+    
+    // Event handler of onControlEvent
+    self.onControlEvent = function(evt)
+    {
+      if(evt.type == Event.BUTTON_CLICK)
+      {
+         var name = evt.target.attributes["name"];
+         try {
+           var handler = eval( String.printf("on_%s_click", name));
+           if( handler instanceof Function )
+            // we've got function onNameClick defined, let's call it.
+             return handler(evt.target);
+         } 
+         catch( er )
+         {
+           output.html = er.toString();   
+           output.update(true);
+         }
+      }
+      return false;
+    }
+    
+    
+    function on_Test_click(el)
+    {
+		   output.html = "Got click on <em>Test</em> button!";   
+		   output.update(true);
+    }
+    function on_ShowSandboxContent_click(el)
+    {
+		   output.html = sandbox.html.htmlEscape();
+		   output.update(true);
+    }
+   
+    function on_Open_click(el)
+	{
+	   var fn = view.selectFile(#open);
+	   if( fn ) view.load(fn);
+	}	
+	
+	function on_OpenWindow_click(el)
+	{
+	   var fn = view.selectFile(#open);
+	   if( fn ) Sciter.open(fn);
+	}
+   
+    </script>
+  </head>
+  <body>
+    <h3>DOM access script functions test</h3>
+    <input type="text" value="test" />
+    <button name="Open">Open doc</button><button name="OpenWindow">Open in the new window</button><br/>
+    <button name="Test">Test</button>
+    <button name="ShowSandboxContent">Show Sandbox Content</button><br/>
+    sandbox:
+    <div id="sandbox">Hello world</div>
+    <div id="output"></div>
+  </body>
+</html>
+  

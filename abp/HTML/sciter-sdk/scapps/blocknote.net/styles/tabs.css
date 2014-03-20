@@ -1,0 +1,97 @@
+widget.tab-strip
+{
+  style-set: "tab-strip";
+}
+
+@set tab-strip
+{
+  :root 
+  {
+    prototype: TabStrip;
+    flow:horizontal;
+  }
+  
+  widget.tabs /* where <option>s live */  
+  {
+    overflow-x: hidden-scroll;
+    flow:horizontal;
+    margin-bottom:@PANELS_BORDER_SPACING;
+    padding:2px;
+    padding-bottom:0;
+    height: @HEADER_HEIGHT;
+  }
+  
+  widget.tabs > option 
+  {
+    height:*;
+    behavior: button;
+    padding: 2px 4px;
+    width:max-intrinsic;
+    border-left: 1px solid @COLOR_SHADOW;
+    border-bottom: 1px solid transparent;
+    
+  }
+  widget.tabs > option:current 
+  {
+    border-top: 1px solid @COLOR_LIGHT;
+    border-right: 1px solid @COLOR_SHADOW;
+    border-left: 1px solid @COLOR_LIGHT;
+    background-color: @COLOR_LIGHT @COLOR_LIGHT @COLOR_BASE @COLOR_BASE;
+    border-bottom: 1px solid @COLOR_BASE;
+    margin-bottom:-2px;
+  }
+  
+  widget.tabs > option:not(:current):first-child,
+  widget.tabs > option:current + option
+  {
+    border-left-color: transparent;
+  }
+  
+  widget.tabs > option[doc-changed] { color:brown; }
+  
+  widget.ctls
+  {
+    flow:horizontal;
+    width:max-intrinsic;
+    height: @HEADER_HEIGHT;
+    margin-bottom:@PANELS_BORDER_SPACING;
+    margin-left:@PANELS_BORDER_SPACING;
+  }
+  
+  widget.ctls > widget // buttons on the right
+  { 
+    font: 12px Marlett; 
+    text-align:center; vertical-align:middle; 
+    border: 1px solid transparent;
+    behavior:clickable;
+    width:max-intrinsic;
+    height:max-intrinsic;
+    padding:2px;
+    margin:* 2px;
+    color:@COLOR_GRAY_TEXT;
+  }
+  
+  widget.ctls > widget:hover:not(:disabled)
+  { 
+    background: @TB_BUTTON_BACK_HOVER; 
+  }      
+  
+  widget.ctls > widget:active:not(:disabled) 
+  {  
+    background: @TB_BUTTON_BACK_ACTIVE;  
+    padding:3px 1px 1px 3px;
+  }
+  
+  widget.ctls > widget:disabled
+  {
+    visibility:hidden;
+  }
+ 
+  
+}
+
+
+
+
+
+

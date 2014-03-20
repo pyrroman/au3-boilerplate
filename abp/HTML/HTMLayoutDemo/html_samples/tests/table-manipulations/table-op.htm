@@ -1,0 +1,48 @@
+<html>
+<head>
+  <style></style>  
+  <script type="text/tiscript">
+  
+    var table = $(table#test);
+  
+    function self#add1.onClick()
+    {
+      var tr,td;
+      tr = new Element("tr");
+      table.append(tr);
+      
+      var td1 = new Element("td","x");
+      td1.@#rowspan = 2;
+      var td2 = new Element("td","x");
+      var td3 = new Element("td","x");
+      tr.content(td1,td2,td3)
+      
+      tr = new Element("tr");
+      table.append(tr);
+            
+      var td4 = new Element("td","x");
+      var td5 = new Element("td","x");
+      tr.content(td4,td5);
+      
+    }
+
+    function self#add2.onClick()
+    {
+      var tr,td;
+      tr = new Element("tr"); table.append(tr);
+      tr.content({td,rowspan:2,"1"},{td,"2"},{td,"3"});
+      tr = new Element("tr"); table.append(tr);
+      tr.content({td,"4"},{td,"5"});
+      
+    }
+  
+  </script>  
+</head>
+<body>
+  <button #add1>Add1</button>
+  <button #add2>Add2</button>
+  <table #test border=1>
+    <tr><td>1</td><td>2</td><td>3</td></tr>
+  </table>
+</body>
+</html>

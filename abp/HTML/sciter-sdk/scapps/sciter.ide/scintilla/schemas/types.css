@@ -1,0 +1,23 @@
+
+@const COLOR_TIS: #700;
+@const COLOR_HTM: #007;
+@const COLOR_CSS: #050;
+@const COLOR_H:   #440;
+@const COLOR_CPP: #00A;
+@const COLOR_DATA: #C00;
+
+option[filename$=".tis"] { color: @COLOR_TIS; list-marker-color: @COLOR_TIS; }
+option[filename$=".html"],
+option[filename$=".htm"] { color: @COLOR_HTM; list-marker-color: @COLOR_HTM; }
+option[filename$=".css"] { color: @COLOR_CSS; list-marker-color: @COLOR_CSS; }
+
+option[filename$=".h"],
+option[filename$=".hpp"],
+option[filename$=".hxx"] { color: @COLOR_H; list-marker-color: @COLOR_H; }
+option[filename$=".c"],
+option[filename$=".cpp"],
+option[filename$=".cxx"] { color: @COLOR_CPP; list-marker-color: @COLOR_CPP; }
+
+option[filename$=".json"],
+option[filename$=".scapp"] { color: @COLOR_DATA; list-marker-color: @COLOR_DATA; }
+

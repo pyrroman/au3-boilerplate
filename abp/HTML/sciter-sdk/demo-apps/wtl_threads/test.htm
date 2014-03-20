@@ -1,0 +1,106 @@
+<html>
+  <head>
+    <style>
+      table#found-file-list
+      {
+        width:*;
+        height:*;
+        flow:table-fixed;
+        behavior:column-resizer;
+        overflow-y: scroll;
+        border:1px solid black;
+      }
+      table#found-file-list tr
+      {
+        border-bottom: 1px solid black;
+      }
+      table#found-file-list td
+      {
+        white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+      }
+      table#found-file-list th
+      { 
+        width:*;
+      }
+      table#found-file-list th:nth-child(1) 
+      { 
+        width:4*;
+      }
+      p#status { line-height:1.3em; white-space: nowrap; overflow-x: hidden; }
+      
+      div.task { margin-bottom: 10px; }
+      div.task:not([running]) button#stop { display:none; }
+      div.task[running]       button#go { display:none; }
+    </style>
+    <script type="text/tiscript">
+      include "findfile.tis";
+      
+      //| Stringizer method, accepts inline HTML inclusion
+      //| Appends the html at the end of the element
+      //| Example of use:
+      //|   var def = { name:"something", value:">23" };
+      //|   table.$append( <tr><td>{def.name}</td><td>{def.value}</td></tr> );
+      function Element.$append(html..)
+      {
+        for( var i = 1; i < html.length; i += 2 ) // each odd parameter is a formal one
+            html[i] = html[i].toHtmlString();
+        this.insert( html.join(""));
+      }
+      
+            
+      function FindFiles()
+      {
+        var counter = 0;
+        var task = null;
+        var table = self.$(table#found-file-list);
+        // clear the table
+        var firstr = table[0].detach(); table.clear(); table.insert(firstr);
+        var status = self.$(p#status);
+        
+        self.$(button#stop).onClick = function() { task.stop(); }
+       
+        function whenStarted() { self.$(div.task).attributes["running"] = true;}
+        function whenStopped() { self.$(div.task).attributes["running"] = undefined; }
+        
+        function fileFound(ffd) 
+        {
+          table.$append( <tr><td>{ ffd.path }\\{ffd.name} </td>
+                             <td>{ ffd.sizeLow.toString() }</td>
+                             <td>{ ffd.created.toLocaleString() }</td>
+                             <td>{ ffd.modified.toLocaleString() }</td>
+                             <td>{ ffd.accessed.toLocaleString() }</td></tr> );
+          status.text = String.printf("scanned %d files", ++counter);                   
+                             
+        }
+        
+        task = FindFileTask 
+            {
+              path   : self.$(input#path).text, 
+              mask   : self.$(input#mask).text,
+              started: whenStarted,
+              done   : whenStopped,
+              found  : fileFound
+            };  
+      }
+      // attach FindFiles to the button click:
+      self.$(button#go).onClick = FindFiles;
+    </script>
+  </head>
+<body>
+  <div .task>
+  Path: <input type=text value="c:" #path /> Mask: <input type=text value="*.*" #mask /> <button #go>Find-em-all</button><button #stop>Enough, stop!</button>
+  </div>  
+  <table #found-file-list fixedrows=1>
+    <tr>
+      <th>Name</th>
+      <th>Size</th>
+      <th>Created</th>
+      <th>Modified</th>
+      <th>Accessed</th>
+    </tr>
+  </table>
+  <p #status>&nbsp;</p>
+</body>
+</html>

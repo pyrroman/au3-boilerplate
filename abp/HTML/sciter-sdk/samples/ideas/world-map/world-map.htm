@@ -1,0 +1,82 @@
+<html>
+<head>
+  <style>
+  
+    body 
+    {
+      flow: "1 1"
+            "2 4"
+            "3 4";
+      border-spacing:10px;
+    }
+    widget#map
+    {
+      prototype: Map;
+      width:50%; //800px - 1:1 scale
+      height:width(50%); // 400px - 1:1 scale
+      border:1px solid red;
+
+      // behavior specific attributes:
+      -land-color: gold;
+      -land-outline-color: goldenrod;
+      -land-outline-width:0.5;
+      -hovered-land-outline-width:1.5;
+      -selected-land-color: goldenrod;
+      -selected-land-outline-color: chocolate;
+      -selected-land-outline-width:1.5;
+    }
+    
+    widget#countries
+    {
+      width:*;
+      height:*;
+    }
+  
+  </style>  
+  <script type="text/tiscript">
+    include "world-map.tis";
+    include "map-widget.tis";
+    
+    // init country list:
+    var contryList = self.$(widget#countries);
+    var map = self.$(widget#map);
+    
+    for(var (partName,partCountries) in WorldMap.parts)
+    {
+      var group = new Element("option", partName);
+      group.state.expanded = true;
+      contryList.append(group);
+      for(var (countryName,countryData) in partCountries)
+        group.append( new Element("option", countryName) );
+    }
+    
+    contryList.onValueChanged = function()
+    {
+      map.value = this.value;
+    } 
+    
+    function onCountryHover(countryName)
+    {
+      self.$(text#hovered-country).text = countryName || "";
+    }
+    
+    function onCountrySelected()
+    {
+      contryList.value = map.value;
+    }
+    
+    function self.ready()
+    {
+      map.onCountryHover = onCountryHover;
+      map.onValueChanged = onCountrySelected;
+    }
+  
+  </script>  
+</head>
+<body>
+  <h1>The World</h1>
+  <widget #map value="Canada" />
+  <text #hovered-country />
+  <widget #countries type="select" />
+</body>
+</html>

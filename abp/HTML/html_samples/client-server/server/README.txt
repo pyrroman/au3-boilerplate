@@ -1,0 +1,1 @@
+This is an implementation of sample RPC server, intended to be used by tiscript.exe 

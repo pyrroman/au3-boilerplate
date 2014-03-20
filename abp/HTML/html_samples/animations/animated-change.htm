@@ -1,0 +1,70 @@
+<html>
+<head>
+  <style>
+    div#status
+    {
+      padding:8px 8px 8px 24px;
+      background-color: threedface;
+      background: threedface url(theme:radio-normal) no-repeat;
+    }
+    div#status[changed]
+    {
+      background: yellow url(theme:radio-checked-hover) no-repeat;
+    }
+  </style>  
+  <script type="text/tiscript">
+  
+    function changeWithAnimation(el, changer)
+    {
+      const STEP_DURATION = 8;
+      function show()
+      {
+        changer(el);
+        var opacity = 0.0;
+        function crystallize() // function-animator 
+        {
+          opacity += 0.01;
+          if(opacity < 1.0) { el.style#opacity = opacity; 
+                              return STEP_DURATION; }
+          else { el.style#opacity = 1.0; 
+                 return 0; }
+        }
+        this.animate(crystallize);
+      }
+      function hide()
+      {
+        var opacity = 1.0;
+        function dissolve() // function-animator 
+        {
+          opacity -= 0.01;
+          if(opacity >= 0.0) { el.style#opacity = opacity; 
+                               return STEP_DURATION; }
+          else { el.post(show); 
+                 return 0; }
+        }
+        el.animate(dissolve);
+      }
+      hide();
+    }
+    
+    self#test.onClick = function() 
+    { 
+      var el = $(div#status);
+      changeWithAnimation(el, function(el)
+        {
+          el.attributes["changed"] = true;
+          el.text = "Changed text";
+        });
+      
+    }
+    
+  </script>  
+<head>
+<body>
+  <button #test>Show message</button>  
+  <div #status>
+    Status text
+  </div>
+
+</body>
+</html>

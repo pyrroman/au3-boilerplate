@@ -1,0 +1,42 @@
+<html>
+<head>
+  <style>
+  
+    span.name { display:inline-block; width:8em; }
+  
+  </style>  
+  <script type="text/tiscript">
+    include "jsont.tis";
+    
+    var contacts = [
+      { id: "1", name:"John", email:"john@example.com" },
+      { id: "2", name:"Steve", email:"steve@example.com" },
+      { id: "3", name:"Masha", email:"masha@example.com" },
+      { id: "4", name:"Alpha", email:"alpha@example.com" },
+      { id: "5", name:"Beta", email:"beta@example.com" },
+      { id: "6", name:"Gamma", email:"gamma@example.com" }
+    ];
+    
+    function rules($,d)
+    {
+      return 
+      { 
+        ""         : $(<ul>{d}</ul>),
+        "[]"       : $(<li contact-id="{d.id}">{d.name}{d.email}</li>),
+        "[].name"  : $(<span class="name">{d}</span>),
+        "[].email" : $(<a class="email" href="mailto:{d}">{d}</a>)
+      };
+    }   
+
+    var r = JSONT.transform(contacts,rules);  
+    stdout.println(r);
+    self.$(body).append(r);
+    
+  </script>  
+</head>
+<body>
+  <p>That is my JsonT implemantation following the idea of Stefan Goessner - http://goessner.net/articles/jsont/</p>
+  <p>My implementation is not useing <code>eval()</code> or RegExp'es - rules compiled and used without interpretation.</p>
+  <p>Here is an output of <code>JSONT.transform(contacts,rules)</code>:</p>
+</body>
+</html>

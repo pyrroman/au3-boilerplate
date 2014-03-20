@@ -1,0 +1,23 @@
+<html>
+<head>
+  <style></style>  
+  <script type="text/tiscript">
+    function self#test.onClick()
+    {
+      view.testThread(); // native method defined in sdk/sciter/native.cpp
+    } 
+    var cnt = 0;
+    
+    // method that will be invoked from worker thread through tiscript::post(...) 
+    view.root.tick = function()
+    {
+      self#out.value = (++cnt).toString(); 
+    }
+    </script>  
+</head>
+<body>
+  This is a test of script calls coming from worker threads.
+  <button #test>Run thread</button>
+  <p #out>.</p>
+</body>
+</html>

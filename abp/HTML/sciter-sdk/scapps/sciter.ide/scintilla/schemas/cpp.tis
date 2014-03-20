@@ -1,0 +1,66 @@
+include "common.tis";
+
+Scintilla.lexers["c++"] =
+{
+  base: "cpp",
+  files:
+  {
+    "C++ headers": {
+      ext: ["h","hpp","hxx" ],
+      color:darkBlue,
+    },
+    "C++": {
+      ext: ["c","cpp","cxx" ],
+      color:darkRed,
+    },
+  },
+  properties: 
+  {
+    "fold": 1,
+    "fold.compact": 1,
+    "fold.comment": 1,
+    "styling.within.preprocessor":1,
+  },
+  keywords: 
+  {
+    #base-keywords: 
+    { 
+      id:0, 
+      list:
+        "asm auto break case catch class const const_cast continue default delete " 
+        "do dynamic_cast else enum explicit export extern for friend goto "
+        "if inline namespace new operator private protected public register "
+        "reinterpret_cast return sizeof static static_cast switch template this "
+        "throw try typedef typeid typename using virtual "
+        "while and and_eq bitand bitor compl not not_eq or or_eq xor xor_eq"
+    },
+    #data-types:  
+    { 
+      id:1,
+      list:
+      	"bool char double false float int long mutable short signed struct true union unsigned void volatile wchar_t "
+        "byte int8 uint8 int16 uint16 int32 uint32 int64 uint64 "
+    },
+  },
+  styles:
+  {
+ 
+    #cpp-default:      { id:0,  fore: black },
+    #cpp-comment:      { id:1,  fore: CODE_COLOR_COMMENT },
+    #cpp-comment-line: { id:2,  fore: CODE_COLOR_COMMENT },
+    
+    #cpp-number:       { id:4,  fore: CODE_COLOR_LITERAL },
+    #cpp-keyword:      { id:5,  fore: CODE_COLOR_KEYWORD },
+    #cpp-string:       { id:6,  fore: CODE_COLOR_STRING },
+    #cpp-character:    { id:7,  fore: CODE_COLOR_LITERAL },
+    #cpp-uuid:         { id:8,  fore: CODE_COLOR_LITERAL },    
+    #cpp-preprocessor: { id:9,  back: offWhite },    
+    
+    #cpp-operator:     { id:10, fore: CODE_COLOR_OPERATOR },
+    #cpp-identifier:   { id:11, fore: CODE_COLOR_IDENTIFIER },    
+    #cpp-string-eol:   { id:12, fore: RGB(0xDF, 0xDF, 0x7F) },
+    #cpp-regex:        { id:14, fore: CODE_COLOR_LITERAL },
+    #cpp-keyword-ext:  { id:16, fore: CODE_COLOR_KEYWORD_EXT },
+
+  }
+};

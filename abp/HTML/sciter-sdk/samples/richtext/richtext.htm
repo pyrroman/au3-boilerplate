@@ -1,0 +1,225 @@
+<html>
+<head>
+  <style>
+  
+    @const COLOR_BASE: threedface;
+    @const COLOR_SHADOW: threedshadow;
+    @const COLOR_LIGHT: threedhighlight;
+    @const BORDER: 1px solid @COLOR_SHADOW;
+    @const BUTTON_BACK_NORMAL: url(theme:toolbar-button-normal) stretch;	
+    @const BUTTON_BACK_HOVER: url(theme:toolbar-button-hover) stretch;
+    @const BUTTON_BACK_ACTIVE: url(theme:toolbar-button-pressed) stretch;
+    @const BUTTON_BACK_CHECKED: url(theme:toolbar-button-checked) stretch;
+	  @const BUTTON_BACK_CHECKED_HOVER: url(theme:toolbar-button-checked-hover) stretch;
+    @const BUTTON_BACK_DISABLED: url(theme:toolbar-button-disabled) stretch;
+            
+    widget.editor
+    {
+      width:*;
+      height:*;
+      min-height:100px;
+      border:@BORDER;
+      style-set: "richtext-editor"; // to isolate this thing from other styles
+    }
+
+    @set richtext-editor
+    {
+      richtext
+      {
+        font: 10pt Verdana; // base font for the editor
+        background-image:none;
+        background-color:window;
+        prototype: RichText;
+        width:*;
+        height:*;
+        overflow-x:auto;
+        overflow-y:scroll;
+      }
+      widget.toolbar
+      {
+        flow:horizontal;
+        height:24px;
+        background-color: threedface;
+        border-bottom:@BORDER;
+        padding:2px;
+        overflow-x:hidden;
+      }
+        
+      widget.tb-button
+      {
+        //prototype: ToolbarButton;
+        font-family:tahoma arial;
+        behavior: clickable;
+        padding:3px;
+        width:20px;
+        height:*;
+        text-align:center;
+        vertical-align:middle;
+        background: @BUTTON_BACK_NORMAL;
+      }
+   
+      widget.tb-button:disabled
+      {
+        background: @BUTTON_BACK_DISABLED;
+        color:threedshadow;
+      }    
+      widget.tb-button:disabled img
+      {
+        foreground-image-transformation: contrast-brightness-gamma(0.15,0.75,1.0);
+      }    
+      
+      widget.tb-button:hover:not(:disabled)         { background: @BUTTON_BACK_HOVER; }    
+      widget.tb-button:active:not(:disabled)        { background: @BUTTON_BACK_ACTIVE; padding:4px 2px 2px 4px; }    
+      widget.tb-button:checked:not(:disabled)       { background: @BUTTON_BACK_CHECKED; }    
+      widget.tb-button:checked:hover:not(:disabled) { background: @BUTTON_BACK_CHECKED_HOVER; }    
+      
+      widget.tb-button.h:not(:disabled) { color:threedshadow; }    
+      widget.tb-button.h:not(:disabled) b { color:windowtext; }    
+
+      widget.toolbar > hr
+      {
+        width:0;
+        height:*;
+        margin: 0 2px;
+        border: 1px solid;
+        border-color: @COLOR_SHADOW @COLOR_LIGHT @COLOR_LIGHT @COLOR_SHADOW;
+      }    
+      
+    } // end of @set richtext-editor
+
+    div.shortcuts
+    {
+        border:1px solid;	
+        background: infobackground;
+        width:*;
+        height:*;
+        overflow:auto;
+    }
+    
+    div.shortcuts > caption
+    {
+      padding-left:30px;
+      font-weight:bold;
+      margin:10px 0;
+    }
+
+    div.shortcuts > ul
+    {
+	    width:*;
+	    height:*;
+      padding-left:30px;
+    }
+    div.shortcuts > ul > li
+    {
+      padding:4px 0;
+    }
+	
+    div.shortcuts kbd
+    {
+      background-color: white;
+      border: 1px solid threedshadow;
+      display: inline-block;
+      width:max-intrinsic;
+      padding:0 4px;
+    }
+  
+    widget#src
+    {
+      font: 10pt monospace;
+    }
+    
+  </style>
+  <script type="text/tiscript">
+    
+    include "toolbar.tis";
+    include "richtext.tis";
+    
+    self #test-load .onClick = :: self.select("richtext").loadHtml(self#src.value);
+    self #test-save .onClick = :: self#src.value = self.select("richtext").saveHtml();
+    self #test-save-images .onClick = :: self#src.value = self.select("richtext").saveHtml("",#emit-all-images);
+    self #test-set-span .onClick = :: self.select("richtext").setSpan("a",{"href":"http://terrainformatica.com"});
+    
+    self #test-show-rules .onClick = function()
+    {
+      var rt = self.select("richtext");
+      var rl = rt.getStyleRules();
+      for( var rid in rl )
+      {
+        var st = rt.getStyleRule(rid);
+        stdout.printf("#%x %s:\n%V\n", rid, rl[rid], st);
+      }
+    }
+    
+    $(widget.tb-button.alignment[value=1]).onClick = :{ $(richtext).alignment = 1; } 
+    $(widget.tb-button.alignment[value=2]).onClick = :{ $(richtext).alignment = 2; } 
+    $(widget.tb-button.alignment[value=3]).onClick = :{ $(richtext).alignment = 3; } 
+    
+    
+  </script>
+  
+</head>
+<body>
+<h1>Demo of behavior:richtext.</h1>
+ <button #test-load>Load</button>
+ <button #test-save>Save</button>
+ <button #test-save-images>Save with images</button>
+ <button #test-set-span>Set &lt;a&gt;</button>
+ <button #test-show-rules>Show rules</button>
+ 
+ <span>Note: this example supports pasting images from clipboard</span>  
+
+<frameset rows="*,100px">
+  <frameset cols="*,*">
+    <widget class="editor">
+      <widget .toolbar>
+        <widget .tb-button command=richtext:cut   title="Cut">	 <img src="res:edit-cut.png" /></widget>
+        <widget .tb-button command=richtext:copy  title="Copy">	 <img src="res:edit-copy.png" /></widget>
+        <widget .tb-button command=richtext:paste title="Paste"> <img src="res:edit-paste.png" /></widget>
+        <hr/>
+        <widget .tb-button command=richtext:undo  title="Undo">	 <img src="res:edit-undo.png" /></widget>
+        <widget .tb-button command=richtext:redo  title="Redo">  <img src="res:edit-redo.png" /></widget>
+        <hr/>      
+        
+        <widget .tb-button   command=richtext:strong  title="Strong emphasis"><b>B</b></widget>
+        <widget .tb-button   command=richtext:em  title="Emphasis"><i>I</i></widget>
+        <widget .tb-button   command=richtext:code  title="Code"><tt style="font-size:9px">code</tt></widget>
+        <hr/>      
+        <widget .tb-button   command=richtext:p  title="Paragraph"><b>P</b></widget>
+        <widget .tb-button.h command=richtext:h1 title="Header 1">H<b>1</b></widget>
+        <widget .tb-button.h command=richtext:h2 title="Header 2">H<b>2</b></widget>
+        <widget .tb-button.h command=richtext:h3 title="Header 3">H<b>3</b></widget>
+        <widget .tb-button.h command=richtext:h4 title="Header 4">H<b>4</b></widget>
+        <!--
+        <widget .tb-button command=richtext:h5 title="Header 5">H5</widget>
+        <widget .tb-button command=richtext:h6 title="Header 6">H6</widget>
+        -->
+        <hr/>
+        <widget .tb-button title="Align left" .alignment value=1 >&lt;</widget>
+        <widget .tb-button title="Align center" .alignment value=2 >&lt;&gt;</widget>
+        <widget .tb-button title="Align right" .alignment value=3 >&gt;</widget>        
+        <hr/>      
+        <widget .tb-button command=richtext:pre title="Block of plain text, <pre>"><tt>pre</tt></b></widget>
+        <hr/>      
+        <widget .tb-button command=richtext:li-ul title="List item, unordered list"><img src="res:format-ul.png" /></widget>
+        <widget .tb-button command=richtext:li-ol title="List item, unordered list"><img src="res:format-ol.png" /></widget>
+        <widget .tb-button command=richtext:indent-dec title="Increase level of list item or quote"><img src="res:format-indent-dec.png" /></widget>
+        <widget .tb-button command=richtext:indent-inc title="Decrease level of list item or un-quote"><img src="res:format-indent-inc.png" /></widget>
+        <hr style="margin-left:*"/>
+        <widget class="tb-button insert-table"><img src="table.png" title="Insert table"/></widget>
+        <hr/>
+        <widget .tb-button .rulers command=richtext:show-rulers><img src="rulers.png" title="Show/hide rulers"/></widget>
+      </widget>
+      <richtext toolbar="widget.toolbar" allow-clipboard-images content-style="content.css" >
+        <p>Hello <b>world</b></p>
+      </richtext>
+    </widget>
+    <div .shortcuts>
+      <include src="help-shortcuts.htm" />
+    </div>
+  </frameset>
+  <plaintext #src>
+    <html>Hello world!</html>
+  </plaintext>
+</frameset>
+</body>
+</html>

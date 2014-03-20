@@ -1,0 +1,121 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Canvas Stuff</title>
+    <script type="text/tiscript">
+    
+	var x = 0.0;
+  var y = 0.0;
+
+  var a = 1.4;
+  var b = -1.7;
+  var c = 1.7;
+  var d = 0.9;
+
+	var reset = true;
+  var active = true;
+  
+  var colors = [ 0, 0x0000FF, 0x00FF00, 0x00FFFF, 0xFF0000, 0xFF00FF, 0xFFFF00 ];
+  var generation = 0;
+  function nextColor() { return colors[(++generation / 32) % colors.length]; }
+  
+	function animate(){
+  
+    if(!active)
+      return false;
+  
+    var canvas = self#can;
+		var context;
+
+		if(reset)
+    {
+      context = canvas.graphics(0xffffffff);
+			a = self #inputa .value;
+			b = self #inputb .value;
+			c = self #inputc .value;
+			d = self #inputd .value;
+			x = y = 0.0;
+			reset = false;
+		}
+    else
+      context = canvas.graphics();
+
+    context.noLine();
+    context.fillColor(nextColor());
+	  
+		for(var i = 0; i < 100; i++)
+    { 
+      context.rectangle (300.5 + x*100, 200.5 + y*100, 2, 2);
+		        
+			var tmpX = Math.sin(a*y) + c*Math.cos(a*x);
+			var tmpY = Math.sin(b*x) + d*Math.cos(b*y);
+
+			x = tmpX;
+			y = tmpY;
+		}
+    canvas.refresh();
+    return true; // keep going;
+	}
+
+	function self #set .onClick()
+  {
+    active = true;
+		reset = true;
+    self.timer(50, animate);   
+	}
+  
+  self.timer(100, animate);   
+  
+	function self #destroy .onClick()
+  {
+    active = false;
+    var canvas = self#can;
+    canvas.graphics(#destroy);
+	}
+  
+  
+    </script>
+    
+    <style>
+      div#can 
+      { 
+        clear:left; 
+        width:600px; 
+        height:400px; 
+        border:1px solid red;
+      }  
+      form
+      {
+        width:max-intrinsic;
+          
+      }
+      label 
+      { 
+         display:inline-block; text-align:right; width:2em; 
+      }
+    </style>
+    
+  </head>
+  <body>
+    <h1>Canvas Stuff</h1>
+    <h3>Clifford Attractor</h3>
+    <p>
+      Clifford Attractor implemented in javascript with the canvas element. 
+      See <a href="http://local.wasp.uwa.edu.au/~pbourke/fractals/clifford/">here</a> 
+      and <a href="http://en.wikipedia.org/wiki/Chaos_theory">Chaos Theory</a> for more information.
+    </p>
+    <p>
+      This is Sciter port of <a href="http://timelessname.com/canvas/experiment02/">this page</a>.
+    </p>
+    
+    <div #can />
+    
+    <label>A:</label><input id="inputa" type="decimal" value="1.5"><br/>
+    <label>B:</label><input id="inputb" type="decimal" value="-1.8"><br/>
+    <label>C:</label><input id="inputc" type="decimal" value="1.6"><br/>
+    <label>D:</label><input id="inputd" type="decimal" value="0.9"><br/>
+    <button id="set">Set</button>
+    <button id="destroy">Destroy</button>
+
+  </body>
+</html>
+

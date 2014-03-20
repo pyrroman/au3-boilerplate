@@ -1,0 +1,7 @@
+// that is manifest file defining Sciter Application
+{
+  main : "/facade.htm", // main layout
+  icon : "/scide.ico", // icon
+  label: "ScIDE", // label and window title.
+  description: "Sciter IDE" // its description 
+}

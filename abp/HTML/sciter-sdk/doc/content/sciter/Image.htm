@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <meta name="GENERATOR" content="BLOCKNOTE.NET"/>
+    <meta name="source"/>
+    <meta name="source"/>
+    <meta name="source"/>
+    <basefont face="Verdana" size="2"/>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>Image object</h1>
+  <p>image (picture).</p>
+  <div align="left">
+    <table border="0" cellpadding="2" cellspacing="4" width="100%">
+      <tr>
+        <td colspan="2">
+          <h2>Constants</h2></td></tr>
+      <tr>
+        <td width="147" valign="top" align="right"></td>
+        <td bgcolor="#fffff0" valign="top">N/A</td></tr>
+      <tr>
+        <td colspan="2">
+          <h2>Properties</h2></td></tr>
+      <tr>
+        <td width="117" bgcolor="#ffffff" valign="top" align="right"><strong><em>url</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"><strong>- </strong><em>string</em>, url where this image came from.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>width</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, pixels, width of the image. read-only property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>height</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <em>integer</em>, pixels, height of the image. read-only property.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>graphics</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">- <a href="Graphics.htm">Graphics</a>, returns graphics object that can be used for drawing on the image surface.</td></tr>
+      <tr>
+        <td colspan="2" valign="top">
+          <h2>Methods</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>this</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong>( width</strong>:<em>integer</em>, <strong>height</strong>:<em>integer</em> [, color: <em>integer</em> = 0]<strong> )</strong></div>
+          <p>Constructs new Image object and initializes it by the <em>color.</em></p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>render</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>( <strong>what</strong>: Element )</div>
+          <p>Renders the <em>what</em> element on the image. Before rendering the element gets dimensions of the image so its border box covers the image in full.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em><strong>destroy</strong></em></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>()</div>
+          <p>Destroys underlying native bitmap. Use this method to force the image to release its bitmap (that can be pretty big) when it is not needed.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>toBytes</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>( [<strong>compressionLevel</strong>:integer] &nbsp;) : <a href="../script/Bytes.htm">Bytes</a></div>
+          <p>Saves content of the image as a byte vector that can be used e.g. for uploading on the server.</p>
+          <p><em>compressionLevel</em> is a number in the range 10..100 - JPEG compression level. If it is omitted or zero then the image is saved using PNG encoding.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em><font color="#999999">scale</font></em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong><font color="#999999">( </font></strong><font color="#999999">width, height<strong> )</strong></font></div>
+          <p><font color="#999999">Scales - changes dimensions of the image.</font></p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em><font color="#999999">toString</font></em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong><font color="#999999">( </font></strong><font color="#999999">#png | #jpeg [, bpp]<strong> &nbsp;) </strong>: <em>string</em></font></div>
+          <p><font color="#999999">Saves content of the image as a base64 encoded string.</font></p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em><font color="#999999">saveAs</font></em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong><font color="#999999">( </font></strong><font color="#999999">#png | #jpeg [, bpp]<strong> &nbsp;)</strong> : <em>true | false</em></font></div>
+          <p><font color="#999999">Saves content of the image as file on the disk. Method opens file dialog allowing user to select file name.</font></p></td></tr></table></div>
+  <div>* - grayed items are planned but not yet implemented.</div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+
+class TabStrip: Behavior // widget.tab-strip control
+{
+  function attached()
+  {
+    this.insert 
+    (
+      "<widget.tabs />"
+      "<widget.ctl.off-strip disabled>7<menu.popup /></widget>"
+      "<widget.ctl.close disabled>r</widget>"
+    );
+  }
+  
+  function onTabSwitch(oldtab,newtab) // overridable, tabstrip.onTabSwitch = function(oldtab,newtab) {}
+  {
+    return true;
+  } 
+  function onTabClose(tab)// overridable
+  { 
+    return true; // proceed.
+  }
+  
+  property isEmpty(v)
+  {
+    get return this.select("widget.tabs").length == 0; 
+  }
+  
+  function placeTab(tab)
+  {
+    // add this tab to the .tabs
+    /*if( this[0].length && this[0][0].text == "(new)" )
+    {
+      this[0].insert(tab, 1);
+    }
+    else
+      this[0].insert(tab, 0);    
+    */
+    var cur = this.$(widget.tabs>option:current);
+    if( cur )
+      this[0].insert(tab, cur.index + 1);
+    else
+      this[0].insert(tab, 0);    
+  }
+  
+  function addTab( label = "(new)", filename = "") 
+  {
+    var tab = this.select("option[filename='%s']", filename);
+    if( !tab )
+    {
+      // create new one 
+      tab = new Element("option", label);
+      tab.@#filename = filename;
+      tab.@#visible = true;
+      tab.@#title = filename;
+      this.placeTab(tab);
+      //this.onSize(); 
+      this.switchTab(tab);
+    }
+    return tab;   
+  }
+  
+  function closeTab( tab )
+  {
+    return this.onTabClose(tab);
+  }
+  
+  // Returns array of all tabs ( <option>'s )
+  property allTabs(v)
+  {
+    get 
+    {
+      var r = [];
+      this.select( :el:r.push(el) , "option");
+      return r;
+    }
+  }
+  
+  // Attempt to close all tabs. 
+  // Each tab will be asked to close by calling tab.close(tab) function (if any) 
+  function closeAll()  
+  {
+    for( var tab in this.allTabs )
+      if(!this.closeTab(tab)) 
+        return false;
+    return true;
+  }
+    
+  // Silently removes the tab.
+  function removeTab( tab ) 
+  {
+    var offstripList = this.select("widget.off-strip menu");
+    for(var ot in offstripList)
+      if( ot.tab === tab )
+      {
+        ot.tab = null;
+        ot.detach();
+        break;
+      }
+    tab.detach();    
+  }
+  
+  // Activates the tab
+  function switchTab(tab)
+  {
+    var prevCurrent = this.select("widget.tabs>option:current");
+    if( prevCurrent )
+    {
+      if( prevCurrent === tab ) return;
+      prevCurrent.current = false;
+    }
+    
+    var offstripList = this.select("widget.off-strip menu");    
+    for(var ot in offstripList)
+      if( ot.tab === tab )
+      {        
+        this.placeTab(tab);
+        tab.@#visible = true; tab.update(true);
+        ot.detach();
+        this.onSize();
+        break;
+      }
+    
+    tab.current = true;
+    this.select("widget.ctl.close").enabled = true;
+    this.onTabSwitch(prevCurrent, tab); // notify observers.
+    this.refresh();
+  }
+ 
+  // ------------- internal methods ---------------
+  // main thing:
+  function onSize()
+  {
+    var offstripButton = this.select("widget.off-strip");  
+    var offstripList = this.select("widget.off-strip menu");
+    var tabs = this.select("widget.tabs");
+    
+    function moveFromOffstrip(tab)
+    {
+      for(var ot in offstripList)
+        if( ot.tab === tab )
+        {
+          ot.tab = null;
+          ot.detach();
+          break;
+        }
+      tab.@#visible = true; // tab.attributes["visible"] = "1";
+      if(!offstripList.length)
+        offstripButton.enabled = false;
+    }
+    function moveToOffstrip(tab)
+    {
+      if(!offstripList.length)
+        offstripButton.enabled = true;
+        var li = tab.clone();
+      li.tab = tab;
+      offstripList.insert(li,0);
+      tab.@#visible = undefined; // tab.attributes.remove("visible"); 
+    }
+   
+    var tabs_width = tabs.box(#width);
+
+    for(var tab in tabs )
+    {
+      var right_edge = tab.box(#right,#border,#parent);
+      if( (right_edge < tabs_width) && !tab.@["visible"]  )
+        moveFromOffstrip(tab);
+      else if( (right_edge > tabs_width) && tab.@["visible"]  )
+        moveToOffstrip(tab);
+    }
+  }
+  
+  function onControlEvent(evt)
+  {
+    if(evt.type == Event.BUTTON_PRESS && evt.target.tag == "option")
+    {
+      this.switchTab(evt.target);  
+      return true; 
+    }
+    if(evt.type == Event.MENU_ITEM_CLICK)
+    {
+      var menuItem = evt.target;
+      var tab = menuItem.tab;
+      this.placeTab(tab);
+      tab.@#visible = true;// tab.update(true);
+      menuItem.detach(); // delete this menu item
+      this.onSize();
+      this.switchTab(tab);
+      return true;
+    }
+    if(evt.type == Event.BUTTON_CLICK && evt.target.match("widget.close"))
+    {
+      var ctab = this.select("widget.tabs>option:current");
+      this.closeTab( ctab ); 
+      return true;
+    }
+    return false;
+  }
+  
+
+  
+}

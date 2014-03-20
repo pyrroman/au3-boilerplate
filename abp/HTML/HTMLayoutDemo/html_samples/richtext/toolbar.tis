@@ -1,0 +1,47 @@
+type ToolbarButton: Behavior
+{
+  function onMouse(evt)
+    {
+      if(!evt.mainButton) 
+          return false;
+  
+      switch(evt.type)
+      {
+        case Event.MOUSE_DOWN:
+          this.setState(Element.STATE_CURRENT, false);
+          return true;
+        case Event.MOUSE_UP:
+          if(this.getState(Element.STATE_CURRENT)) 
+          {
+            this.onClick();
+            return true;   
+          }
+          return false;
+      }       
+      return false;
+    }
+  // this method needs to be redefined for each button instance.
+  function onClick()
+  {
+    stdout.printf("ATTN:not bound button %s\n", this.attributes["id"]);
+  }
+}
+
+// Toolbar selector handler
+type ToolbarSelector: Behavior
+{
+  function onControlEvent(evt)
+    {
+      if(evt.type == Event.SELECT_SELECTION_CHANGED)
+      {
+        this.onValueChanged(this.value); 
+        return true;
+      }       
+      return false;
+    }
+  // this method needs to be redefined for each selector instance.
+  function onValueChanged(val)
+  {
+    stdout.printf("ATTN:not bound select %s\n", this.attributes["id"]);
+  }
+}

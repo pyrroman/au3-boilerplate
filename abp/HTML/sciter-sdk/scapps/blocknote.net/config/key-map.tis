@@ -1,0 +1,48 @@
+// decorators are needed as this file is using them:
+include "../code/decorators.tis";
+
+// global key map 
+@key 'S' @CTRL @NOSHIFT @NOALT: { saveFile(); return true; } // Ctrl-S
+@key 'S' @CTRL @SHIFT   @NOALT: { saveFile(true); return true; } // Ctrl-Shift-S
+@key 'F' @CTRL @NOSHIFT @NOALT: { gSearchBar.activate(false); return true; } // Ctrl-F
+@key 'R' @CTRL @NOSHIFT @NOALT: { gSearchBar.activate(true); return true; } // Ctrl-R
+
+// key map of actions used in HTML WYSIWYG editor
+class HTML_WYSIWYG_BEHAVIOR: Behavior
+{
+  // Note 'this' here is an instance of Richtext class
+  @key 'B' @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:strong");  } 
+  @key 'I' @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:em");  } 
+  @key 'U' @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:u");  }   
+  @key 'D' @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:code");  }   
+  @key 'K' @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:pre");  }   
+  @key 'A' @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:selectall");  }   
+  
+  // headers
+  @key Event.VK_NUMPAD1 @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:h1");  }   
+  @key Event.VK_NUMPAD2 @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:h2");  }   
+  @key Event.VK_NUMPAD3 @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:h3");  }   
+  @key Event.VK_NUMPAD4 @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:h4");  }   
+  @key Event.VK_NUMPAD5 @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:h5");  }   
+  @key Event.VK_NUMPAD6 @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:h6");  }   
+  
+  // lists
+  @key Event.VK_NUMPAD0 @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:li-ol");  }   
+  @key Event.VK_DECIMAL @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:li-ul");  }   
+  @key Event.VK_DIVIDE  @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:dt-dl");  }  // first definition term in definition list 
+  
+  // lists and indentation (blockquote)
+  @key Event.VK_ADD      @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:indent-inc");  }  // Ctlr + Numpad"+" 
+  @key Event.VK_SUBTRACT @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:indent-dec");  }  // Ctlr + Numpad"-" 
+  
+  // tables 
+  @key 'M' @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:merge-cells"); }   
+  @key '/' @CTRL @NOSHIFT @NOALT: { return this.execAction("richtext:split-cells-by-rows"); }   
+  @key '/' @CTRL @SHIFT   @NOALT: { return this.execAction("richtext:split-cells-by-cols"); }   
+  
+  //show/hide rulers
+  //static ustring s_SHOW_RULES  = L"richtext:show-rulers";
+  
+}
+
+ 

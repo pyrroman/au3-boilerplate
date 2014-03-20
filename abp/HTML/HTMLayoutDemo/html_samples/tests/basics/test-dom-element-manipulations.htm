@@ -1,0 +1,101 @@
+<html>
+  <head>
+    <style>
+      body { height:100%%; }
+      #sandbox 
+      { 
+        height:50%%; 
+        border:1px dotted silver; 
+        margin:4px;
+        overflow:auto;
+      }
+      #output 
+      { 
+        height:50%%; 
+        border:1px dotted silver;
+        margin:4px;
+        overflow:auto;
+      }
+    </style>
+    <script type="text/tiscript">
+    
+    var sandbox = self.select("#sandbox");
+    var output = self.select("#output");
+    
+    if( !sandbox || !output ) throw "select is not working or bad DOM";
+	
+    
+    // Event handler of onControlEvent
+    self.onControlEvent = function(evt)
+    {
+      if(evt.type == Event.BUTTON_CLICK)
+      {
+         var name = evt.target.attributes["name"];
+         try {
+           var handler = eval( String.printf("on_%s_click", name));
+           if( handler instanceof Function )
+            // we've got function onNameClick defined, let's call it.
+             return handler(evt.target);
+         } 
+         catch( er )
+         {
+           output.html = "<pre>" + er.toString() + "</pre>";   
+           output.update(true);
+         }
+      }
+      return false;
+    }
+    
+    
+    function on_Insert_click(el)
+    {
+        sandbox.insert("<h1>New</h1>",0);
+        sandbox.update(true);
+    }
+    function on_Append_click(el)
+    {
+        sandbox.insert("<h1>New</h1>",sandbox.length);
+        sandbox.update(true);
+    }
+    function on_Replace_click(el)
+    {
+        output.html = "was:" + sandbox[0].outerHtml.htmlEscape();
+        output.update(true);
+        sandbox[0].outerHtml = "<h1>New</h1>";
+        sandbox.update(true);
+    }
+
+    function on_RemoveInline_click(el)
+    {
+        var toRemove = self.select("#to-remove");
+        var p = toRemove.parent;
+        if(toRemove)
+        {
+          toRemove.remove();
+          p.update();
+        } 
+        else
+          output.value = "Already deleted!";
+    }
+   
+    </script>
+  </head>
+  <body>
+    <h1>Insert HTML functions test</h1>
+    <button name="Insert">Insert At Start</button>
+    <button name="Append">Append</button>
+    <button name="Replace">Replace (outerHtml)</button>
+    <span id="to-remove" style="padding:4px; background-color:yellow">Element to delete</span><button name="RemoveInline">&lt; Remove Inline</button>
+    <h2>sandbox</h2>
+    <div id="sandbox">
+    
+    <div>first</div>
+    <div>second</div>
+    <div>third</div>
+    
+    </div>
+    <h2>output</h2>
+    <pre id="output"></pre>
+  </body>
+</html>
+  

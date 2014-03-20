@@ -1,0 +1,58 @@
+﻿/* Adds an ability to attach many observers to single method of some object:
+
+  So it implements patterns Observer and uses concept of delegates.
+  
+  var vgrid_onChangedCurrent = new MethodObserver(grid_obj, #onSelected);
+  vgrid_onChangedCurrent.attach(this, this.onVgridSelectionChanged);
+  
+  (c) Dmitry Yakimov, support@activekitten.com
+  The code is in public domain.
+*/
+
+class MethodObserver {
+    
+    function getMemberOf(obj, member) { return obj[member] || !obj.prototype || getMemberOf(obj.prototype, member); }  
+
+    function replaceMember(obj, member, val)
+    {
+      if( obj[member] )
+      {
+        this.origin = obj[member];
+        obj[member] = val;
+      }
+      else
+      if( obj.prototype )
+        this.replaceMember(obj.prototype, member, val);
+      else
+        throw "Cannot find a destination";
+    }
+        
+    function this(dst, method_symbol)
+    {
+      this.dst = dst;
+      this.observers = [];
+      
+      var me = this;
+      if( typeof getMemberOf(dst, method_symbol) == #function )
+      {
+        function callback(argv..) 
+        {
+          if( typeof me.origin == #function )
+            me.origin.apply(me.dst, argv);
+            
+          for(var f in me.observers)
+            f[0].apply(f[1], argv);
+        }
+        this.replaceMember(dst, method_symbol, callback);
+      } else
+        throw "Wrong destination type, must be a function";
+    }
+    
+    // creates a delegate
+    function attach(observer_obj, observer_method)
+    {
+      this.observers.push([observer_method, observer_obj]);
+    }
+}
+
+

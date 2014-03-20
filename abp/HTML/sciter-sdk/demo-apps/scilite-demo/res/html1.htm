@@ -1,0 +1,107 @@
+<html>
+<head>
+  <style>
+    html 
+    { 
+      background-color:transparent; 
+      overflow:hidden;
+    }
+    
+    body 
+    {
+      flow: "a . b c"  /* caption collapse close */
+            "d d d d"; /* body */
+      border-spacing: 4px;
+    }
+    
+    body > .window-part
+    {
+      border:2px solid #6d3f20;
+      border-radius:10px;
+      margin:0;
+    }
+    
+    body > widget#window-caption  
+    { 
+      behavior: clickable;
+      background-color:#cc3300; 
+      color:white;
+      padding:2px 4px;
+      float: "a";
+      width:*;
+    }
+    body > widget#window-caption:hover
+    {
+      background-color: tint(#cc3300, 0.5);
+    }  
+    
+    body > widget.button 
+    { 
+      behavior: clickable;
+      padding:2px 4px;
+      width:max-intrinsic;
+    }
+    body > widget#window-collapse
+    {
+      float: "b";
+      background-color:#ff6600; 
+      font-family:webdings;
+      text-align:center;
+    }
+    body > widget#window-close
+    {
+      float: "c";
+      background-color:#cc9900; 
+      font-family:webdings;
+      text-align:center;
+    }
+    body > widget#window-close:hover
+    {
+      background-color: tint(#cc9900, 0.5);
+    }     
+    
+    body > div#window-body
+    {
+      float: "d";
+      background-color:#ffcc99; 
+      padding:4px;
+      height:*;
+      width:*;
+      overflow:auto;
+    }
+    form{ width:*; height:*; margin:0 }
+    richtext { width:*; height:*; }
+    
+  </style>
+  <script type="text/tiscript">
+    self.select("p#out").text = "loaded!";
+    self.select("#test").onClick = function()  
+    {
+      self.select("p#out").text = "Got click!";
+    };
+    /*function view.testHit(x,y)
+    {
+       //var el = self.find();
+    }*/
+  </script>
+</head>
+<body>
+  <widget.window-part .caption #window-caption>Hi!</widget>
+  <widget.window-part .button  #window-collapse>0</widget>
+  <widget.window-part .button  #window-close>r</widget>
+  <div.window-part #window-body>
+    Form tests:
+    <form>
+      <div>Button: <button #test>Test</button></div>
+      <div>Text: <input type=text value=Test></div>
+      <div>Select: <select><option>One</option>
+                           <option>Two</option></select></div>
+      Richtext: 
+      <richtext>
+         Hello <b>World</b>
+      </richtext>
+    </form>
+    <p #out>.</p> 
+  </div>
+</body>
+</html>

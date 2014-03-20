@@ -1,0 +1,11 @@
+
+namespace Tests
+{
+  class Passed: Behavior
+  {
+    function attached()
+    {
+      this.$content( <b>Passed!</b> );
+    }
+  }
+}

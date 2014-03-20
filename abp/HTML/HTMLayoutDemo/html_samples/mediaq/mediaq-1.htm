@@ -1,0 +1,46 @@
+<html>
+<head>
+  <style>
+  
+  @const COLOR: magenta;
+  
+  @media screen 
+  {
+    @const COLOR: red;
+    body { color:@COLOR; }
+  }
+  
+  @media screen && test
+  {
+    body { color:green; }
+  }
+  
+  @media testint > 100
+  {
+    body { color:blue; }
+  }
+
+  
+  </style>  
+  <script type="text/tiscript">
+  
+  var mv = view.mediaVars();
+  stdout.printf("%V\n",mv);
+  
+  $( button#test ).onClick = function()
+  {
+    view.mediaVars{test:true};
+  }
+  $( button#test2 ).onClick = function()
+  {
+    view.mediaVars{testint:200};
+  }  
+    
+  </script>  
+</head>
+<body>
+  <button #test>Add 'test' variable</button>
+  <button #test2>Add 'testint:200' variable</button>
+  <p>test</p>
+</body>
+</html>

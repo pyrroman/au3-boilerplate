@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <title></title>
+    <style>
+    </style>
+    <script type="text/tiscript">
+      var tbl = self.$(table);
+      var stats = self.$(span#stats);
+      
+      self.$(button#delete-cols).onClick = function()
+      {
+        var col = self.$(input#col-no).value;
+        var num = self.$(input#col-num).value || 1;
+        tbl.removeColumns(col, num);
+        updateStats();
+      }
+      self.$(button#delete-rows).onClick = function()
+      {
+        var row = self.$(input#row-no).value;
+        var num = self.$(input#row-num).value || 1;
+        tbl.removeRows(row, num);
+        updateStats();
+      }
+      
+      function updateStats()
+      {
+        stats.value = String.printf("%dx%d",tbl.columns,tbl.rows);
+      }
+      
+      updateStats();
+      
+    </script>
+  </head>
+<body>
+  <h1>Table operations demo</h1>
+  Column: <input #col-no type=number value=0 step=1 /> Columns: <input #col-num type=number value=1 step=1 /> <button #delete-cols>Delete</button><br/>
+  Row: <input #row-no type=number value=0 step=1/> Rows: <input #row-num type=number value=1 step=1 /> <button #delete-rows>Delete</button><br/>
+  The table (<span #stats />):
+  <table border="1" cellpadding="1" cellspacing="1" width="100%">
+    <tr>
+      <td colspan="4">1.1</td>
+    </tr>
+    <tr>
+      <td colspan="2">2.1</td>
+      <td>2.3</td>
+      <td>2.4</td>
+    </tr>
+    <tr>
+      <td rowspan="3">3.1</td>
+      <td>3.2</td>
+      <td colspan="2">3.3</td>
+    </tr>
+    <tr>
+      <td colspan="2">4.2</td>
+      <td rowspan="2">4.4</td>
+    </tr>
+    <tr>
+      <td>5.2</td>
+      <td>5.3</td>
+    </tr>
+  </table>
+</body>
+</html>

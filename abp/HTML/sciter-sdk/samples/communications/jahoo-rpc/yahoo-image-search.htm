@@ -1,0 +1,73 @@
+﻿<html>
+<head>
+<style> 
+
+  html 
+  { 
+    background-color: threedface; 
+  }
+  #sandbox 
+  { 
+    //margin:20px; 
+    //padding:20px; 
+    overflow:auto;
+    //background-color:window; 
+    //border:1px solid threedface; 
+    width:*; height:*;
+  }
+  
+  #tree 
+  {
+    prototype:Tree;
+    height:*;
+  }
+  
+  #tree var
+  {
+    font-style:normal;
+    text-decoration:underline;
+  }
+
+  
+  #indicator 
+  {
+    background-image: url(indicator.png);
+    background-repeat: expand;
+    background-position: 12px 12px 12px 12px;
+    
+    padding:4px 4px 4px 20px; 
+    visibility:hidden;
+    position:fixed;
+    width: max-intrinsic;
+    right:10px;
+    bottom:10px;
+  }
+  
+  #indicator:busy // that small spinning thing...
+  {
+    visibility:visible;
+    foreground-image:url(res:activity.gif); 
+    foreground-repeat:no-repeat; 
+    foreground-position:4px 50%; 
+  }
+      
+</style>
+  <script src="sciter:lib/root-extender.tis" type="text/tiscript"/> 
+  <script src="sciter:lib/behaviors/tree.tis" type="text/tiscript"/> 
+  <script type="text/tiscript">
+    include "yahoo-image-search.tis";
+  </script>
+</head>
+
+<body>
+<h1>Yahoo web service demo, search for image on the Web:</h1>
+Image to search <input type="text" id="query" value="?" />
+<button id="ImageSearch">Call Yahoo for images</button>
+<frameset cols="*,*">
+  <widget id="tree" type="select"></widget>
+  <widget id="sandbox" type="textarea"></widget>
+</frameset>
+<div id="indicator">Talking...</div>
+</body>
+
+</html>

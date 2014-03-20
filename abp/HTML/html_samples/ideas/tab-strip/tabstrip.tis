@@ -1,0 +1,139 @@
+
+
+type TabStrip: Behavior // widget.tab-strip ctl
+{
+  function attached()
+  {
+    this.insert 
+    (
+      "<widget.tabs />"
+      "<widget.ctl.off-strip disabled>7<menu.popup /></widget>"
+      "<widget.ctl.close disabled>r</widget>"
+    );
+  }
+  
+  function onTabSwitch(oldtab,newtab) // overridable, tabstrip.onTabSwitch = function(oldtab,newtab) {}
+  {} 
+  function onTabClose(oldtab) {} // another one
+
+  // main thing:
+  function onSize()
+  {
+    var offstripButton = this.select("widget.off-strip");  
+    var offstripList = this.select("widget.off-strip menu");
+    var tabs = this.select("widget.tabs");
+    
+    function moveFromOffstrip(tab)
+    {
+      for(var ot in offstripList)
+        if( ot.tab === tab )
+        {
+          ot.tab = null;
+          ot.detach();
+          break;
+        }
+      tab.@#visible = true; // tab.attributes["visible"] = "1";
+      if(!offstripList.length)
+        offstripButton.enabled = false;
+         
+    }
+    function moveToOffstrip(tab)
+    {
+      if(!offstripList.length)
+        offstripButton.enabled = true;
+        var option = tab.clone();
+      option.tab = tab;
+      offstripList.insert(option,0);
+      tab.@#visible = undefined; // tab.attributes.remove("visible"); 
+    }
+   
+    var tabs_width = tabs.box(#width);
+    
+    if( this.getState(Element.STATE_IS_RTL) )
+      for(var tab in tabs )
+      {
+        var left_edge = tab.box(#left,#border,#parent);
+        //stdout.printf("left_edge=%d\n",left_edge);
+        if( (left_edge >= 0) && !tab.@["visible"]  )
+          moveFromOffstrip(tab);
+        else if( (left_edge < 0) && tab.@["visible"]  )
+          moveToOffstrip(tab);
+      }
+    else // ltr   
+      for(var tab in tabs )
+      {
+        var right_edge = tab.box(#right,#border,#parent);
+        if( (right_edge < tabs_width) && !tab.@["visible"]  )
+          moveFromOffstrip(tab);
+        else if( (right_edge > tabs_width) && tab.@["visible"]  )
+          moveToOffstrip(tab);
+      }
+  }
+  
+  function onControlEvent(evt)
+  {
+    if(evt.type == Event.BUTTON_PRESS && evt.target.tag == "option")
+    {
+      this.switchTab(evt.target);  
+      return true; 
+    }
+    if(evt.type == Event.MENU_ITEM_CLICK)
+    {
+      var menuItem = evt.target;
+      var tab = menuItem.tab;
+      tab.parent.insert(tab,0); // move it as a first one
+      tab.@#visible = true; 
+      menuItem.detach(); // delete this menu item
+      this.onSize();
+      this.switchTab(tab);
+      return true;
+    }
+    if(evt.type == Event.BUTTON_CLICK && evt.target.match("button.close"))
+    {
+      var ctab = this.select("widget.tabs>option:current");
+      this.closeTab( ctab ); 
+      return true;
+    }
+    return false;
+  }
+  
+  function addTab( label, filename ) 
+  {
+    var tab = this.select("option[value='%s']", filename);
+    if( !tab )
+    {
+      // create new one 
+      tab = new Element("option", label);
+      tab.@#value = filename;
+      tab.@#visible = true;
+      this[0].insert(tab); // add this tab to the .tabs
+      this.post(this.onSize,true); // delay resizing
+    }
+    return tab;   
+  }
+  function removeTab( tab ) 
+  {
+    for(var ot in offstripList)
+      if( ot.tab === tab )
+      {
+        ot.tab = null;
+        ot.detach();
+        break;
+      }
+    tab.detach();    
+  }
+  function switchTab(tab)
+  {
+    var prevCurrent = this.select("widget.tabs>option:current");
+    if( prevCurrent )
+    {
+      if( prevCurrent === tab ) return;
+      prevCurrent.current = false;
+    }
+    tab.current = true;
+    this.onTabSwitch(prevCurrent, tab); // notify observers.
+    this.select("widget.ctl.close").enabled = true;
+    this.refresh(); // need refresh as our tabs overlap siblings
+  }
+  
+}

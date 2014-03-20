@@ -1,0 +1,46 @@
+<widget .tb-button #file-new title="new HTML file"><img src="res:file-new.png" /></widget>
+<widget .tb-button #file-open title="Open HTML file"><img src="res:file-open.png" /></widget>
+<widget .tb-button .menu #file-save><img src="res:file-save.png" />
+  <menu.popup>
+    <li style="foreground:url(res:file-save.png)">Save</li>
+    <li style="foreground:url(res:file-save.png)">Save as ...</li>
+    <li style="foreground:url(res:file-save.png)">Save All</li>
+  </menu>
+</widget>
+<hr/>
+<widget .tb-button command=richtext:cut   title="Cut"><img src="res:edit-cut.png" /></widget>
+<widget .tb-button command=richtext:copy  title="Copy"><img src="res:edit-copy.png" /></widget>
+<widget .tb-button command=richtext:paste title="Paste"><img src="res:edit-paste.png" /></widget>
+<hr/>
+<widget .tb-button command=richtext:undo  title="Undo"><img src="res:edit-undo.png" /></widget>
+<widget .tb-button command=richtext:redo  title="Redo"><img src="res:edit-redo.png" /></widget>
+<hr/>      
+<widget .tb-button #toggle-search-n-replace title="Search and replace"><img src="styles/images/search.png" /></widget>
+<hr/>      
+<widget .tb-button   command=richtext:strong  title="Strong emphasis"><b>B</b></widget>
+<widget .tb-button   command=richtext:em  title="Emphasis"><i>I</i></widget>
+<widget .tb-button   command=richtext:code  title="Code"><tt style="font-size:9px">code</tt></widget>
+<hr/>      
+<widget .tb-button   command=richtext:p  title="Paragraph"><b>P</b></widget>
+<widget .tb-button.h command=richtext:h1 title="Header 1">H<b>1</b></widget>
+<widget .tb-button.h command=richtext:h2 title="Header 2">H<b>2</b></widget>
+<widget .tb-button.h command=richtext:h3 title="Header 3">H<b>3</b></widget>
+<widget .tb-button.h command=richtext:h4 title="Header 4">H<b>4</b></widget>
+<hr/>      
+<widget .tb-button command=richtext:pre title="Block of plain text, <pre>"><tt>pre</tt></widget>
+<hr/>      
+<widget .tb-button command=richtext:li-ul title="List item, unordered list"><img src="res:format-ul.png" /></widget>
+<widget .tb-button command=richtext:li-ol title="List item, unordered list"><img src="res:format-ol.png" /></widget>
+<div .tb-button-group-v>
+  <widget .tb-button command=richtext:dt-dl title="term, definition list"><img src="res:format-dl-dt.png" /></widget>
+  <widget .tb-button command=richtext:dd-dl title="definition, definition list"><img src="res:format-dl-dd.png" /></widget>
+</div>
+<widget .tb-button command=richtext:indent-dec title="Decrease level of list item or quote"><img src="res:format-indent-dec.png" /></widget>
+<widget .tb-button command=richtext:indent-inc title="Increase level of list item or un-quote"><img src="res:format-indent-inc.png" /></widget>
+
+<hr style="margin-left:*"/>
+<widget .tb-button #insert-table><img src="styles/images/table.png" title="Insert table"/></widget>
+<widget .tb-button #insert-hr><img src="hr.png" title="Insert rule"/></widget>
+<hr/>
+<widget .tb-button #rulers command=richtext:show-rulers title="Show/Hide rulers"><img src="rulers.png"/></widget>
+  

@@ -1,0 +1,155 @@
+class ToolbarMenuButton: Behavior
+{
+  function onMouse(evt)
+    {
+ 
+      switch(evt.type)
+      {
+        case Event.MOUSE_UP:
+          if(evt.propButton) 
+            return this.showMenu();          
+          break;
+        //case Event.MOUSE_LEAVE:
+        //  if( (evt.y >= this.box(#height)) )
+        //    return this.showMenu();          
+        //  break;
+        case Event.MOUSE_IDLE:
+          return this.showMenu();
+      }       
+      return false;
+    }
+  function showMenu()
+  {
+    if( this.state.ownspopup )
+      return true;
+
+    var menu = this.select("menu");
+    if( menu )
+    {
+      this.popup(menu,2);
+      return true;
+    }
+  }
+}
+
+// Toolbar selector handler
+class ToolbarSelector: Behavior
+{
+  function onControlEvent(evt)
+    {
+      if(evt.type == Event.SELECT_SELECTION_CHANGED)
+      {
+        this.onValueChanged(this.value); 
+        return true;
+      }       
+      return false;
+    }
+  // this method needs to be redefined for each selector instance.
+  function onValueChanged(val)
+  {
+    stdout.printf("ATTN:not binded select %s\n", this.attributes["id"]);
+  }
+}
+
+class TableButton: Behavior
+{
+  // get popup element, create it if needed
+  function getPopup()
+  { 
+    var popup = this.select("popup.new-table");  
+    if( popup ) 
+      return popup;
+      
+    popup = new Element("popup");
+    popup.attributes#class = "new-table";
+    var table = new Element("table");
+    var i = 0;
+    for(var r = 0; r < 5; ++r)
+    {
+      var row = new Element("tr");
+      for(var c = 0; c < 7; ++c)
+      {
+        var cell = new Element("td");
+        cell.onMouse = this.popupCellOnMouse;
+        row.insert(cell);
+      }
+      table.insert( row );
+    }
+    popup.insert(table);
+    table.onMouse = this.popupTableOnMouse;
+    this.insert(popup);
+    return popup;
+  }
+  
+  function showPopup()
+  {
+      var pe = this.getPopup();
+      this.popup( pe, 2); // show our popup underneath of this element
+  }
+  
+  function onControlEvent(evt)
+  {
+    if( evt.type == Event.BUTTON_PRESS )
+    {
+      this.showPopup();
+      return true;
+    }
+    return false;
+  }  
+  
+  function popupCellOnMouse(evt)
+  {
+    function highlightRegion(cell)
+    {
+      var cidx = cell.index;
+      var ridx = cell.parent.index;
+      var table = cell.parent.parent;
+      for( var i = 0; i < table.length; ++i)
+      {
+        var r = table[i];
+        for( var j = 0; j < r.length; ++j)
+        {
+          var c = r[j];
+          if( c.index <= cidx && c.parent.index <= ridx) 
+            c.setState(Element.STATE_CHECKED);
+          else
+            c.clearState(Element.STATE_CHECKED);
+        }
+      }
+    }
+    
+    // Note 'this' here is our popup element, not button,
+    // because we've atached this function to the popup element
+    switch(evt.type)
+    {
+      case Event.MOUSE_ENTER:
+        highlightRegion(evt.target);
+        return true; 
+      case Event.MOUSE_DOWN:
+        return true; 
+      case Event.MOUSE_UP:
+      {
+        var btn = this.selectParent(".tb-button"); // find our button
+        this.selectParent("popup").clearState(Element.STATE_POPUP); // hide popup
+        if(btn && btn.onCreateNewTable) 
+        {
+          btn.onCreateNewTable( this.parent.index + 1, this.index + 1 );
+        }
+        return true; // to prevent its handling in the button
+      }
+    }
+    return false; 
+  }  
+
+  function popupTableOnMouse(evt)
+  {
+    if(evt.type == Event.MOUSE_LEAVE)
+    {
+      function uncheck(el) { el.clearState(Element.STATE_CHECKED); }
+      this.select(uncheck, "td:checked" );
+      return true; 
+    }
+  }  
+
+  
+}

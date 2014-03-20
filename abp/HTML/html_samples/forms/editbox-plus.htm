@@ -1,0 +1,69 @@
+<html>
+<head>
+  <style>
+  
+  input[type="text"]
+  {
+    prototype: LineEditor;
+  }
+  
+  </style>  
+  <script type="text/tiscript">
+  
+  
+    class LineEditor: Behavior
+    {
+      /*function onFocus(evt)
+      {
+        const BY_KEY_NEXT = 2; // VK_TAB
+        const BY_KEY_PREV = 3; // VK_TAB + VK_SHIFT
+        if( evt.type == Event.GOT_FOCUS && 
+            (evt.reason == BY_KEY_NEXT || evt.reason == BY_KEY_PREV) )
+          this.selectAll();
+      }*/
+      function selectAll()
+      {
+        this.xcall(#selectAll,true);
+        return this;
+      }
+      function select(start,end = undefined)
+      {
+        if( end === undefined ) end = start;
+        this.xcall(#setSelection,start,end);
+        return this;
+      }
+      property selection(v)
+      {
+        get { return this.xcall(#selectionText); }
+        set { this.xcall(#insertText,v); }
+      }
+      property selectionStart(v) 
+      {
+        get { return this.xcall(#selectionStart); }
+      }
+      property selectionEnd(v)
+      {
+        get { return this.xcall(#selectionEnd); }
+      }
+      property selectionLength(v)
+      {
+        get { return this.xcall(#selectionEnd) - this.xcall(#selectionStart); }
+      }
+    }
+    
+    $(button#do-sel).onClick = function()
+    {
+      view.focus = $(#edit).select(0,5);
+    }
+    $(button#do-sel-all).onClick = function()
+    {
+      view.focus = $(#edit).selectAll();
+    }
+    
+  </script>  
+</head>
+<body>
+  <button #do-sel>Select "Hello"</button> <button #do-sel-all>Select All</button><br/>
+  Text: <input #edit type=text value="Hello World!"/> 
+</body>
+</html>

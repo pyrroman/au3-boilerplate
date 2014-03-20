@@ -1,0 +1,38 @@
+/* This is a default style sheet for the richtext widget (WYSYWIG view). 
+   
+   It's main goal to provide styling system that
+   is suitable for editing - e.g. to highlight structure of the
+   document. */
+   
+  html, td
+  { 
+    font: 10pt verdana, arial, sans-serif;
+  }
+
+  tt, code, samp, kbd
+  {
+    font-family: monospace;
+  } 
+ 
+  pre
+  {
+    font-family  : monospace;
+    margin       : 10px 0;
+    padding      : 4px; 
+    background-color: ghostwhite;
+    border       : 1px dotted #ccc;
+  }
+  
+  pre code { color:blue; }
+  
+  p 
+  {
+    margin       : 10px 0;
+  }
+  
+  blockquote
+  {
+    margin       : 10px 0 10px 10px;
+    border-left  : 2px solid #ccc;
+    padding-left : 8px;
+  }

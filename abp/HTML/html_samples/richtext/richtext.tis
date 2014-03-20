@@ -1,0 +1,141 @@
+
+include "xdom.tis";
+
+class RichText: Behavior
+{
+  function attached()
+  {
+    var tbselector = this.attributes#toolbar; 
+    if(!tbselector) /* no 'toolbar' attribute */ return;
+    var tb = self.select(tbselector);
+    if(tb) 
+	    this.bindToolbar(tb);
+	  else
+	    stderr << "toolbar " << tbselector << " not found!\n";
+  }
+
+  function loadHtml(html, baseUrl = "")
+  {
+    return this.xcall( #loadHTML, html, baseUrl );
+  }
+
+  // #emit-no-images - does not emit any image data
+  // #emit-pasted-images - emit data of images that were pasted from clipboard
+  // #emit-local-images - emit data of images that were pasted from clipboard or inserted from file://
+  // #emit-all-images - emit data of all images
+
+  function saveHtml(baseUrl = "", emit_images = #emit-no-images)
+  {
+    return this.xcall( #saveHTML, baseUrl, emit_images );
+  }
+  
+  property readOnly(v)
+  {
+    get return this.xcall( #readOnly );
+    set this.xcall( #readOnly, v );
+  }
+
+  // basic actions.
+  function undo(doit = false)     { return this.xcall(#doUndo); }
+  function redo(doit = false)     { return this.xcall(#doRedo); }
+  function cut(doit = false)      { return this.xcall(#doCut); } 
+  function copy(doit = false)     { return this.xcall(#doCopy); }
+  function paste(doit = false)    { return this.xcall(#doPaste); }
+  
+  // basic actions state indicators.
+  property canUndo(v)             { get return this.xcall(#canUndo); }
+  property canRedo(v)             { get return this.xcall(#canRedo); }
+  property canCut(v)              { get return this.xcall(#canCut); } 
+  property canCopy(v)             { get return this.xcall(#canCopy); }
+  property canPaste(v)            { get return this.xcall(#canPaste); }
+ 
+  function insert(html)           { return this.xcall(#insertHtml, html); }
+  function append(html)           { return this.xcall(#appendHtml, html); }
+  
+  property blockType(v)           { get return this.xcall(#blockType, false); set this.xcall(#blockType, v); }
+  
+  function toggleRulers()         { this.cmdRulers.checked = !this.cmdRulers.checked; this.xcall( #showRulers, this.cmdRulers.checked ); }
+  
+  function indentPlus()           { this.xcall( #doIndentPlus); }
+  function indentMinus()          { this.xcall( #doIndentMinus); }
+
+  property canIndentPlus(v)       { get return this.xcall( #canIndentPlus ); }
+  property canIndentMinus(v)      { get return this.xcall( #canIndentMinus ); }
+  
+  function setSpan( tag, attributes = null ) { this.xcall( #setSpan, tag, attributes ); this.setFocus(); }
+  
+  const ALIGN_LEFT = 1;
+  const ALIGN_CENTER = 2;
+  const ALIGN_RIGHT = 3;
+  const ALIGN_JUSTIFY = 4;
+
+  property alignment(v)
+  {
+    set { this.xcall( #setTextAlign, v); this.setFocus(); }
+    get { var ta = this.xcall( #getCurrentStyle )["text-align"];
+          return ["left","center","right","justify"].indexOf(ta,undefined); }
+  }
+  
+
+  // bind actions with toolbar buttons
+  function bindToolbar(tb)
+  {
+    var rt = this;
+    function bind( selector, func, event_sym = #onClick)
+    {
+      var btn = tb.select(selector); if(!btn) return;
+      btn[event_sym] = func;
+      return btn;
+    }
+    
+    // var holding button | selector | function to do
+    /*
+    
+    We do not need them as behavior:richtext does this for us automagically
+    
+    this.cmdUndo    = bind( #undo,   ::rt.undo() );
+    this.cmdRedo    = bind( #redo,   ::rt.redo() );
+    this.cmdCopy    = bind( #copy,   ::rt.copy() );
+    this.cmdCut     = bind( #cut,    ::rt.cut() );
+    this.cmdPaste   = bind( #paste,  ::rt.paste() );
+    this.cmdH1     = bind( #h1,     ::rt.blockType = "h1" );
+    this.cmdH2     = bind( #h2,     ::rt.blockType = "h2" );
+    this.cmdH3     = bind( #h3,     ::rt.blockType = "h3" );
+    this.cmdH4     = bind( #h4,     ::rt.blockType = "h4" );
+    this.cmdH5     = bind( #h5,     ::rt.blockType = "h5" );
+    this.cmdH6     = bind( #h6,     ::rt.blockType = "h6" );
+    this.cmdP      = bind( #p,      ::rt.blockType = "p" );
+    this.cmdRulers  = bind( ".rulers", ::rt.toggleRulers() );
+    */
+    
+
+    // for the demo purposes
+    var tableHTML = "<table border='1' width=100%>"
+                "<tr><td width=25%>1</td><td>2</td><td>3</td></tr>"
+                "<tr><td>4</td><td>5</td><td>6</td></tr>"
+                "<tr><td>7</td><td>8</td><td>9</td></tr>"
+                "</table>";   
+    this.cmdInsertTable = bind( ".insert-table",  ::rt.insert(tableHTML) );
+    
+  }
+  
+   
+  // this function is inboked by behavior:richtext to indicate that UI needs to be updated
+  function updateUI(  )
+  {
+    /* do not need this as these buttons are bound automagically
+    this.cmdUndo.enabled    = this.canUndo;
+    this.cmdRedo.enabled    = this.canRedo;
+    this.cmdCopy.enabled    = this.canCopy;
+    this.cmdCut.enabled     = this.canCut;
+    this.cmdPaste.enabled   = this.canPaste;
+		var bt = this.blockType;
+	  this.cmdH1.checked = bt == "h1"; this.cmdH2.checked = bt == "h2"; this.cmdH3.checked = bt == "h3";
+	  this.cmdH4.checked = bt == "h4"; this.cmdH5.checked = bt == "h5"; this.cmdH6.checked = bt == "h6";
+	  this.cmdP.checked = bt == "p";
+    */
+    this.cmdInsertTable.enabled   = this.canInsert;
+  }
+
+ 
+}

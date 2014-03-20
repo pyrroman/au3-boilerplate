@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Function _Excel_RangeValidate</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="../css/default.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<h1>Function Reference</h1>
+<font size="+1">_Excel_RangeValidate</font>
+<hr size="2">
+<p>Adds data validation to the specified range.<br></p>
+
+<p class="codeheader">
+#Include &lt;Excel Rewrite.au3&gt;<br>
+_Excel_RangeValidate($oWorkbook, $vWorksheet, $vRange, $iType, $sFormula1[, $iOperator = Default[, $sFormula2 = Default[, $bIgnoreBlank = True[, $iAlertStyle = $xlValidAlertStop[, $sErrorMessage = Default[, $sInputMessage = Default]]]]]])<br>
+</p>
+<p>&nbsp;</p>
+
+<p><b>Parameters</b></p>
+<table border="1" width="100%" cellspacing="0" cellpadding="3" bordercolor="#C0C0C0">
+  <tr>
+    <td width="15%">$oWorkbook</td>
+    <td width="85%">Excel workbook object</td>
+  </tr>
+  <tr>
+   <td>$vWorksheet</td>
+   <td>Name, index or worksheet object. If set to keyword Default the active sheet will be used</td>
+  </tr>
+  <tr>
+   <td>$vRange</td>
+   <td>A range object, an A1 range or keyword Default to validate all cells in the specified worksheet</td>
+  </tr>
+  <tr>
+   <td>$iType</td>
+   <td>The validation type. Can be any of the XlDVType enumeration</td>
+  </tr>
+  <tr>
+   <td>$sFormula1</td>
+   <td>The first part of the data validation equation</td>
+  </tr>
+  <tr>
+   <td>$iOperator</td>
+   <td>Optional: The data validation operator. Can be any of the XlFormatConditionOperator enumeration (default = keyword Default)</td>
+  </tr>
+  <tr>
+   <td>$sFormula2</td>
+   <td>Optional: The second part of the data alidation when $iOperator is $xlBetween or $xlNotBetween. Otherwise it is ignored (default = keyword Default)</td>
+  </tr>
+  <tr>
+   <td>$bIgnoreBlank</td>
+   <td>Optional: If set to True, cell data is considered valid if the cell is blank (default = True)</td>
+  </tr>
+  <tr>
+   <td>$iAlertStyle</td>
+   <td>Optional: The validation alert style. Can be any of the XlDVAlertStyle enumeration (default = $xlValidAlertStop)</td>
+  </tr>
+  <tr>
+   <td>$sErrorMessage</td>
+   <td>Optional: Message to be displayed in a MsgBox when invalid data has been entered (default = keyword Default)</td>
+  </tr>
+  <tr>
+   <td>$sInputMessage</td>
+   <td>Optional: Message to be displayed in a Tooltip when you begin to enter data (default = keyword Default)</td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p><b>Return Value</b></p>
+Success: Returns the range object<br>
+Failure: Returns 0 and sets @error:<br>
+&nbsp;&nbsp;&nbsp; 1 - $oWorkbook is not an object or not a workbook object<br>
+&nbsp;&nbsp;&nbsp; 2 - $vWorksheet name or index are invalid or $vWorksheet is not a worksheet object. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 3 - $vRange is invalid. @extended is set to the COM error code<br>
+&nbsp;&nbsp;&nbsp; 4 - Error returned by the Add method. @extended is set to the COM error code<br>
+<p>&nbsp;</p>
+
+<p><b>Remarks</b></p>
+Parameter $bDisplayAlerts for function _Excel_Open needs to be set to True to display $sErrorMessage.<br>
+<br>
+If you want to validate against a list of values stored in another cell range ($iType = $xlValidateList) then<br>
+$sFormula1 has to start with a "=" (e.g. "=C:C").<br>
+<br>
+Before adding a new validation rule to a range the function deletes existing validation rules.<br>
+<br>
+<p>&nbsp;</p>
+
+<p><b>Related</b></p>
+
+<p>&nbsp;</p>
+
+<p><b>Example</b></p>
+<p class="codebox">
+<br>
+<span><span class="S12">#AutoIt3Wrapper_AU3Check_Stop_OnWarning=Y</span><br>
+<span class="S12">#AutoIt3Wrapper_AU3Check_Parameters=-d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6</span><br>
+<br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Excel Rewrite.au3&gt;</span><br>
+<span class="S11">#include</span><span class="S0"> </span><span class="S7">&lt;Constants.au3&gt;</span><br>
+<br>
+<span class="S1">; Create application object and open an example workbook</span><br>
+<span class="S5">Global</span><span class="S0"> </span><span class="S9">$oAppl</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_Open</span><span class="S8">(</span><span class="S5">True</span><span class="S8">,</span><span class="S0"> </span><span class="S5">True</span><span class="S8">)</span><br>
+<span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Exit</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeValidate Example"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error creating the Excel application object."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S5">Global</span><span class="S0"> </span><span class="S9">$oWorkbook</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S15">_Excel_BookNew</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">)</span><br>
+<span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeValidate Example"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error creating new workbook."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_Close</span><span class="S8">(</span><span class="S9">$oAppl</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Exit</span><br>
+<span class="S5">EndIf</span><br>
+<br>
+<span class="S0">Example1</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">Example2</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">Example3</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<span class="S0">Example4</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<br>
+<span class="S5">Exit</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 1</span><br>
+<span class="S1">; Only values from a list are valid</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example1</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeValidate</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"A1:A10"</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlValidateList</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Yes;No;Don't know"</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeValidate Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error setting range validation."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeValidate Example 1"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Validation against a list of values successfully set for range 'A1:A10'."</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example1</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 2</span><br>
+<span class="S1">; Only values from a list defined in a cell range (column 'D') are valid</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example2</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S1">; Write values to a range</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">Local</span><span class="S0"> </span><span class="S9">$aValidation</span><span class="S8">[]</span><span class="S0"> </span><span class="S8">=</span><span class="S0"> </span><span class="S8">[</span><span class="S7">"10"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"20"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"30"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"40"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"50"</span><span class="S8">]</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeWrite</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$aValidation</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"D1"</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S1">; Only values from the range are valid</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeValidate</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"C:C"</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlValidateList</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"=D:D"</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeValidate Example 2"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error setting range validation."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeValidate Example 2"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Validation against a list of values in cell range '=D:D' successfully set for colum 'C'."</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example2</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 3</span><br>
+<span class="S1">; Only numeric values are valid</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example3</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeValidate</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"B:B"</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlValidateDecimal</span><span class="S8">,</span><span class="S0"> </span><span class="S3">0</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlGreater</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlValidAlertStop</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"You entered a non numeric value!"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Only numeric values are valid."</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeValidate Example 3"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error setting range validation."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeValidate Example 3"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Only numeric values are valid in column 'B'."</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example3</span><br>
+<br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S1">; Example 4</span><br>
+<span class="S1">; Custom validation. Sum of all cells in column 'E' has to be &lt; 100</span><br>
+<span class="S1">; *****************************************************************************</span><br>
+<span class="S5">Func</span><span class="S0"> Example4</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">)</span><br>
+<br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S15">_Excel_RangeValidate</span><span class="S8">(</span><span class="S9">$oWorkbook</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"E:E"</span><span class="S8">,</span><span class="S0"> </span><span class="S9">$xlValidateCustom</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"=SUMME(E:E)&lt;=100"</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S5">Default</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Sum of all cells in column 'E' &gt; 100."</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S5">If</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&lt;&gt;</span><span class="S0"> </span><span class="S3">0</span><span class="S0"> </span><span class="S5">Then</span><span class="S0"> </span><span class="S5">Return</span><span class="S0"> </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeValidate Example 4"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Error setting range validation."</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@CRLF</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">"@error = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@error</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S7">", @extended = "</span><span class="S0"> </span><span class="S8">&amp;</span><span class="S0"> </span><span class="S6">@extended</span><span class="S8">)</span><br>
+<span class="S0">&nbsp; &nbsp; </span><span class="S4">MsgBox</span><span class="S8">(</span><span class="S9">$MB_SYSTEMMODAL</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Excel UDF: _Excel_RangeValidate Example 4"</span><span class="S8">,</span><span class="S0"> </span><span class="S7">"Sum of all cells in column 'E' has to be &lt; 100."</span><span class="S8">)</span><br>
+<br>
+<span class="S5">EndFunc</span><span class="S0"> &nbsp;&nbsp;</span><span class="S1">;==&gt;Example4</span></span><br>
+<br><OBJECT id=hhctrl type="application/x-oleobject" classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11" width=58 height=57>
+<PARAM name="Command" value="ShortCut">
+<PARAM name="Button" value="Text:Open this Script">
+<PARAM name="Item1" value=",Examples\HelpFile\_Excel_RangeValidate.au3,">
+</OBJECT>
+<p>&nbsp;</p>
+
+</body>
+</html>

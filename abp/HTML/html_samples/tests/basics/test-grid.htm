@@ -1,0 +1,185 @@
+<html>
+<head>
+<style> 
+
+  @include "text/tiscript" url(sciter:lib/behaviors/grid.tis);
+
+  html { background-color: #fff #e9e8f3 #e9e8f3 #fff; }
+
+  table 
+  { 
+    border:1px solid #bdbccc; 
+    overflow: auto;
+    width:100%%;
+    height:100%%;
+    prototype:Grid;
+  }
+  table th 
+  { 
+    color: white;
+    font-family:"Century Gothic","Verdana"; 
+	  font-size:10pt; 
+    border:none;
+    padding:4px; 
+    background-color:#DDD; 
+    background-image:url(header.png);
+    background-repeat:expand stretch-left stretch-right stretch-middle;
+	  background-position:3px 3px 3px 3px;
+  }
+  table th:hover 
+  { 
+	  color: #ffe598;
+    transition:blend;
+	  background-image:url(header-hover.png);
+  }
+  
+  table tr:nth-child(odd) { background-color:white; } /* each odd row */
+  table tr:nth-child(even) { background-color:#F4F3F9; } /* each even row */
+  
+  table tr:current /* current row */ 
+  { 
+    background-color:#bdbccc; 
+    color:white;
+  } 
+  
+  table td 
+  { 
+    padding:2px; 
+    font-family:"Verdana"; 
+	  font-size:9pt;
+  }
+  
+  table td:nth-child(1) { font-weight:bold; text-align:center; width:10%%; } /* first column */
+  table td:nth-child(2) { border-left:1px solid #bdbccc; color:#8380A0; width:10%%; } /* second column */
+  table td:nth-child(3) /* last column */
+  { 
+     text-align:left;
+     overflow:hidden;        /* three line below - ellipsis */
+     text-overflow:ellipsis;
+     white-space:nowrap;
+     width:80%;
+     border-left:1px solid #bdbccc;
+  } 
+    
+</style>
+  <script src="sciter:lib/root-extender.tis" type="text/tiscript"/> 
+  <script type="text/tiscript">
+
+    function on_AddNewRow_click(btn)
+    {
+      var table = self.select("#thetable");
+      if(!table) { stderr << "thetable is not found";  return; }
+      var row = new Element("tr");
+      row.insert( new Element("td","&yuml;".htmlUnescape()) );
+      row.insert( new Element("td","&yuml;") );
+      row.insert( new Element("td","small y with diaeresis") );
+      table.insert(row,1);
+      table.update(true);
+      table.setCurrentRow(row);
+    }
+
+    function on_RemoveCurrentRow_click(btn)
+    {
+      var table = self.select("#thetable");
+      if(!table) { stderr << "thetable is not found";  return; }
+      if(table.length <= 0) 
+        return;
+      var row = table.getCurrentRow();
+      if(!row)
+        return;
+      var row_index = row.index;
+      row.remove();
+      table.update(true);
+      if( row_index < table.length)
+        table.setCurrentRow(table[row_index]);
+    }
+    
+    // attaching custom handler to onRowClick port. 
+    self.select("#thetable").onRowClick = function( row )
+    {
+      stdout << "got click on row:" << row << "\n";
+    }
+    
+
+    
+    </script>
+
+</head>
+
+<body>
+
+Letters in the Latin-1 Set:
+<table id="thetable"  cellspacing="0" style="margin:20px" fixedrows=1>
+  <tr><th>Character<th>Entity<th>Description</th></tr>
+  <tr><td>&Agrave;<td>&amp;Agrave;<td><font color="brown">capital</font> A <font color="green">with</font> grave = <font color="brown">capital</font> A grave</td></tr>
+  <tr><td>&Aacute;<td>&amp;Aacute;<td><font color="brown">capital</font> A with acute</td></tr>
+  <tr><td>&Acirc;<td>&amp;Acirc;<td><font color="brown">capital</font> A with circumflex</td></tr>
+  <tr><td>&Atilde;<td>&amp;Atilde;<td><font color="brown">capital</font> A with tilde</td></tr>
+  <tr><td>&Auml;<td>&amp;Auml;<td><font color="brown">capital</font> A with diaeresis</td></tr>
+  <tr><td>&Aring;<td>&amp;Aring;<td><font color="brown">capital</font> A with ring above = <font color="brown">capital</font> A ring</td></tr>
+  <tr><td>&AElig;<td>&amp;AElig;<td><font color="brown">capital</font> AE = <font color="brown">capital</font> ligature AE</td></tr>
+  <tr><td>&Ccedil;<td>&amp;Ccedil;<td><font color="brown">capital</font> C with cedilla</td></tr>
+  <tr><td>&Egrave;<td>&amp;Egrave;<td><font color="brown">capital</font> E with grave</td></tr>
+  <tr><td>&Eacute;<td>&amp;Eacute;<td><font color="brown">capital</font> E with acute</td></tr>
+  <tr><td>&Ecirc;<td>&amp;Ecirc;<td><font color="brown">capital</font> E with circumflex</td></tr>
+  <tr><td>&Euml;<td>&amp;Euml;<td><font color="brown">capital</font> E with diaeresis</td></tr>
+  <tr><td>&Igrave;<td>&amp;Igrave;<td><font color="brown">capital</font> I with grave</td></tr>
+  <tr><td>&Iacute;<td>&amp;Iacute;<td><font color="brown">capital</font> I with acute</td></tr>
+  <tr><td>&Icirc;<td>&amp;Icirc;<td><font color="brown">capital</font> I with circumflex</td></tr>
+  <tr><td>&Iuml;<td>&amp;Iuml;<td><font color="brown">capital</font> I with diaeresis</td></tr>
+  <tr><td>&ETH;<td>&amp;ETH;<td><font color="brown">capital</font> ETH</td></tr>
+  <tr><td>&Ntilde;<td>&amp;Ntilde;<td><font color="brown">capital</font> N with tilde</td></tr>
+  <tr><td>&Ograve;<td>&amp;Ograve;<td><font color="brown">capital</font> O with grave</td></tr>
+  <tr><td>&Oacute;<td>&amp;Oacute;<td><font color="brown">capital</font> O with acute</td></tr>
+  <tr><td>&Ocirc;<td>&amp;Ocirc;<td><font color="brown">capital</font> O with circumflex</td></tr>
+  <tr><td>&Otilde;<td>&amp;Otilde;<td><font color="brown">capital</font> O with tilde</td></tr>
+  <tr><td>&Ouml;<td>&amp;Ouml;<td><font color="brown">capital</font> O with diaeresis</td></tr>
+  <tr><td>&times;<td>&amp;times;<td>multiplication sign</td></tr>
+  <tr><td>&Oslash;<td>&amp;Oslash;<td><font color="brown">capital</font> O with stroke = <font color="brown">capital</font> O slash</td></tr>
+  <tr><td>&Ugrave;<td>&amp;Ugrave;<td><font color="brown">capital</font> U with grave</td></tr>
+  <tr><td>&Uacute;<td>&amp;Uacute;<td><font color="brown">capital</font> U with acute</td></tr>
+  <tr><td>&Ucirc;<td>&amp;Ucirc;<td><font color="brown">capital</font> U with circumflex</td></tr>
+  <tr><td>&Uuml;<td>&amp;Uuml;<td><font color="brown">capital</font> U with diaeresis</td></tr>
+  <tr><td>&Yacute;<td>&amp;Yacute;<td><font color="brown">capital</font> Y with acute</td></tr>
+  <tr><td>&THORN;<td>&amp;THORN;<td><font color="brown">capital</font> THORN</td></tr>
+  <tr><td>&szlig;<td>&amp;szlig;<td>small sharp s = ess-zed</td></tr>
+  <tr><td>&agrave;<td>&amp;agrave;<td>small a with grave = small a grave</td></tr>
+  <tr><td>&aacute;<td>&amp;aacute;<td>small a with acute</td></tr>
+  <tr><td>&acirc;<td>&amp;acirc;<td>small a with circumflex</td></tr>
+  <tr><td>&atilde;<td>&amp;atilde;<td>small a with tilde</td></tr>
+  <tr><td>&auml;<td>&amp;auml;<td>small a with diaeresis</td></tr>
+  <tr><td>&aring;<td>&amp;aring;<td>small a with ring above = small a ring</td></tr>
+  <tr><td>&aelig;<td>&amp;aelig;<td>small ae = small ligature ae</td></tr>
+  <tr><td>&ccedil;<td>&amp;ccedil;<td>small c with cedilla</td></tr>
+  <tr><td>&egrave;<td>&amp;egrave;<td>small e with grave</td></tr>
+  <tr><td>&eacute;<td>&amp;eacute;<td>small e with acute</td></tr>
+  <tr><td>&ecirc;<td>&amp;ecirc;<td>small e with circumflex</td></tr>
+  <tr><td>&euml;<td>&amp;euml;<td>small e with diaeresis</td></tr>
+  <tr><td>&igrave;<td>&amp;igrave;<td>small i with grave</td></tr>
+  <tr><td>&iacute;<td>&amp;iacute;<td>small i with acute</td></tr>
+  <tr><td>&icirc;<td>&amp;icirc;<td>small i with circumflex</td></tr>
+  <tr><td>&iuml;<td>&amp;iuml;<td>small i with diaeresis</td></tr>
+  <tr><td>&eth;<td>&amp;eth;<td>small eth</td></tr>
+  <tr><td>&ntilde;<td>&amp;ntilde;<td>small n with tilde</td></tr>
+  <tr><td>&ograve;<td>&amp;ograve;<td>small o with grave</td></tr>
+  <tr><td>&oacute;<td>&amp;oacute;<td>small o with acute</td></tr>
+  <tr><td>&ocirc;<td>&amp;ocirc;<td>small o with circumflex</td></tr>
+  <tr><td>&otilde;<td>&amp;otilde;<td>small o with tilde</td></tr>
+  <tr><td>&ouml;<td>&amp;ouml;<td>small o with diaeresis</td></tr>
+  <tr><td>&divide;<td>&amp;divide;<td>division sign</td></tr>
+  <tr><td>&oslash;<td>&amp;oslash;<td>small o with stroke = small o slash</td></tr>
+  <tr><td>&ugrave;<td>&amp;ugrave;<td>small u with grave</td></tr>
+  <tr><td>&uacute;<td>&amp;uacute;<td>small u with acute</td></tr>
+  <tr><td>&ucirc;<td>&amp;ucirc;<td>small u with circumflex</td></tr>
+  <tr><td>&uuml;<td>&amp;uuml;<td>small u with diaeresis</td></tr>
+  <tr><td>&yacute;<td>&amp;yacute;<td>small y with acute</td></tr>
+  <tr><td>&thorn;<td>&amp;thorn;<td>small thorn</td></tr>
+  <tr><td>&yuml;<td>&amp;yuml;<td>small y with diaeresis</td></tr>
+</table>
+
+<button id="AddNewRow">Add new row test</button>
+<button id="RemoveCurrentRow">Remove current row test</button>
+
+</body>
+
+</html>

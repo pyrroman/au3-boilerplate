@@ -1,0 +1,50 @@
+<html>
+<head>
+  <style>
+    div#status
+    {
+      padding:8px;
+      background-color: threedface;
+    }
+    text.message 
+    {
+      visibility:hidden;
+      prototype:StatusMessage;
+    }
+    text.message:animating 
+    {
+      color:red;
+      visibility:visible;
+      background-color: threedface;
+    }
+  </style>  
+  <script type="text/tiscript">
+    class StatusMessage: Behavior
+    {
+      function show()
+      {
+        var opacity = 1.0;
+        function dissolve() // function-animator 
+        {
+          this.style#opacity = opacity -= 0.01;
+          return opacity > 0.0 ? 40: 0;
+        }
+        this.animate(dissolve);
+      }
+    }
+    
+    self#test.onClick = function() 
+    { 
+      self.select("text.message").show(); 
+    }
+    
+  </script>  
+<head>
+<body>
+  <button #test>Show message</button>  
+  <div #status>
+    <text .message>No more text found!</text>
+  </div>
+
+</body>
+</html>

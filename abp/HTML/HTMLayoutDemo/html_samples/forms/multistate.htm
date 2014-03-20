@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <title></title>
+    <style>
+      select[type=multistate] { style-set: multistate; }
+      
+      @set multistate
+      {
+        :root 
+        { 
+          behavior:none; 
+          flow:stack; 
+          width:max-intrinsic; 
+          height:min-intrinsic; 
+          overflow:hidden;
+          prototype: MultiState url(multistate.tis);
+        }
+        :root > option { visibility:hidden; width:max-intrinsic; }
+        :root > option:current { visibility:visible; width:max-intrinsic; }
+      }
+      
+      div#values { behavior:form; }
+      
+      select.traffic-light 
+      {
+        font:system;
+        background-repeat: no-repeat;
+        background-position: 2px 50%;
+        padding: 2px 2px 2px 64px;
+        border:1px solid gray;
+        line-height:19px;
+      }
+      select.traffic-light:hover 
+      {
+        background-image-transformation: contrast-brightness-gamma(0.7,0.45, 1.2);
+      } 
+      select.traffic-light:disabled 
+      {
+        color: graytext;
+        background-image-transformation: contrast-brightness-gamma(0.15,0.5, 0.25);
+      } 
+      select.traffic-light:tab-focus > option { outline:1px dotted black; }
+      
+      select.traffic-light[state=0] { background-image: url(images/3state-red.png); }
+      select.traffic-light[state=1] { background-image: url(images/3state-yellow.png); }
+      select.traffic-light[state=2] { background-image: url(images/3state-green.png); }
+      
+    </style>
+    <script type="text/tiscript">
+      $(#show).onClick = function()
+      {
+        var form = $(div#values);
+        stdout.printf("%V\n", form.value );
+      }
+    </script>  
+  </head>
+<body>
+  <button #show>Show values</button> 
+  <div #values>
+    <p>Numeric values: 
+    <select type="multistate" .traffic-light name="numeric">
+      <option value=1 >Red</option>
+      <option value=2 selected>Yellow</option>
+      <option value=3 >Green</option>
+    </select></p>
+    <p>Boolean/Nullable:  
+    <select type="multistate" .traffic-light name="boolean">
+      <option value=false>Stop!</option>
+      <option value=null>Steady...</option>
+      <option value=true>Go!</option>
+    </select></p>
+    <p>Textual:  
+    <select type="multistate" .traffic-light name="textual">
+      <option value="stop">Stop!</option>
+      <option value="warning">Steady...</option>
+      <option value="go">Go!</option>
+    </select></p>
+    <p>Disabled:  
+    <select type="multistate" .traffic-light disabled name="disabled">
+      <option value=1>Stop!</option>
+      <option value=2>Steady...</option>
+      <option value=3>Go!</option>
+    </select></p>
+  </div>
+</body>
+</html>

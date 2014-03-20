@@ -1,0 +1,174 @@
+class Views: Behavior
+{
+  function bind(strip)
+  {
+    this.strip = strip;
+    var me = this;
+    strip.onTabSwitch = function(oldtab, newtab) { me.bringToFront(newtab.@#filename).activate(); }
+    strip.onTabClose = function(tab) { return me.closeView(); }
+  }
+
+  function checkExisting(filename)
+  {
+    var existing = this.select("widget[filename='%s']",filename);
+    if( existing )
+    {
+      this.strip.switchTab(existing.tab);
+      return existing;
+    }
+    return null;
+  }
+
+  function installTab(tab_obj, label, filename)
+  {
+    this.insert(tab_obj);
+    var tab = this.strip.addTab(label, filename);
+    tab_obj.tab = tab;
+    this.bringToFront(filename);
+    this.strip.switchTab(tab);   
+  }
+    
+  function createScintillaTab(label, filename)
+  {
+    var scintilla = new Element("widget");
+        scintilla.@#type = "scintilla";
+        scintilla.@#filename = filename;
+        scintilla.@#class = "tabview";
+
+    this.installTab(scintilla, label, filename);    
+    return scintilla;    
+  }
+  
+  function openMasterCSS()
+  {
+    var filename = "__mastercss__";
+    var existing = this.checkExisting(filename);
+    if( existing ) return existing;
+    
+    var scintilla = this.createScintillaTab("Master CSS (r/o)", filename);
+    scintilla.setLexer("css");
+    scintilla.selection = view.getMasterCSS();
+    scintilla.readonly = true;
+    scintilla.changed = false;
+    scintilla.tab.state.checked = false;
+    scintilla.gotoPos(0);    
+    scintilla.activate();
+    return scintilla;    
+  }
+
+  function openOptions()
+  {
+    var filename = "__options__";
+    var existing = this.checkExisting(filename);
+    if( existing ) return existing;
+
+    var options = Options.Load(filename); // load options html and initialize it
+    
+    this.installTab(options, "IDE options", filename);
+
+    Options.Fill(options);
+    
+    return options;
+  }
+
+  function openView(filename = "", readonly = false, lineNo = undefined) 
+  {
+    var ext = filename %~ ".";
+    switch( ext || "" )
+    {
+      case "png":
+      case "jpg":
+      case "gif":
+      case "ico":
+      case "bmp":
+      case "zip":
+      case "rar":
+      case "doc":
+      case "exe":
+      case "xlt":
+        Sciter.launch(filename);
+        return this[0];
+    }
+
+    var scintilla = this.checkExisting(filename);
+    if(!scintilla)
+    {
+      scintilla = this.createScintillaTab(getFileLabel(filename) + (readonly ? " (r/o)" : ""), filename);
+      if( filename == "" )
+      {
+        scintilla.set_utf8();
+      }
+      scintilla.openFile(filename);
+      if( readonly )
+      {
+        scintilla.readonly = true;
+        scintilla.changed = false;
+        scintilla.tab.state.checked = false;       
+      }
+      scintilla.activate();
+    }
+    if(typeof lineNo == #integer)
+    {
+      scintilla.state.focus = true;
+      scintilla.gotoLine(lineNo-3);
+      scintilla.gotoLine(lineNo-1);
+    }
+    return scintilla;
+  }
+  
+  function fileToOpen()
+  {
+    if(this.length)
+      return this[0].fileToOpen();
+    else
+      return view.selectFile(#open);
+  }
+  
+  function closeView()
+  {
+    if( this.length )
+    {
+      var current = this[0]; 
+      if(!current.close())
+        return false;
+      var tab = current.tab;
+      current.remove(); // remove it from the DOM and destroy the scintilla
+      this.strip.removeTab(tab);
+      if( !this.strip.isEmpty )
+        this.strip.switchTab(this[0].tab);
+    }
+    return true;
+  }
+  
+  property current(v)
+  {
+    get return this[0];
+  }
+  
+  function closeAll() 
+  {
+    while(this.length)
+    {
+      if(!this.closeView(false))
+        return false;
+    }
+    return true;
+  }
+
+  function bringToFront(filename) 
+  {
+    if( this.length != 0 )
+    {
+      front = this[0]; 
+      if( front.@#filename == filename )
+        return front;
+      front.deactivate();        
+    }
+    front = this.select("widget[filename='%s']",filename); 
+    this.insert( front, 0 ); // current view is always the first one.
+    front.focus = true;
+    return front;
+  }
+
+
+}

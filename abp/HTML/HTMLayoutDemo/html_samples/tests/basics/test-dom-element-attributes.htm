@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <style>
+      body { height:100%%; }
+      #output 
+      { 
+        margin: 25%% 25%%; width:50%%; height:50%%; 
+        border:1px dotted silver; 
+        padding: 3em;
+        text-align:center; vertical-align:middle; 
+      }
+      #output .result { color:red; }
+      #output .result[passed] { color:green; }
+    </style>
+    <script type="text/tiscript">
+    
+    var thing = self.select("#thing");
+    
+    if( !thing ) throw "select is not working or bad DOM";
+    
+    function passed()
+    {
+       var r = self.select("#output .result");
+       if(!r) throw String.printf("Element with selector #output .result not found");
+       r.text = "passed";
+       r.attributes["passed"]="";
+       r.update(true);
+    }
+    
+    function testAttributes()
+    {
+      var testname = "testAttributes";
+      
+      // basic properties: 
+      
+      if( thing.attributes.length != 2 ) throw testname + " length!";
+      if( thing.attributes.name(0) != "id" ) throw testname + " name(0)!";
+      if( thing.attributes.name(1) != "align" ) throw testname + " name(1)!";
+      if( thing.attributes[0] != "thing" ) throw testname + " [0]!";
+      if( thing.attributes[1] != "center" ) throw testname + " [1]!";
+      if( thing.attributes["id"] != "thing" ) throw testname + " ['id']!";
+      if( thing.attributes["align"] != "center" ) throw testname + " ['align']!";
+      
+      // attribute modification
+      thing.attributes["align"] = "right";
+      if( thing.attributes["align"] != "right" ) throw testname + " ['align'] = 'right'!";
+     
+      // attributes adding and removing
+      thing.attributes["foo"] = "bar";
+      if( thing.attributes.length != 3) throw testname + " adding new attribute 1!";
+      if( !thing.attributes["foo"]) throw testname + " adding new attribute 2!";
+      
+      thing.attributes.remove("foo");
+      //thing.attributes.remove(2);
+      if( thing.attributes.length != 2) throw testname + " removing attribute!";
+ 
+      // atrributes enumeration
+      var s = "";
+      for( var name in thing.attributes )
+        s += String.printf("%s:%s ", name, thing.attributes[name] );
+       
+      if( s != "id:thing align:right ") throw testname + " enumeration -> " + s;
+      
+      // atrributes, clear the collection.
+      var at = self.select("#anotherthing"); 
+      at.attributes.clear();
+      
+      passed();
+      
+    }
+  
+    testAttributes();
+  
+  
+    </script>
+  </head>
+  <body>
+    <h1>DOM access script functions test</h1>
+    <p id="thing" align="center">This is <em>test</em> dom element and if passed shall be <strong>right</strong> aligned.</p>
+    <p id="anotherthing" align="right">And this if passed shall be <strong>left</strong> aligned.</p>
+    <div id="output">
+      Element.attributes test - <strong class="result">failed</strong>
+    </div>
+  </body>
+</html>
+  

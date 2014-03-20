@@ -1,0 +1,86 @@
+function RGB(r,g,b)
+{
+  return (0xff & r) | ((0xff & g) << 8) | ((0xff & b) << 16);
+}
+
+const black = 0;
+const white = 0xffffff;
+const red = RGB(0xFF, 0, 0);
+const offWhite = RGB(0xFF, 0xFB, 0xF0);
+const darkGreen = RGB(0, 0x80, 0);
+const darkBlue = RGB(0, 0, 0x80);
+const darkRed = RGB(0x80, 0, 0);
+
+// Global color constants used in various schemas.
+
+const CODE_COLOR_FORE = black; 
+const CODE_COLOR_COMMENT = darkGreen; 
+const CODE_COLOR_LITERAL = RGB(0,0x80,0x80); // number, char, regexp
+const CODE_COLOR_STRING = RGB(0x80,0,0x80);
+const CODE_COLOR_KEYWORD = RGB(0, 0, 0xD0);
+const CODE_COLOR_IDENTIFIER = black;
+const CODE_COLOR_OPERATOR = darkBlue;
+const CODE_COLOR_KEYWORD_EXT = darkRed;
+
+const TABS_USE_TAB = false;
+const TABS_WIDTH = 2;
+
+var defaultStyle = 
+{
+  fore: black,
+  back: white,
+  size: 10,
+  font: "Courier New",
+};
+
+function fileSelectFilter()
+{
+  var allext = "";
+  var filter = "";
+  for(var lxn in Scintilla.lexers)
+  {
+    var lx = Scintilla.lexers[lxn];
+    for( var fgn in lx.files )
+    {
+      var fg = lx.files[fgn];
+      var fel = "";
+      if( typeof fg.ext == #array )
+        for( var ext in fg.ext )
+        {
+          var mask = String.printf("*.%s", ext);        
+          if( fel.length ) fel += ";";   
+          fel += mask;
+        }
+      else
+        fel = String.printf("*.%s", fg.ext);
+      filter += String.printf("%s files (%s)|%s|",fgn,fel,fel);
+      if(allext.length) allext +=  ";";
+      allext += fel;
+    }
+  }
+  var r = String.printf("Supported files|%s|",allext);
+  r += filter;
+  r += "All files (*.*)|*.*|";
+  return r;
+}
+
+// enumerates all registered extensions and does callback of fun(ext, lexerName, lexer) 
+// Stops enumeration if fun will return true.
+function foreach_extension(fun)
+{
+  for(var lxn in Scintilla.lexers)
+  {
+    var lx = Scintilla.lexers[lxn];
+    for( var fgn in lx.files )
+    {
+      var fg = lx.files[fgn];
+      if( typeof fg.ext == #array )
+      {
+        for( var ext in fg.ext )
+          if(fun(ext,lxn,lx)) break;
+      }
+      else
+        if(fun(fg.ext,lxn,lx)) break;
+    }
+  }
+}

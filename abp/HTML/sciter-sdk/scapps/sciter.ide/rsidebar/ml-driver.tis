@@ -1,0 +1,158 @@
+include "outline-driver.tis";
+
+// handler of editing actions specific to HTML/XML files
+namespace MarkupDriver: Driver 
+  {
+    function doesNotNeedTail(tag)
+    {
+      return tag == "img" || 
+             tag == "input" || 
+             tag == "br" || 
+             tag == "hr";
+    }
+    
+    function inputType(node)
+    {
+      switch(node.tag)
+      {
+        case "button":   return node.typ || "button";
+        case "widget":
+        case "input":    return node.typ || "button";
+        case "select":
+        case "richtext":
+        case "plaintext":
+        case "textarea": return node.typ || "widget";
+      }
+      return null;
+    }
+    
+    
+    function inspectMarkup( text, cb/*function(#head|#tail, obj)*/, html = true )
+    {
+      var stream = Stream.openString(text);
+      if( !stream ) return;
+      
+      var scan = new XMLScanner( stream );
+      if( !scan ) return;
+      
+      var token;
+      var stack = [];
+      var tname = null;
+      var aname = null;
+      var top = null;
+      var startLine = 0;
+      while:main ( token = scan.token() )
+        switch( token )
+        {
+          case XMLScanner.EOF: break main;
+          case XMLScanner.ERROR: cb( #error, stack.last, scan.lineNo );  break main;  
+          case XMLScanner.HEAD:     
+               tname = scan.tag;
+               startLine = scan.lineNo;
+               stack.push( {tag:tname} ); 
+               break;
+          case XMLScanner.HEAD_END: 
+               cb( #head, stack.last, startLine );
+               if( html && doesNotNeedTail(tname)) 
+                 cb( #tail, stack.pop(), scan.lineNo );
+               break;
+          case XMLScanner.EMPTY_HEAD_END:
+               cb( #head-tail, stack.pop(), scan.lineNo );
+               break;
+          case XMLScanner.TAIL:
+               if(html && doesNotNeedTail(scan.tag))
+                 break; //skip it, optional
+               cb( #tail, stack.pop(), scan.lineNo );
+               break;
+          case XMLScanner.ATTR:
+               aname = scan.attribute;
+               top = stack.last;
+               if( aname == "id" )
+                 top.id = scan.value;
+               else if( aname like "#*" )
+                 top.id = aname[1..]; // chop out the first char
+               else if ( aname == "class" )
+                 top.cls = "." + scan.value;
+               else if (aname like ".*" )
+                 top.cls = (top.cls || "") + aname;
+               else if( aname == "type" )
+                 top.typ = scan.value;
+               break;
+           //case XMLScanner.TEXT: 
+           //case XMLScanner.CDATA:
+           //case XMLScanner.PI:    not interesting here
+        }
+        stream.close();
+    }
+    
+    // main thing, builds outline in 'outlineWidget' from text of 'scintilla'   
+    function buildCodeOutline(scintilla, outlineWidget)
+    {
+      var tree = outlineWidget;
+      if(!tree.isVisible)
+        return false;
+      
+      // 'this' here is the instance of Scintilla 
+      var text = scintilla.value;
+      tree.clear();  
+      
+      var node = tree;
+      function cb( headTail, obj, lineNo )
+      {
+        //stdout.printf("%s %v (%d)\n", headTail, obj, lineNo);
+        var expand = false;
+        var name = obj.tag;
+        var intype = inputType(obj);
+        if (intype)
+            name = String.printf("<img.icon type='%s' />%s",intype,name); 
+        if( obj.id )
+            name = String.printf("%s#<span.id>%s</span>", name, obj.id); 
+        if( obj.cls )
+            name = String.printf("%s<span.cls>%s</span>", name, obj.cls); 
+        if( headTail == #head )
+        {
+          var n = new Element("option");
+              n.startLineNo = lineNo;
+          node.insert(n);
+          n.html = name;
+          if( obj.tag == "html" || obj.tag == "body" )
+              n.state.expanded = true;
+          else
+              n.state.collapsed = true;
+          node = n;
+        }
+        else if( headTail == #head-tail)
+        {
+          var n = new Element( "option");
+              n.startLineNo = n.endLineNo = lineNo;
+          node.insert(n);
+          n.text = name;
+        }
+        else if( headTail == #tail )
+        {
+          node.endLineNo = lineNo;
+          node = node.parent;
+        }
+        else if( headTail == #error )
+        {
+          node.endLineNo = lineNo;
+          node.insert(new Element("hr")); // is it good enough error indicator?
+          node = node.parent;
+        }
+      }
+        
+      inspectMarkup( text, cb );    
+      
+      //stdout << "changed!\n";
+    }
+    
+    function scintilla_navigateTo(scintilla, opt)
+    {
+      scintilla.gotoLine(opt.endLineNo - 1);
+      var lineNoZ = opt.startLineNo - 1;
+      var startPos = scintilla.linePos(lineNoZ);
+      var endPos = startPos + scintilla.lineLength(lineNoZ);
+      scintilla.setSelection( endPos, startPos );
+    }
+    
+  }

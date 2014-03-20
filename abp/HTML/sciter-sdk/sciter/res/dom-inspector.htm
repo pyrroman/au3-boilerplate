@@ -1,0 +1,43 @@
+<div #elements>
+  <caption>Elements:</caption> 
+  <ul #current-tags><text>(Use CTRL+SHIFT+Click to select element)</text></ul>
+</div>
+<frameset #inspector-info cols="*,*,*">
+  <div>
+    <caption>Style rules:</caption>
+    <table .list #current-rules />
+  </div>
+  <div>
+    <caption>Current style:</caption>
+    <table .list #current-styles />
+  </div>
+  <div>
+    <caption>Attributes:</caption>
+    <widget .list #current-atts type="select"></widget>
+  </div>
+  <div>
+    <caption>States:</caption>
+    <widget .list #current-states type="select"></widget>
+  </div>
+  <div>
+    <caption titleid="for-current-metrics">Metrics(?):</caption>
+    <widget .list #current-metrics type="select"></widget>
+    <button name="rel-to" type="radio" checked value="parent">parent</button>
+    <button name="rel-to" type="radio" value="root">root</button>
+    <button name="rel-to" type="radio" value="view">view</button>
+    <button name="rel-to" type="radio" value="screen">screen</button>
+    <popup #for-current-metrics style="width:300px">
+     <ul>
+        <li>#margin - margin box edge,</li>
+        <li>#border - border box edge,</li>
+        <li>#padding - padding box edge,</li>
+        <li>#inner, default value - inner box edge,</li>
+        <li>#content - content box edge. Content box here is outline of the content of the element and this is not  an inner box of the element. 
+                    E.g. content box can be bigger than inner box if the element has overflow attribute set.</li>
+        <li>#client - client area, that is #inner box minus areas taken by [optional] scrollbars.</li>
+        <li>#icon - area covered by element's icon. Icon here is element's foreground image with foreground-repeat: no-repeat. 
+                If element has no such image the function returns #width and #height equals to zero.</li>
+      </ul>
+    </popup>
+  </div>
+</frameset>

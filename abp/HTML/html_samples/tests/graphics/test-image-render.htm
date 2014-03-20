@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <style>
+      html { background-color:window window threedface threedface; }
+      
+      div#sandbox
+      {
+        border:1px dotted silver;
+        height:300px; 
+        width:300px; 
+        margin:*;
+      }
+      input#angle 
+      {
+        width:160px;
+      }
+      
+      div#to-be-drawn
+      {
+        display:none;
+        border:2px solid silver;
+        font:12pt Arial;
+        padding:3px;
+        background-color:white white yellow yellow;
+      }
+      
+    </style>
+    <script type="text/tiscript">
+      var sandbox = self.select("#sandbox");
+      var angleCtl = self.select("#angle");
+      var angle = 0;
+     
+      var img = new Image(200,200, 0xffffffff); 
+      
+      var elementToRender = self.select("#to-be-drawn");
+      img.render(elementToRender);
+      
+      function angleCtl.onValueChanged()
+      {
+        angle = angleCtl.value;
+        sandbox.onSize();
+      }
+
+      function sandbox.draw() 
+      {
+        var gfx = this.graphics(0xFFFFFFFF);
+        
+        var width = this.box(#width);
+        var height = this.box(#height);      
+        
+        var imgHalfWidth = img.width/2;    
+        var imgHalfHeight = img.height/2;
+
+        gfx.save();
+          gfx.translate( width/2, height/2 );
+          gfx.rotate( (angle * Math.PI) / 180.0 );
+          gfx.drawImage(img, -imgHalfWidth, -imgHalfHeight);
+        gfx.restore();
+        
+        var padding = height/10;
+        gfx.lineWidth(2);
+        gfx.rectangle(padding, padding, width - 2*padding, height - 2*padding, 20);
+      }
+
+      function sandbox.onSize()
+      {
+        this.draw();
+        this.refresh();
+      }
+    
+    </script>
+  </head>
+  <body>
+    <h1>Drawing HTML on Image test.</h1>
+    Rotate on <input#angle type="hslider" min="-45" max="45" value="0" buddy="angle-buddy" /> <span id="angle-buddy">x</span> degree.
+    <div#sandbox></div> 
+    <div#to-be-drawn>
+      <p>This content will be rendered on the image.</p>
+      <p><i>Test</i> of some <b>styling</b>.</p>
+    </div> 
+  </body>
+</html>
+  

@@ -1,0 +1,74 @@
+<html>
+<head>
+  <style>
+	html {
+		background-color:transparent;
+		
+	}
+	body {
+		font-size: 300%;
+		background-color:rgba(69,115,213,0.75);
+		border:3px solid;
+        border-radius:5% 15% 10% 10%;
+        border-width: 3px 3px 6px 12px;
+		margin:0;
+		padding-bottom:10px;
+		height:5%;
+		
+            
+	}
+	
+	ul {
+	assigned! : 
+	  self.$1(li):current = true, //first li is :current by default
+	  self:focus = true;
+	 //border:1px solid;
+	behavior:menu;
+	list-style: none;
+	padding:0px;
+	margin:0;
+	//overflow:hidden;
+	
+	
+	}
+	p {
+	//border:1px solid yellow;
+	border-bottom:2px solid;
+	border-radius: 0 14% 0 0;
+	//background-color:red;
+	background-color:rgba(17,66,170,0.75);
+	padding:0;
+	margin:0;
+	margin-bottom:10px;
+	
+	}
+	
+	li {
+		 border-radius:5% ;
+		//border:1px solid red;
+	background-color: rgb(6,39,111) rgba(42,69,128,0.20) rgba(42,69,128,0.20) rgb(6,39,111);
+		margin:2px;
+		border:2px solid rgb(6,39,111);
+		text-align:center;
+		font-size:80%;
+		
+	}
+	li:current {
+		background-color: rgba(121,69,214,0.20) rgba(121,69,214,0.20) rgb(121,69,214) rgb(121,69,214);
+		border:3px solid rgb(6,39,111);
+		transition: background-color(linear,0.5s);
+	}
+  </style>  
+  
+</head>
+<body>
+  <ul>
+	<p>menu title</p>
+	<li no=1>Item 1</li>
+	<li no=2>Item 2</li>
+	<li no=3>Item 3</li>
+	<li no=4>Item 4</li>
+	<li no=5>Item 5</li>
+	</ul>
+</body>
+</html>

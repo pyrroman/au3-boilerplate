@@ -1,0 +1,84 @@
+<html>
+<head>
+  <style>
+    @import "facade.css";
+    @import "tabstrip/tabstrip.css";
+    @import "scintilla/scintilla.css";
+    @import "sidebar/sidebar.css";
+    @import "scintilla/schemas/types.css";
+    @import "options/style.css";
+    @import "rsidebar/rsidebar.css";
+  </style>  
+  <script type="text/tiscript">
+    include "tabstrip/tabstrip.tis";
+    include "scintilla/scintilla.tis";
+    include "views/views.tis";
+    include "sidebar/sidebar.tis";
+    include "sidebar/drawrunbutton.tis";
+    include "utils/search-replace.tis";
+    include "utils/log.tis";
+    include "options/options.tis";
+    include "facade.tis";
+    include "keymap.tis";
+    include "rsidebar/rsidebar.tis";
+  </script>  
+</head>
+<body>
+  <div #toolbar >
+    <widget .tb-button #new style="foreground-image:url(res:file-new.png)"  title="Ctrl-N - New file" />
+    <widget .tb-button #open style="foreground-image:url(res:file-open.png)"  title="Ctrl-O - Open exisiting file" />    
+    <widget .tb-button #save style="foreground-image:url(res:file-save.png)"  title="Ctrl-S - save this file or Ctrl-Shift-S to save all" />    
+    <hr />
+    <widget .tb-button #cut style="foreground-image:url(res:edit-cut.png)"  title="Ctrl-X - cut selection" />        
+    <widget .tb-button #copy style="foreground-image:url(res:edit-copy.png)"  title="Ctrl-C - copy selection" />    
+    <widget .tb-button #paste style="foreground-image:url(res:edit-paste.png)"  title="Ctrl-V - paste text from clipboard" />
+    <hr />
+    <widget .tb-button #undo style="foreground-image:url(res:edit-undo.png)"  title="Ctrl-Z - undo last operation" />    
+    <widget .tb-button #run style="foreground-image:url(app://images/application_go.png)"  title="F5 - run project" />    
+    <widget .tb-button #run-current style="foreground-image:url(app://images/application_side_expand.png)"  title="F7 - run current htm file" />    
+    <widget .tb-button #options style="foreground-image:url(app://images/wrench.png)"  title="Alt-F7 - options" />    
+    <hr />
+    <widget .tb-button #master-css style="foreground-image:url(app://images/page_code.png)"  title="Show master styles sheet" />    
+    <widget .tb-button #help style="margin-left:*;foreground-image:url(app://images/information.png)"  title="F1 - help system" />    
+    <!--<div .colors title="Ctrl+L list of colors">
+      <text>Color names:</text>
+      <SELECT name="colors" size=1></SELECT>
+    </div>-->
+  </div>
+  <frameset rows="*,140px">
+    <frameset cols="220px,*,220px">
+      <div #sidebar>
+        <include src="sidebar/sidebar.htm" />
+      </div>
+      <hr/>
+      <div #sandbox>
+        <widget #tab-strip />
+        <hr .caption-bar />
+        <div #views />
+        <include src="scintilla/context-menu.htm" />
+      </div>
+      <hr/>
+      <div #r-sidebar>
+        <include src="rsidebar/rsidebar.htm" />
+      </div>
+    </frameset>
+    <hr .caption-bar/>
+    <pre #log/>
+  </frameset>
+
+  <div #statusbar>
+    <div #search-n-replace>
+        <button #search-n-replace-close .ctl>r</button>
+        Search: <input type="text" #search-text style="margin:50%% 0px;" size=20 maxlength=200 />
+        <button type="checkbox" #search-match-case>Match case?</button>&nbsp;&nbsp;
+        <button type="checkbox" #search-whole-word>Whole word?</button>&nbsp;&nbsp;
+        <button type="checkbox" #search-backward>Backward?</button>&nbsp;&nbsp;
+        <button type="checkbox" #replace-with>Replace by:</button>
+        <input type="text" #replace-text disabled style="margin:50%% 0px;" size=20 maxlength=200 />
+        <button #do-search-next>Next</button> <button id="do-search-all" disabled>All</button>
+        <span #search-result></span>
+    </div>      
+
+  </div>
+</body>
+</html>

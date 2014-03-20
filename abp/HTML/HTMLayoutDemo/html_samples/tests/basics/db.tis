@@ -1,0 +1,76 @@
+
+function CreateObj(name, id)
+{
+  return { 
+          id:     id,
+          name :      name, 
+          contact :   name + "@gmail.com",
+          contactType : "E-mail",
+          address :   name + " city",
+          date :      new Date()
+          };
+}
+
+function fillDbWithData(idx)
+{
+  var name = "Jack Black";
+  for(var i = 0; i < 10; ++i)
+  {
+    var uid = String.UID();
+    idx[uid] = CreateObj(name + i.toString(), uid);
+  }
+}
+
+// open database and initialze it if needed
+function openDatabase(pathname = "test.db")
+{
+  var ndb = Storage.open(pathname);
+  if(!ndb.root)
+  { // new db, initialize structure
+    ndb.root = 
+      {
+        desc    : "test db",
+        items   : ndb.createIndex(#string)        // main index, item.id -> item
+      };
+    fillDbWithData(ndb.root.items);
+  }
+  return ndb;
+}
+
+db = openDatabase();
+
+function showAll()
+{
+    var items_list = self.select("#items-list");
+      
+    if(db.root.items.length == 0)
+    {
+      items_list.html = "{no items found}";
+      return;
+    }
+
+    try 
+    { 
+      items_list.text = ""; // clear it
+      for(var item in db.root.items)
+      {
+        var option = new Element("option"); 
+        items_list.insert(option);
+        option.attributes["value"] = item.id;
+        option.html = 
+          String.printf("name:<em class=name>%s</em> ctype:<em class=contact-type>%s</em> contact:<em class=contact>%s</em> address:<em class=address>%s</em>", 
+                    item.name,
+                    item.contactType,
+                    item.contact,
+                    item.address);
+      } 
+      items_list.update();     
+    }
+    catch(ex)
+    {
+      stdout << "Exception: " << ex << "\n";
+    }
+}
+  
+showAll();
+

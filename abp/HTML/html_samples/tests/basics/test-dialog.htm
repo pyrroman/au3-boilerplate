@@ -1,0 +1,154 @@
+﻿<html>
+<head>
+<style> 
+
+  html 
+  { 
+    background-color: #fff #e9e8f3 #e9e8f3 #fff; 
+  }
+  #sandbox 
+  { 
+    margin:20px; 
+    padding:10px; 
+    overflow:auto;
+    background-color:window; 
+    border:1px solid threedface; 
+    width:*; height:*;
+  }
+  
+  li { margin-top:1em; margin-bottom:1em; border:1px solid; }
+  
+  a[id] 
+  { 
+     behavior:button;  /* hyperlinks with ID will behave as buttons in this sample - will send BUTTON_CLICK */
+     text-decoration:underline; 
+     cursor: pointer;
+  } 
+  a[id]:hover { color:red; }
+  a[id]:active { color:orange; }
+    
+</style>
+  <script src="sciter:lib/root-extender.tis" type="text/tiscript"/> 
+  <script type="text/tiscript">
+    
+    var sandbox = self.select("#sandbox");
+    if(!sandbox) 
+      stderr << "sandbox not found"; 
+
+    function on_ShowDialog1_click(btn)
+    {
+      var v = view.dialog( self.url("samples/sample-dialog-1.htm"));
+      sandbox.value = "sample-dialog-1 returned:" + v;
+    }
+    function on_ShowDialog2_click(btn)
+    {
+      var params = { one: "first", two: "second" }; // parameters to pass
+      var v = view.dialog( self.url("samples/sample-dialog-2.htm"), params );
+      sandbox.value = "sample-dialog-2 returned:" + v;
+    }
+    function on_ShowDialogPos_click(btn)
+    {
+      var pos = btn.attributes["pos"].toInteger() || 0;
+      sandbox.value = view.dialog( self.url("samples/sample-dialog-1.htm"), null, pos);
+    }
+
+    function on_Test_click(btn)
+    {
+      var parameters = 
+      { 
+         type:    #alert,
+         title:   "Test",
+         content: "Test content",
+         buttons: [#yes, #no]
+      }; 
+      
+      var output_stream = Stream.openString();
+      emit("samples/std-msgbox.htm",output_stream, parameters);
+      var v = view.dialog( output_stream, parameters );
+    
+      //var v = view.dialog( "samples/std-dialog.htm");
+      sandbox.value = String.printf("std-dialog returned:%s",v);
+    }
+
+    function on_Alert_click(btn)
+    {
+      var v = view.msgbox( #alert, "Some message here...");
+      sandbox.value = String.printf("view.msgbox returned:%s",v);
+    }
+
+    function on_MsgBox_click(btn)
+    {
+      var v = view.msgbox( #question, "Be or not to be?", "The question:", [#yes, #no]);
+      sandbox.value = String.printf("view.msgbox returned:%s",v);
+    }
+    function on_MsgBoxCaptions_click(btn)
+    {
+      var v = view.msgbox( #question, "Be or not to be?", "The question:", 
+        [ 
+          { id:#yes, text:"To be" }, 
+          { id:#no, text:"Not to be" }
+        ]
+      );
+      sandbox.value = String.printf("view.msgbox returned:%s",v);
+    }
+    function on_MsgBoxCustomIds_click(btn)
+    {
+      var v = view.msgbox( #question, "Be or not to be?", "The question:", 
+        [ 
+          { id:#ToBe, text:"To be" }, 
+          { id:#NotToBe, text:"Not to be" }
+        ]
+      );
+      sandbox.value = String.printf("view.msgbox returned:%s",v);
+    }
+    
+    function on_MsgBoxCaptionsRussian_click(btn)
+    {
+      var v = view.msgbox( #question, "Be or not to be?", "The question:", 
+        [ 
+          { id:#yes, text:"Быть" }, 
+          { id:#no, text:"Не быть" }
+        ]
+      );
+      sandbox.value = String.printf("view.msgbox returned:%s",v);
+    }
+    
+    </script>
+
+</head>
+
+<body>
+<h1>Modal dialog samples</h1>
+<h2>Custom dialogs</h2>
+<ul>
+  <li><a id="ShowDialog1">simple dialog</a></li>
+  <li><a id="ShowDialog2">parametrized dialog</a></li>
+  <li>Dialog positioning:<br/>
+    <a id="ShowDialogPos" pos=7>7-top/left</a>
+    <a id="ShowDialogPos" pos=8>8-top/center</a>
+    <a id="ShowDialogPos" pos=9>0-top/right</a>
+    <a id="ShowDialogPos" pos=4>4-center/left</a>
+    <a id="ShowDialogPos" pos=5>5-center/center</a>
+    <a id="ShowDialogPos" pos=6>6-center/right</a>
+    <a id="ShowDialogPos" pos=1>1-bottom/left</a>
+    <a id="ShowDialogPos" pos=2>2-bottom/center</a>
+    <a id="ShowDialogPos" pos=3>3-bottom/right</a><br/>
+    (see NUMPAD on keyboard for the position values).
+  </li>
+  <li><a id="Test">Std msgbox simulation using dialog</a>. See sdk/samples.tests/tests/samples/std-msgbox.htm</li>
+  <li>Message Box:
+     1) <a id="Alert">Alert</a> 
+     2) <a id="MsgBox">Yes/No</a>
+     3) <a id="MsgBoxCaptions">Custom Captions</a>
+     4) <a id="MsgBoxCustomIds">Custom Ids</a>
+     5) <a id="MsgBoxCaptionsRussian">Russian Captions</a></li>
+     
+</ul>
+
+<pre id="sandbox">
+  sandbox
+</pre>
+
+</body>
+
+</html>

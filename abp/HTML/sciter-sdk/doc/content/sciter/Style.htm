@@ -1,0 +1,96 @@
+<html>
+  <head>
+    <meta name="source"/>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <div><strong><font size="6">Style object</font></strong></div>
+  <p>Represents style attributes of the DOM <a href="Element.htm">element</a>.</p>
+  <p>To access Style object of the element use its <em>style</em> property: element.style</p>
+  <p>Note that TIScript supports extended get-by-symbol notation so</p>
+  <p><code>el.style[&quot;background-color&quot;] = &quot;red&quot;; // is an equivalent of</code></p>
+  <p><code>el.style#background-color = &quot;red&quot;; // extended &quot;symbol&quot; notation</code></p>
+  <p>To clear particular CSS attribute value that was set in runtime simply assign <em>undefined</em> value to it:</p>
+  <p><font face="Courier New"><code>el.style#background-color = undefined; // </code></font>clear runtime style attribute - its computed value will be determined by normal CSS cascading process.</p>
+  <div align="left">
+    <table border="0" cellspacing="4" width="100%">
+      <tr>
+        <td colspan="2">
+          <h2>Properties</h2></td></tr>
+      <tr>
+        <td width="117" bgcolor="#ffffff" valign="top" align="right"><strong><em>[attname]</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><em>string</em>, value of style attribute <em>attname </em>(CSS). &nbsp;<em>attname </em>here is a string or a symbol. Read-write index accessor.</div>
+          <p>See <a href="http://www.terrainformatica.com/htmlayout/cssmap.whtm">list of supported names of CSS attributes</a>.</p>
+          <p>To clear value of style attribute assign <em>undefined</em> value to it:</p>
+          <p><font face="Courier New">el.style#background-color = undefined;</font></p></td></tr>
+      <tr>
+        <td width="117" bgcolor="#ffffff" valign="top" align="right"><em><strong>backgroundImageWidth</strong></em></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><em>integer</em> | <em>undefined</em>, width in pixels of background image if it is available or <em>undefined</em> if background image is available.</div></td></tr>
+      <tr>
+        <td width="117" bgcolor="#ffffff" valign="top" align="right"><em><strong>backgroundImageHeight</strong></em></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><em>integer</em> | <em>undefined</em>, height in pixels of background image if it is available or <em>undefined</em> if background image is available.</div></td></tr>
+      <tr>
+        <td width="117" bgcolor="#ffffff" valign="top" align="right"><em><strong>foregroundImageWidth</strong></em></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><em>integer</em> | <em>undefined</em>, width in pixels of foreground image if it is available or <em>undefined</em> if foreground image is available.</div></td></tr>
+      <tr>
+        <td width="117" bgcolor="#ffffff" valign="top" align="right"><em><strong>foregroundImageHeight</strong></em></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><em>integer</em> | <em>undefined</em>, height in pixels of foreground image if it is available or <em>undefined</em> if foreground image is available.</div></td></tr>
+      <tr>
+        <td colspan="2" valign="top">
+          <h2>Methods</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>clear</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong>() </strong>returns: Style</div>
+          <p>Clears all attributes previously set by using [attname] accessor for the element or the set() function.</p>
+          <p>Returns the style object itself allowing to chain the call with the set()</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>set</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong>(</strong> attributes: Object <strong>)</strong> returns: Style</div>
+          <p>Sets or clears multiple style attributes on the element. As function accepts single object pareameter then it can be used with &quot;object-call&quot; notation:</p>
+          <pre>el.style.set {
+   display: &quot;block&quot;,
+   width: px(40),
+   height: px(20)
+};
+</pre></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>rules</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong>( ) </strong>returns: Array</div>
+          <p>Returns array of style rules applied to the element. Each element of the array is an object of following types:</p>
+          <ul>
+            <li>{ <em>type</em>: <strong>#style-rule</strong>, <em>selector</em>: &lt;string&gt;, <em>file</em>: &lt;string&gt;, <em>lineNo</em>: integer; } - for the rule defined in CSS;</li>
+            <li>{ <em>type</em>: <strong>#inline-style</strong>, <em>text</em>: &lt;string&gt; } - for styles defined by the style=&quot;...&quot; attribute in the DOM;</li>
+            <li>{ <em>type</em>: <strong>#runtime-style</strong> } - designates that the element has styles set in runtime through script.</li></ul></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em><strong>all</strong></em></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong>(</strong> <strong>)</strong> returns: Object</div>
+          <p>Gathers all style defined style attributes and returns them as an object.</p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>constant</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div><strong>( </strong><em>name</em>: string | symbol<strong> ) </strong>returns: value | array</div>
+          <p>Returns value of CSS constant defined in CSS. It could be single value for the case (CSS):</p>
+          <p><font face="Courier New">@const SINGLE: #ff007f;</font></p>
+          <p>or array for the case like:</p>
+          <p><font face="Courier New">@const MULTY: 12px 14px;</font></p></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em><strong>dimension</strong></em></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>(<em>width</em>: length | int | undefined, <em>height</em>: length | int | undefined [, <em>delayed</em>: false | true] )</div>
+          <p>The <em>dimension</em> method is an equivalent of setting these two style attributes:</p>
+          <pre>elem.style.width = ... ;
+elem.style.height = ... ;
+</pre>
+          <p>The only difference is when last parameter <em>delayed</em> = <code>true</code> is provided. With it the method changes dimensions of the element immediately and defers remeasurement of children for some later time. It makes sense to use this method if you need to update dimensions of the <em>overflow:auto | scroll</em> element with many children in response of some frequent events like MOUSE_MOVE (E.g. in custom splitter implementation). In this case mutiple MOUSE_MOVEs will end up in only one remeasurement of element's content.</p></td></tr></table></div>
+  <div></div>
+</body>
+</html>

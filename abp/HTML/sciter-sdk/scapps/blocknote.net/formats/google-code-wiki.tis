@@ -1,0 +1,128 @@
+// GoogleCode wiki format handler
+
+// Reference: http://code.google.com/p/support/wiki/WikiSyntax
+
+namespace GoogleCodeWiki
+{
+  // converts content of the richtext widget to GoogleCodeWiki format
+  function toText(richtext /*widget*/, what = #document)
+  {
+    var out = Stream.openString();  
+    var listStack = [];
+    var quoteLevel = 0;
+    var isPre = false;
+    
+    function indentListItem()
+    {
+      out << "\r\n";
+      for( var n = 0; n < listStack.length; ++n ) 
+        out << "  "; 
+      if( listStack.last == #ul )
+        out << "* "; 
+      else 
+        out << "# "; 
+    }
+    function indentQuotes(forceLF = false)
+    {
+      if(quoteLevel || forceLF)
+      {
+        out << "\r\n";  
+        for( var n = 0; n < quoteLevel; ++n )
+          out << "  "; 
+      }
+    }
+    
+    function elementStart(tag,atts,elementType,elementUID) 
+    {
+      switch( tag )
+      {
+        case #i:
+        case #em:      out << "_";    break;
+        case #b: 
+        case #strong:  out << "*";    break;
+        case #tt:      out << "`";    break;
+        case #code:    out << "{{{";  break;
+        case #sup:     out << "^";    break;
+        case #sub:     out << ",,";   break;
+        case #strike:  out << "~~";   break;  
+        
+        case #pre:     isPre = true; out << "\r\n{{{\r\n";  break;
+        case #p:       out << "\r\n";  indentQuotes(true); break;
+        case #text:    indentQuotes(); break;
+        
+        case #h1:      out << "\r\n="; break;
+        case #h2:      out << "\r\n=="; break;
+        case #h3:      out << "\r\n==="; break;
+        case #h4:      out << "\r\n===="; break;
+        case #h5:      out << "\r\n====="; break;
+        case #h6:      out << "\r\n======"; break;
+                
+        case #ol:      
+        case #ul:      listStack.push(tag); break;
+        case #li:      indentListItem(); break;
+        
+        case #blockquote: ++quoteLevel; break;
+        
+        case #tr:      out << "\r\n|"; break;
+        case #th:
+        case #td:      out << "| "; break;
+        
+        case #hr:      out << "\r\n----\r\n"; break;
+      }
+    }
+    
+    function elementEnd(tag,elementType,elementUID) 
+    {
+      switch( tag )
+      {
+        case #i:
+        case #em:      out << "_";   break;
+        case #b: 
+        case #strong:  out << "*";   break;
+        case #tt:      out << "`";  break;
+        case #code:    out << "}}}";   break;
+        case #sup:     out << "^";   break;
+        case #sub:     out << ",,";  break;
+        case #strike:  out << "~~";  break;  
+        
+        case #pre:     isPre = false; out << "}}}\r\n"; break;
+        case #text:    if(isPre) out << "\r\n"; break;
+          
+        case #h1:      out << "="; break;
+        case #h2:      out << "=="; break;
+        case #h3:      out << "==="; break;
+        case #h4:      out << "===="; break;
+        case #h5:      out << "====="; break;
+        case #h6:      out << "======"; break;
+        
+        case #ol:      
+        case #ul:      listStack.pop(); break;
+        
+        case #blockquote: --quoteLevel; break;
+
+        case #tr:      out << "|"; break;
+        case #th:
+        case #td:      out << " |"; break;
+        case #table:   out << "\r\n"; break;
+      }
+    }
+    function elementText(txt) 
+    {
+      // some escapements:
+      txt = txt.replace("`","```");
+      txt = txt.replace("*","`*`");
+      txt = txt.replace("_","`_`");
+      txt = txt.replace("~~","`~~`");
+      txt = txt.replace("^","`^`");
+      txt = txt.replace(",,","`,,`");
+      txt = txt.replace("||","`||`");
+      txt = txt.replace("----","`----`");
+      out << txt;
+    }
+    
+    richtext.visit(what, elementStart, elementEnd, elementText);
+    var r = out.toString();
+    out.close();
+    return r;
+  }  
+}

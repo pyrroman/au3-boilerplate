@@ -1,0 +1,33 @@
+
+/*
+
+FindFileTask - starts new thread defined in thread_object.cpp
+
+FindFileTask function accepts single parameter - object so it can be invoked using "object-call" notation (a.k.a. function with named parameters):
+
+  FindFileTask 
+  {
+    path    : string [optional],
+    mask    : string [optional],
+    started : function() {...} [optional] ,
+    done    : function() {...} [optional] ,
+    found   : function() {...}  
+  };  
+*/
+
+function FindFileTask(params) 
+{
+  var thread = Thread.create("find-file"); // see worker_threads.cpp, worker_thread_factory() function. 
+  if( !thread )
+    return;
+  function blackhole() {}
+  // setup the thread callbacks
+  thread.started = params.started || blackhole;
+  thread.done    = params.done || blackhole;
+  assert typeof params.found == #function;  
+  thread.found   = params.found;
+  // start it
+  thread.start( params.path || "c:\\", params.mask || "*.*" );
+  return thread; // returns it so caller can call task.stop() if needed.
+} 
+

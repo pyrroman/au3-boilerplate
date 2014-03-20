@@ -1,0 +1,61 @@
+<html>
+<head>
+  <script type="text/tiscript">
+  
+  self.$(#set-caption).onClick = function() 
+	{
+	  var wtlapp = new WtlApp(); // I create new instance here just for the demo purposes.
+	  wtlapp.caption = self.select("input#caption").value; // 'cause I've made caption pure instance property. 
+	                             // In reality WtlApp is a global object so WtlApp.caption should work. See:
+                                 // VOID CALLBACK WtlApp_caption( HVM hvm, SCITER_VALUE* self, BOOL set, SCITER_VALUE* val )
+								 // for how to change it. 
+    }
+    
+  self.$(#test).onClick = function() 
+	{
+	  //WtlApp.exit(); // call native method defined in WtlApp class
+	  TSTestNative.test();
+  }
+    
+    
+	// this event will be called by menu Test handler in WTL.
+	WtlApp.onTest = function() 
+	{
+	  self.select("div#sandbox").html = "Got call of WtlApp.onTest so: <b>H</b>ello <b>W</b>orld!"; // set content of ssndbox element
+	}
+
+  namespace Foo
+	{
+	  function bar(p1)
+	  {
+	    self.select("div#sandbox").html = "Got call of Foo.bar with:" + p1; // set content of ssndbox element
+	  }
+	}
+	
+	view.hostCallback(12,"hello", "world");	
+
+	/* // inspector aka reflection
+	for(var n in View)
+	{
+	  stdout << n << ":" << View[n] << "\n";
+	}*/
+
+  var obj = { one:1, two:2, three:"3"};
+	view.showValue( obj ); // See: CSciterView::handle_scripting_call()
+	var arr = [ "one", "two", 3, 4, new Date() ];
+	view.showValue( arr ); 
+	
+	// Testing static method that returns array of objects.
+	var arrOfObj = TSTestNative.arrayOfObjects();
+	stdout.printf("%V\n",arrOfObj);
+	   
+  </script>
+</head>
+<body>
+  Window caption: <input #caption type="text" /><button #set-caption>Set</button>
+  <button #test>Test native call</button>
+  <div #sandbox>
+    Click on menu test to change this...
+  </div>
+</body>
+</html>

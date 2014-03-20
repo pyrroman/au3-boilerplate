@@ -1,0 +1,185 @@
+
+@set side-bar 
+{
+  :root
+  {
+    prototype: FoldersPanel;    
+    background:window;
+    padding:0;
+    margin:0;
+    height:*;
+    overflow:hidden; /* or auto? */
+  }
+
+  div.header
+  {
+    flow:horizontal;
+    background-color: @CAPTION_BACKGROUND_COLOR;
+    border:1px solid;
+    border-color:@CAPTION_BORDER;
+  }
+  #select-folder 
+  {  
+    behavior:clickable;
+    display:inline-block;
+    width:max-intrinsic;
+    margin:2px;
+    padding:2px;
+    background: @TB_BUTTON_BACK_NORMAL;
+  }
+  #select-folder:hover 
+  {  
+    background: @TB_BUTTON_BACK_HOVER;
+  }
+  #select-folder:active 
+  {  
+    background: @TB_BUTTON_BACK_ACTIVE;
+  }
+  
+  widget.ctl
+  {
+    behavior: clickable;  
+    width:max-intrinsic;
+    height:*;
+    background: @TB_BUTTON_BACK_NORMAL;
+    margin:2px;
+    padding:2px;
+    color: @TB_BUTTON_TEXT_COLOR;
+  }
+  
+  widget.ctl > text
+  {
+    font: 10pt Marlett;
+  }
+  
+  widget.ctl:disabled
+  {
+    color: threedface;
+    background: @TB_BUTTON_BACK_DISBALED;
+  }
+  widget.ctl:hover
+  {
+    background: @TB_BUTTON_BACK_HOVER;
+  }
+  widget.ctl:active
+  {
+    background: @TB_BUTTON_BACK_ACTIVE;
+  }
+  
+  div.content 
+  {
+    border:1px solid;
+    border-color: @VIEW_BORDER;
+    width:*;
+    height:*;
+  }
+  
+  ul#folder-list
+  {
+    background-color:window window threedface threedface;
+    margin:0;
+    padding: 3px 3px 3px 16px;
+    min-height:3em;
+  }
+  ul#folder-list:rtl 
+  {
+    padding: 3px 16px 3px 3px;
+  }
+  
+  ul#folder-list > li
+  {
+    behavior: hyperlink;
+    border-top: 1px dashed threedshadow;
+    list-style-image: url("stock:arrow-right");
+    padding:10px 0;
+  }
+  ul#folder-list > li:rtl
+  {
+    list-style-image: url("stock:arrow-left");
+  }
+  
+  ul#folder-list > li:first-child
+  {
+    list-marker-color: tomato;
+    list-style-image: url("stock:arrow-up");
+  }
+  
+  ul#folder-list > li:hover
+  {
+    text-decoration:underline;
+  }
+  
+  widget#folder-view
+  {
+    prototype: FolderView; 
+    width:*;
+    height:*;
+    margin:3px;        
+    background-image:none;
+    background-color:window;
+  }
+  
+  widget#folder-view options > :first-child /* caption */
+  {
+    padding-top:2px;
+    padding-bottom:2px;
+    font-weight:bold;
+    margin:0;
+  }
+      
+  /* all options with more than one child (that is caption) 
+     uncomment this if you need tree lines.
+  widget#folder-view options:has-children > * 
+  {
+    display: list-item;
+    list-style-type: tree-line;
+    outline-color:threedshadow;
+  } */ 
+  
+  widget#folder-view options
+	{
+		padding-left:16px;
+	}
+	widget#folder-view options:rtl
+	{
+    padding-right:16px;
+		padding-left:0;
+	}  
+        
+  widget#folder-view option
+  {
+    min-width:max-intrinsic;
+    //behavior: shell-icon; /* see: behavior_shell_icon.cpp  */
+    margin-left:16px;
+    line-height:1.4em;
+    //padding-top:1px;
+    //padding-bottom:2px;
+    //display:list-item;
+    //list-style-type: disc;
+    flow:horizontal;    
+  }
+  widget#folder-view option:rtl
+  {
+    margin-right:20px;
+    margin-left:0;
+  }
+  
+  widget#folder-view option > .run-button 
+  {
+    margin: 1px 2px 1px *;
+    width: 1.5em;
+    height: *;
+    behavior: clickable;
+    background: @TB_BUTTON_BACK_CHECKED;
+    foreground: url("stock:arrow-right") no-repeat 50% 50%;
+    color:green;
+  }
+  widget#folder-view option > .run-button:hover 
+  {
+    background: @TB_BUTTON_BACK_HOVER;
+  }
+  widget#folder-view option > .run-button:active {
+    background: @TB_BUTTON_BACK_ACTIVE;
+  }
+  
+}

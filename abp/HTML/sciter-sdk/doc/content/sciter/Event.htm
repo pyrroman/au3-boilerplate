@@ -1,0 +1,367 @@
+﻿<html>
+  <head>
+    <meta name="source"/>
+    <meta name="source"/>
+    <meta name="generator" content="h-smile:richtext"/>
+  </head>
+<body>
+  <h1>Event object</h1>
+  <p>Represents user interface event. Events and correspndent event handlers are defined in <a href="Events.htm">Events</a>.</p>
+  <div align="left">
+    <table border="0" cellspacing="4" width="100%">
+      <tr>
+        <td colspan="2" valign="top">
+          <h2>Constants</h2></td></tr>
+      <tr>
+        <td colspan="2" bgcolor="#ffffff" valign="top" align="center">
+          <h3>Event Group codes (used with Element.subscribe() method)</h3></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MOUSE</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">mouse events group</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>KEY</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">key events group</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>FOCUS</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">focus events group</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>BEHAVIOR_EVENT</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">group of events generated (synthesized) by particular behaviors (like BUTTON_CLICK, EDIT_VALUE_CHANGING, etc.)</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>SCROLL</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">scroll events group</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>SIZE</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">size events group (that is just single event, onSize)</td></tr>
+      <tr>
+        <td colspan="2" bgcolor="#ffffff" valign="top" align="center">
+          <h3>Mouse event codes</h3></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MOUSE_ENTER</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">type of event, mouse enters the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MOUSE_LEAVE</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">type of event, mouse leaves the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MOUSE_MOVE</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">type of event, mouse moves over the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MOUSE_DOWN</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">type of event, mouse button pressed in the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MOUSE_UP</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">type of event, mouse button released in the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MOUSE_DCLICK</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">type of event, mouse clicked twice in the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MOUSE_WHEEL</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">type of event, mouse wheel rotated.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MOUSE_TICK</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">type of event, mouse timer event. Runtime sends this event regularly when mouse button is pressed on the element.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MOUSE_IDLE</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">type of event, mouse timer event. Runtime sends this event when mouse is over the element, not pressed and not moving for some time. By default this event triggers popup of tooltip.</td></tr>
+      <tr>
+        <td colspan="2" bgcolor="#ffffff" valign="top" align="center">
+          <h3>Keyboard event codes</h3></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>KEY_DOWN</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">type of event, key pressed when element or one of its children is in focus.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>KEY_UP</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">type of event, key released when element or one of its children is in focus.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>KEY_CHAR</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">type of event, character key pressed when element or one of its children is in focus.</td></tr>
+      <tr>
+        <td colspan="2" bgcolor="#ffffff" valign="top" align="center">
+          <h3>Scroll event codes</h3></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>SCROLL_HOME</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>SCROLL_END</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>SCROLL_STEP_PLUS</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>SCROLL_STEP_MINUS</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>SCROLL_PAGE_PLUS</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>SCROLL_PAGE_MINUS</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>SCROLL_POS</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td colspan="2" bgcolor="#ffffff" valign="top" align="center">
+          <h3>Gesture (touch screen) event codes</h3></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em><strong>GESTURE_REQUEST</strong></em></td>
+        <td bgcolor="#fffff0" valign="middle">The engine sends this event to request list of gestures that the element supports. Set &quot;ORed&quot; flags in Event.flags field. List of supported flags/gesture types: 
+          <ul>
+            <li><code>Event.GESTURE_FLAG_ZOOM</code> &nbsp;- two fingers zoom;</li>
+            <li><code>Event.GESTURE_FLAG_ROTATE</code> &nbsp;- two fingers rotate;</li>
+            <li><code>Event.GESTURE_FLAG_PAN_VERTICAL</code> - vertical swipe or panning;</li>
+            <li><code>Event.GESTURE_FLAG_PAN_HORIZONTAL</code>- horizontal swipe or panning; </li>
+            <li><code>Event.GESTURE_FLAG_TAP1</code> - press-and-tap gesture;</li>
+            <li><code>Event.GESTURE_FLAG_TAP2</code> - tap by two fingers;</li>
+            <li><code>Event.GESTURE_FLAG_PAN_WITH_GUTTER</code> &nbsp;- &nbsp;PAN_VERTICAL and PAN_HORIZONTAL modifier - gutter.</li>
+            <li><code>Event.GESTURE_FLAG_PAN_WITH_INERTIA</code> &nbsp;- &nbsp;PAN_VERTICAL and PAN_HORIZONTAL modifier - generate inertia events. </li>
+            <li><code>Event.GESTURE_FLAGS_ALL</code> &nbsp;- all flags/events</li></ul></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>GESTURE_ZOOM</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">The zoom gesture. <code>Event.deltaV</code> &nbsp;field contains float &gt; 1.0 in case of zoom-out and float &lt; 1.0 for zoom-in.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>GESTURE_PAN</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">The pan/swipe gesture. <code>Event.deltaX</code> and <code>Event.deltaY</code> fields contain integers - number of pixels in X and Y directions.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>GESTURE_ROTATE</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">The rotation gesture. <code>Event.deltaV</code> &nbsp;field contains delta angle (in radians).</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>GESTURE_TAP1</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">The press and tap gesture. </td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>GESTURE_TAP2</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">Tap by two fingers gesture.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"></td>
+        <td bgcolor="#fffff0" valign="middle">Event.flags in all events (but not in GESTURE_REQUEST) is ORed combination of the following states:
+          <ul>
+            <li><code>Event.GESTURE_STATE_BEGIN</code> - is &quot;on&quot; for first event in the gesture sequence. </li>
+            <li><code>Event.GESTURE_STATE_INERTIA</code> - is &quot;on&quot; for events synthesized by the inertia processor.</li>
+            <li><code>Event.GESTURE_STATE_END</code> - is &quot;on&quot; for last event in the gesture sequence.</li></ul></td></tr>
+      <tr>
+        <td colspan="2" bgcolor="#ffffff" valign="top" align="center">
+          <h3>Focus event codes</h3></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>LOST_FOCUS</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>GOT_FOCUS</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td colspan="2" bgcolor="#ffffff" valign="top" align="center">
+          <h3>Logical event codes from builtin behaviors</h3></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>BUTTON_CLICK</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>BUTTON_PRESS</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>BUTTON_STATE_CHANGED</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">Checkbox/radio state was changed. ( Not all <em>BUTTON_CLICK</em>s are changing state of those. )</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>EDIT_VALUE_CHANGING</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>EDIT_VALUE_CHANGED</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>SELECT_SELECTION_CHANGED</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>SELECT_STATE_CHANGED</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>HYPERLINK_CLICK</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>ACTIVATE_CHILD</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>POPUP_REQUEST</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>POPUP_READY</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>POPUP_DISMISSED</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><em><strong>POPUP_DISMISSING</strong></em></td>
+        <td bgcolor="#fffff0" valign="middle"></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MENU_ITEM_ACTIVE</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">Mouse over the menu item, Event.target is a menu item, Event.owner - initiator of the menu &nbsp;</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>MENU_ITEM_CLICK</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">Click on the menu item, Event.target is a menu item, Event.owner - initiator of the menu</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>CONTEXT_MENU_REQUEST</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">Is sent by the engine when context menu needs to be shown. <code>evt.target</code> is a top element that have got e.g. right mous click. <code>evt.source</code> [read/write] is a menu element that is about to popup. You can set your own menu element to the evt.source field while handling this event.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>CONTEXT_MENU_SETUP</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">Is sent by the engine when context menu is found. <code>evt.source</code> is the menu element that you can modify at this point.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>VISUAL_STATUS_CHANGED</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">Notification that the element changed its visibility either by changing <code>display</code> or <code>visibility</code> CSS attributes. The event is sent only to the element itself (so not a bubbling event).</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>DISABLED_STATUS_CHANGED</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">Notification that the element or one of its containers have changed its disabled status.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right">
+          <div><strong><em>DRAGGING_MOVE</em></strong></div>
+          <div><strong><em>DRAGGING_COPY</em></strong></div></td>
+        <td bgcolor="#fffff0" valign="middle">Values of the <em>draggingMode</em> attribute below.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right">
+          <div><strong><em>REQUEST_TOOLTIP</em></strong></div></td>
+        <td bgcolor="#fffff0" valign="middle">Request for tooltip, the event is sent in respnse of MOUSE_IDLE. Element on <em>evt.source</em> is a proposed tooltip element. You can assign your own DOM element to the <em>evt.source</em> field. To cancel tooltip generation set <em>evt.source</em> to <em>null</em> and return <em>true</em> (event handled) from the event handler.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right">
+          <div><strong><em>DOCUMENT_COMPLETE</em></strong></div></td>
+        <td bgcolor="#fffff0" valign="middle">Notification that document finishes its loading - all requests for external resources are finished. <em>evt.target</em> is the root node ( <code>&lt;html&gt;</code> ) of the document that is complete. Note that the event is being generated even some of resources were not available. DOM elements that contain non-available resources will get <code>:incomplete</code> state flag.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right">
+          <div><strong><em>FORM_SUBMIT</em></strong></div></td>
+        <td bgcolor="#fffff0" valign="middle">behavior:form detected submission event from button type=reset. <code>evt.data</code> field contains data to be sent to the server as a map (object). You can modify the data or discard submission by returning <code>true</code> (&quot;event consumed&quot;) from the event handler.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right">
+          <div><strong><em>FORM_RESET</em></strong></div></td>
+        <td bgcolor="#fffff0" valign="middle">behavior:form detected reset event (from button type=reset). <code>evt.data</code> field contains data to be set to input fields.</td></tr>
+      <tr>
+        <td colspan="2" bgcolor="#ffffff" valign="top" align="center">
+          <h3>Event flags</h3></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right">
+          <div><strong><em>SINKING</em></strong></div>
+          <div></div></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>Event dispatching direction. If this flag set then event is being dispatched in the direction from parent to child. Example:</div>
+          <pre>switch(evt.type)
+{
+   case Event.MOUSE_DOWN | Event.SINKING:
+        // handle thr event before any child
+   case Event.MOUSE_DOWN:
+        // it is here as no one child processed it.
+}
+</pre></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>HANDLED</em></strong></td>
+        <td bgcolor="#fffff0" valign="middle">
+          <div>Event was handled (event handler function returned <em>true</em>) by some child of the element or behavior. Example:</div>
+          <pre>switch(evt.type)
+{
+   case Event.MOUSE_DOWN:
+       // after all children and no one has handled it.
+   case Event.MOUSE_DOWN | Event.HANDLED:
+       // after all children, and some child has handled it.
+}
+</pre></td></tr>
+      <tr>
+        <td colspan="2" bgcolor="#ffffff" valign="top" align="center">
+          <h3>Virtual key codes - values of keyCode filed in KEY_DOWN and KEY_UP events</h3></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="center"></td>
+        <td bgcolor="#fffff0" valign="top">
+          <pre>VK_CANCEL   VK_BACK     VK_TAB      VK_CLEAR    VK_RETURN   VK_SHIFT    VK_CONTROL
+VK_MENU     VK_PAUSE    VK_CAPITAL  VK_KANA     VK_HANGUL   VK_JUNJA    VK_FINAL
+VK_HANJA    VK_KANJI    VK_ESCAPE   VK_CONVERT  VK_SPACE    VK_PRIOR    VK_NEXT
+VK_END      VK_HOME     VK_LEFT     VK_UP       VK_RIGHT    VK_DOWN     VK_SELECT
+VK_PRINT    VK_EXECUTE  VK_SNAPSHOT VK_INSERT   VK_DELETE   VK_HELP     VK_SLEEP
+VK_NUMPAD0  VK_NUMPAD1  VK_NUMPAD2  VK_NUMPAD3  VK_NUMPAD4  VK_NUMPAD5  VK_NUMPAD6
+VK_NUMPAD7  VK_NUMPAD8  VK_NUMPAD9  VK_MULTIPLY VK_ADD      VK_SEPARATOR VK_SUBTRACT
+VK_DECIMAL  VK_DIVIDE   VK_F1       VK_F2       VK_F3       VK_F4       VK_F5
+VK_F6       VK_F7       VK_F8       VK_F9       VK_F10      VK_F11      VK_F12
+VK_F13      VK_F14      VK_F15      VK_F16      VK_F17      VK_F18      VK_F19
+VK_F20      VK_F21      VK_F22      VK_F23      VK_F24
+</pre>
+          <p>Example:</p>
+          <pre>switch(event.keyCode)
+{
+  case Event.VK_HOME: index = 0; break;
+  case Event.VK_END: index = this.length - 1; break;
+}
+</pre></td></tr>
+      <tr>
+        <td colspan="2">
+          <h2>Properties</h2></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>type</em></strong></td>
+        <td bgcolor="#fffff0" valign="top"><font color="#999999">r - </font><em>Integer</em>, type of the event, value equal to one of the constant above.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>altKey</em></strong></td>
+        <td bgcolor="#fffff0" valign="top"><font color="#999999">r - </font><em>true/false</em>, true if ALT key pressed. Valid for Mouse, Key events.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>ctrlKey</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - <em>true/false</em>, true if CTRL key pressed. Valid for Mouse, Key events.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>shiftKey</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - <em>true/false</em>, true if SHIFT key pressed. Valid for Mouse, Key events.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>mainButton</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - <em>true/false</em>, true if main mouse button pressed (usually left mouse button). Valid for Mouse events.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>propButton</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - <em>true/false</em>, true if property mouse button pressed (usually right mouse button). Valid for Mouse events.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>target</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - <em>Element</em>, &nbsp;element this event tageted to.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>reason</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r/w - <em>integer</em>, reason field of control event code.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>keyCode</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - integer, key scan code for KEY_DOWN/KEY_UP events and unicode codepoint of the character pressed for the KEY_CHAR event.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>group</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - <em>symbol</em>, event group symbol, here it is a symbol of event handler function: #onMouse, #onKey, #onFocus, etc.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>wheelDelta</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - mouse wheel &quot;tick&quot; - valid in onMouse/MOUSE_WHEEL event.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>scrollPos</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - scroll position in <em>SCROLL_POS</em> event.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>x</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - <em>integer</em>, x coordinate of the mouse event relative to the element itself (origin of its content box)</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>y</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - <em>integer</em>, y coordinate of the mouse event relative to the element itself (origin of its content box)</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>xRoot</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - <em>integer</em>, x coordinate of the mouse event relative to the element's root element (&lt;html&gt;). As root element spans the whole view area then it is also view relative coordinate.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>yRoot</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r -<em>integer</em>, y coordinate of the mouse event relative to the element's root element (&lt;html&gt;).</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>xScreen</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - <em>integer</em>, x coordinate of the mouse event relative to the screen.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>yScreen</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r -<em>integer</em>, y coordinate of the mouse event relative to the screen.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>owner</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">rw - Element, owner (initiator) of the menu in MENU_ITEM_CLICK, also this is value of last parameter in Element.sendEvent method.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>isOnIcon</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - true | false, onMouse(evt) only. true if mouse is on icon area. Element icon is foreground, no-repeat image.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>dragging</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r/w - <em>Element</em>, <em>onMouse(evt)</em> and <em>onExchange(evt)</em> only. Reference of element being dragged when onMouse and data being dragged when onExchange().</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>draggingMode</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r/w - <em>integer</em>, onMouse(evt) only. Dragging mode - either Event.DRAGGING_MOVE or Event.DRAGGING_COPY - current dragging mode.</td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>draggingDataType</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">r - symbol, &nbsp;<em>onExchange(evt)</em> only. One of the following values:
+          <ul>
+            <li><code>#text</code> -</li>
+            <li><code>#html</code></li>
+            <li><code>#url</code></li>
+            <li><code>#file</code></li>
+            <li><code>#json</code></li></ul></td></tr>
+      <tr>
+        <td bgcolor="#ffffff" valign="top" align="right"><strong><em>deltaV, deltaX, deltaY, flags</em></strong></td>
+        <td bgcolor="#fffff0" valign="top">- onGesture() event specific fields. See prose above about GESTURE_**** values.</td></tr></table></div>
+  <div></div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<html>
+<head>
+<style> 
+</style>
+  <script src="sciter:lib/root-extender.tis" type="text/tiscript"/> 
+  <script type="text/tiscript">
+ 
+    function on_SortAscending_click(btn)
+    {
+      var sel = self.select("[name='select']"); 
+      sel.sort( :lel,rel: lel.text < rel.text? -1: 1 );  
+      sel.update();
+    }
+    
+    function on_SortDescending_click(btn)
+    {
+      var sel = self.select("[name='select']"); 
+      sel.sort( :lel,rel: lel.text > rel.text? -1: 1 );  
+      sel.update();
+    }
+
+
+        
+    </script>
+
+</head>
+
+<body>
+<div #main>
+  <button id="SortAscending">Sort Ascending</button> 
+  <button id="SortDescending">Sort Descending</button>
+  <p>Select: <select name="select" type="select">
+    <option value="1">Alpha</option>
+    <option value="2">Gamma</option>
+    <option value="3">Omega</option>
+  </select></p>
+</div>
+<p .test></p>
+</body>
+
+</html>
