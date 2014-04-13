@@ -1,0 +1,21 @@
+#include-once
+
+#include <APILocaleConstants.au3>
+
+; winnls.h
+
+Global Const $LOCALE_NOUSEROVERRIDE = 0x80000000
+
+Global Const $LOCALE_ALL = 0x00
+Global Const $LOCALE_WINDOWS = 0x00000001
+Global Const $LOCALE_SUPPLEMENTAL = 0x00000002
+Global Const $LOCALE_ALTERNATE_SORTS = 0x00000004
+Global Const $LOCALE_REPLACEMENT = 0x00000008
+
+Global Const $LOCALE_NEUTRALDATA =0x00000010
+Global Const $LOCALE_SPECIFICDATA =0x00000020
+
+Global Const $LOCALE_NAME_MAX_LENGTH = 85
+Global Const $LOCALE_NAME_USER_DEFAULT = Null
+Global Const $LOCALE_NAME_SYSTEM_DEFAULT = '!x-sys-default-locale'
+

@@ -5,8 +5,8 @@
 ; #INDEX# =======================================================================================================================
 ; Title .........: {TITLE}
 ; AutoIt Version : {AUTOIT_VERSION}
-; Description ...: {SHORT}
-; Description ...: {LONG}
+; Description ...: {SHORT_DESC}
+; Description ...: {LONG_DESC}
 ; Author(s) .....: {AUTHORS}
 ; Requirements ..: {REQUIREMENTS}
 ; ===============================================================================================================================

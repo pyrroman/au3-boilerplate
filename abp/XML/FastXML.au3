@@ -1,13 +1,10 @@
 #include-once
 #include <Array.au3>
 
-Dim $aTest=_XML_GetElementsByTag(BinaryToString(InetRead('http://rds.lagardere.cz/getChannels.php?masterStation=evropa2')))
-_ArrayDisplay($aTest)
-
 ; #FUNCTION# ====================================================================================================================
-; Name ..........: _XML_GetElementsByTag
+; Name ..........: _XML_GetElementsByTagName
 ; Description ...: Matches strings/values between XML tags
-; Syntax ........: _XML_GetElementsByTag($sSource, $sTag[, $fIsCDATA = 0])
+; Syntax ........: _XML_GetElementsByTagName($sSource, $sTag[, $fIsCDATA = 0])
 ; Parameters ....: $sSource      - A string value.
 ;                  $sTag - A string value. The name of the element containing the demanded strings/values.
 ;                  $fIsCDATA     - [optional] A boolean value.
@@ -26,21 +23,16 @@ _ArrayDisplay($aTest)
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
-Func _XML_GetElementsByTag($sSource, $sTag = "", $fIsCDATA = Default)
+Func _XML_GetElementsByTagName($sSource, $sTag, $fIsCDATA = Default)
 	Local $aMatches
-	$sTag = ($sTag ? '\Q' & $sTag & '\E.*?' : '\w+?')
+	$sTag = '\Q' & $sTag & '\E.*?'
+	If IsKeyword($fIsCDATA) Or $fIsCDATA = "" Then $fIsCDATA = StringRegExp($sSource, '(?s)<' & $sTag & '><!\[CDATA\[')
 
 	$aMatches = StringRegExp($sSource, '(?s)' & _
 			'<' & $sTag & '>' & ($fIsCDATA ? '<!\[CDATA\[' : '') & _ ; beginning
-			'(.*?)' & _                                                     ; body
-			($fIsCDATA ? ']]>' : '') & '</' & $sTag & '>', 3) ;         ending
+			'(.*?)' & _                                              ; body
+			($fIsCDATA ? ']]>' : '') & '</' & $sTag & '>', 3) ;        ending
 	If @error Then Return SetError(1, 0, "")
 
-	If Not $fIsCDATA Then
-		For $i = 0 To UBound($aMatches) - 1
-			$aMatches[$i] = (StringLeft($aMatches[$i], 9) = '<![CDATA[' ? StringMid($aMatches[$i], 10, StringLen($aMatches[$i]) - 12) : $aMatches[$i])
-		Next
-	EndIf
-
 	Return $aMatches
-EndFunc   ;==>_XML_GetElement
+EndFunc   ;==>_XML_GetElementsByTagName

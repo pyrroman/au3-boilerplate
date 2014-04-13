@@ -91,3 +91,38 @@ Func _SQLite_TestKey($hDB, $sKey)
 	If @error Then Return SetError(1, @error, 0)
 	Return (_SQLite_Exec($hDB, "SELECT * FROM sqlite_master LIMIT 1;") == $SQLITE_OK ? SetError(0, 0, 1) : SetError(2, @error, 0))
 EndFunc   ;==>_SQLite_TestKey
+
+Func _SQLite_BatchEscapeNames(ByRef $asNames)
+	Local $sReturn
+
+	For $i = 0 To UBound($asNames) - 1
+		$asNames[$i] = '"' & StringReplace($asNames[$i], '"', '""') & '"'
+		$sReturn &= $asNames[$i] & ($i = UBound($asNames) - 1 ? "" : ",")
+	Next
+
+	Return $sReturn
+EndFunc   ;==>_SQLite_BatchEscapeNames
+
+Func _SQLite_BatchEscapeValues(ByRef $avValues)
+	Local $sReturn
+	Local Const $iMax = UBound($avValues) - 1
+
+	For $i = 0 To $iMax
+		$avValues[$i] = (IsString($avValues[$i]) ? _SQLite_FastEscape($avValues[$i]) : $avValues[$i])
+		$sReturn &= $avValues[$i] & ($i == $iMax ? "" : ",")
+	Next
+
+	Return $sReturn
+EndFunc   ;==>_SQLite_BatchEscapeValues
+
+Func _SQLite_BuildUpdateParams(ByRef $aColumns, ByRef $aValues)
+	Local $sColumns = __SQLite_BatchEscapeNames($aColumns), $sValues = __SQLite_BatchEscapeValues($aValues)
+	Local $sUpdateSt
+
+	For $i = 0 To UBound($aColumns) - 1
+		If $i = $iKey And UBound($aColumns) > 1 Then ContinueLoop
+		$sUpdateSt &= $aColumns[$i] & "=" & $aValues[$i] & ($i = UBound($aColumns) - 1 ? "" : ",")
+	Next
+
+	Return $sUpdateSt
+EndFunc   ;==>_SQLite_BuildUpdateParams

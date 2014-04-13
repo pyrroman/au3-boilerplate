@@ -1,1 +1,0 @@
-Various window related samples.

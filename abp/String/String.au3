@@ -23,7 +23,7 @@
 
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _str_split
-; Description ...: Converts a string to an array.
+; Description ...: Converts a string to an array based on the length.
 ; Syntax ........: _str_split($sString[, $iMaxLength = 1])
 ; Parameters ....: $sString             - The input string.
 ;                  $iMaxLength          - [optional] Maximum length of the chunk. ( 0 < $iMaxLength < 65536 )
@@ -52,7 +52,7 @@ EndFunc   ;==>_str_split
 
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: _str_repeat
-; Description ...: Repeats the provided sring n-times
+; Description ...: Repeats the provided string n-times
 ; Syntax ........: _str_repeat($sString, $iMultiplier)
 ; Parameters ....: $sString     - The string to be repeated.
 ;                  $iMultiplier - Number of time the input string should be repeated.
@@ -60,24 +60,21 @@ EndFunc   ;==>_str_split
 ;                                 If the $iMultiplier is set to 0, the function will return an empty string.
 ; Return values .: Success - Returns the repeated string.
 ;                  Failure - Returns an empty string and sets the @error flag to a non-zero value.
-; Author ........: SmOke_N
-; Modified ......: rindeal
-; Version .......: 2014-01-23
+; Version .......: 2014-03-26
 ; Requirements ..:
-; Performance ...: For short strings with few iterations 1-2 ms/query
+; Performance ...: For short strings with few iterations 1-2 ms/call
 ; Remarks .......: The fastest method known to me (rindeal) so far.
 ; Related .......: _StringRepeat (Strings.au3)
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
 Func _str_repeat($sString, $iMultiplier)
-	Local $iLen = StringLen($sString)
-	If (Not StringIsInt($iMultiplier)) Or $iLen < 1 Or $iMultiplier <= 0 Then Return SetError(1, 0, "")
-	Local $iMax = $iLen * Int($iMultiplier)
-	While StringLen($sString) < $iMax
-		$sString &= $sString
-	WEnd
-	Return StringLeft($sString, $iMax)
+	If (Not StringIsInt($iMultiplier)) Or StringLen($sString) < 1 Or $iMultiplier <= 0 Then Return SetError(1, 0, "")
+	Local $sReturn
+	For $i = 1 To $iMultiplier
+		$sReturn &= $sString
+	Next
+	Return $sReturn
 EndFunc   ;==>_str_repeat
 
 ; #FUNCTION# ====================================================================================================================
@@ -136,7 +133,7 @@ EndFunc   ;==>_StringRandom
 ; Requirements ..:
 ; Performance ...:
 ; Remarks .......:
-; Related .......:
+; Related .......: PHP sprintf
 ; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
@@ -145,22 +142,22 @@ Func _sprintf($sFormat, $arg1 = "", $arg2 = "", $arg3 = "", $arg4 = "", $arg5 = 
 
 	; TODO: Error checking, optimize RegExes
 
-	Local $sNewParameters
+	Local $sNewParams, $sFSpec
 	Local $aFormatSpecs = StringRegExp($sFormat, "(?<!%)%(\d{0,2}\$?[# +\-*\d.a-zA-Z]*[a-zA-Z])", 3)
 
 	For $i = 0 To UBound($aFormatSpecs) - 1
 		$sFSpec = $aFormatSpecs[$i]
 		If StringInStr($sFSpec, "$") Then
 			$sFormat = StringReplace($sFormat, $sFSpec, StringRegExpReplace($sFSpec, "(.*\$)", "", 1), 1)
-			$sNewParameters &= "$arg" & StringRegExp($sFSpec, "(\d*)\$", 3)[0] & ", "
+			$sNewParams &= "$arg" & StringRegExp($sFSpec, "(\d*)\$", 3)[0] & ","
 		Else
-			$sNewParameters &= "$arg" & $i + 1 & ", "
+			$sNewParams &= "$arg" & $i + 1 & ","
 		EndIf
 
 	Next
-	$sNewParameters = StringRegExpReplace($sNewParameters, "\W*$", "")
+	$sNewParams = StringRegExpReplace($sNewParams, "\W*$", "")
 
-	Return Execute('StringFormat($sFormat,' & $sNewParameters & ')')
+	Return Execute('StringFormat($sFormat,' & $sNewParams & ')')
 EndFunc   ;==>_sprintf
 
 
@@ -241,3 +238,8 @@ Func _StringToASCII($sString)
 
 	Return $sString
 EndFunc   ;==>_StringToASCII
+
+Func _StringRegExpSingle($sInput, $sPattern)
+	Local $aReturn = StringRegExp($sInput, $sPattern, 3)
+	Return (@error ? "" : $aReturn[0])
+EndFunc   ;==>_StringRegExpSingle

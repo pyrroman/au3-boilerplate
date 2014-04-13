@@ -4,7 +4,7 @@
 ;  Author: Ward
 ; =============================================================================
 
-#Include "Binary.au3"
+#Include "../Binary.au3"
 
 SpeedTest(10)
 

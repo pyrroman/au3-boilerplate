@@ -1,5 +1,0 @@
-﻿namespace localized
-{
-  const col1 = "Первый";
-  const col2 = "Второй";
-}

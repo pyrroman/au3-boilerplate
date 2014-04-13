@@ -4,7 +4,7 @@
 ;  Author: Ward
 ; =============================================================================
 
-#Include "Binary.au3"
+#Include "../Binary.au3"
 
 Func Example1()
 	Local $Binary1 = _BinaryRandom(16)

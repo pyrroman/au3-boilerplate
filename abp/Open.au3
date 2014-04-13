@@ -1,3 +1,3 @@
 #include "Constants.au3"
 
-ShellExecute($___INSTALL_DIR___)
+ShellExecute($__ABP_INSTALL_DIR)

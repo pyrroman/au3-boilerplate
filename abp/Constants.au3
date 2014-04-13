@@ -1,6 +1,7 @@
 #include-once
 
-#include "Miscellaneous/AutoIt.au3"
+#include "Misc/AutoIt.au3"
 
-Global Const $___NAME___ = "abp"
-Global Const $___INSTALL_DIR___ = _GetAutoItInstallEx() & "\Include\" & $___NAME___
+Global Const $__ABP_NAME = "abp"
+Global Const $__ABP_VERSION = "0.0.1"
+Global Const $__ABP_INSTALL_DIR = _GetAutoItInstallEx() & "\Include\" & $__ABP_NAME

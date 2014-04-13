@@ -1,1 +1,0 @@
-tabs.htm - is the root file of this sample.

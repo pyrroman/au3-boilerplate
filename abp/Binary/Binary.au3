@@ -50,31 +50,32 @@
 #Include-once
 #Include <Memory.au3>
 
-Global $__Binary_Kernel32Dll = DllOpen("kernel32.dll")
-Global $__Binary_User32Dll = DllOpen("user32.dll")
-Global $__Binary_MsvcrtDll = DllOpen("msvcrt.dll")
+#include "../DLL/KERNEL32_DLL.au3"
+#include "../DLL/USER32_DLL.au3"
+#include "../DLL/MSVCRT_DLL.au3"
+
 
 Func __Binary_lstrlenA($Ptr)
-	Local $Ret = DllCall($__Binary_Kernel32Dll, "int", "lstrlenA", "ptr", $Ptr)
+	Local $Ret = DllCall($KERNEL32_DLL, "int", "lstrlenA", "ptr", $Ptr)
 	If @Error Then Return SetError(@Error, @Extended, 0)
 	Return $Ret[0]
 EndFunc
 
 Func __Binary_lstrlenW($Ptr)
-	Local $Ret = DllCall($__Binary_Kernel32Dll, "int", "lstrlenW", "ptr", $Ptr)
+	Local $Ret = DllCall($KERNEL32_DLL, "int", "lstrlenW", "ptr", $Ptr)
 	If @Error Then Return SetError(@Error, @Extended, 0)
 	Return $Ret[0]
 EndFunc
 
 Func __Binary_Realloc($Ptr, $Size)
-	Local $Ret = DllCall($__Binary_MsvcrtDll, "ptr:cdecl", "realloc", "ptr", $Ptr, "ulong_ptr", $Size)
+	Local $Ret = DllCall($MSVCRT_DLL, "ptr:cdecl", "realloc", "ptr", $Ptr, "ulong_ptr", $Size)
 	If @Error Then Return SetError(@Error, @Extended, 0)
 	If $Ret[0] = 0 Then Exit MsgBox(16, "AutoIt Binary UDF Error", "Out of memory !!")
 	Return $Ret[0]
 EndFunc
 
 Func __Binary_Free($Ptr)
-	DllCall($__Binary_MsvcrtDll, "ptr:cdecl", "free", "ptr", $Ptr)
+	DllCall($MSVCRT_DLL, "ptr:cdecl", "free", "ptr", $Ptr)
 	If @Error Then Return SetError(@Error, @Extended, 0)
 EndFunc
 
@@ -154,7 +155,7 @@ Func _BinaryAnd($Binary1, $Binary2)
 	DllStructSetData($Buffer2, 1, $Binary2)
 
 	If $Len1 And $Len2 Then
-		DllCall($__Binary_User32Dll, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
+		DllCall($USER32_DLL, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
 																"ptr", DllStructGetPtr($Buffer1), _
 																"uint", $Len1, _
 																"ptr", DllStructGetPtr($Buffer2), _
@@ -187,7 +188,7 @@ Func _BinaryOR($Binary1, $Binary2)
 	DllStructSetData($Buffer2, 1, $Binary2)
 
 	If $Len1 And $Len2 Then
-		DllCall($__Binary_User32Dll, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
+		DllCall($USER32_DLL, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
 																"ptr", DllStructGetPtr($Buffer1), _
 																"uint", $Len1, _
 																"ptr", DllStructGetPtr($Buffer2), _
@@ -221,7 +222,7 @@ Func _BinaryXOR($Binary1, $Binary2)
 	DllStructSetData($Buffer2, 1, $Binary2)
 
 	If $Len1 And $Len2 Then
-		DllCall($__Binary_User32Dll, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
+		DllCall($USER32_DLL, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
 																"ptr", DllStructGetPtr($Buffer1), _
 																"uint", $Len1, _
 																"ptr", DllStructGetPtr($Buffer2), _
@@ -251,7 +252,7 @@ Func _BinaryNot($Binary)
 	DllStructSetData($Buffer, 1, $Binary)
 
 	If $Len Then
-		DllCall($__Binary_User32Dll, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
+		DllCall($USER32_DLL, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
 																"ptr", DllStructGetPtr($Buffer), _
 																"uint", $Len, _
 																"int", 0, _
@@ -280,7 +281,7 @@ Func _BinaryShift($Binary, $Shift)
 	DllStructSetData($Buffer, 1, $Binary)
 
 	If $Len Then
-		DllCall($__Binary_User32Dll, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
+		DllCall($USER32_DLL, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
 																"ptr", DllStructGetPtr($Buffer), _
 																"uint", $Len, _
 																"int", $Shift, _
@@ -309,7 +310,7 @@ Func _BinaryRotate($Binary, $Shift)
 	DllStructSetData($Buffer, 1, $Binary)
 
 	If $Len Then
-		DllCall($__Binary_User32Dll, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
+		DllCall($USER32_DLL, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
 																"ptr", DllStructGetPtr($Buffer), _
 																"uint", $Len, _
 																"int", $Shift, _
@@ -338,7 +339,7 @@ Func _BinaryReverse($Binary)
 	DllStructSetData($Buffer, 1, $Binary)
 
 	If $Len Then
-		DllCall($__Binary_User32Dll, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
+		DllCall($USER32_DLL, "none", "CallWindowProc", "ptr", $CodeBufferPtr, _
 																"ptr", DllStructGetPtr($Buffer), _
 																"uint", $Len, _
 																"int", 0, _
@@ -379,7 +380,7 @@ Func _BinaryInBin($Binary, $Search, $Occur = 1, $Start = 1)
 	DllStructSetData($Var, "occur", $Occur)
 	DllStructSetData($Var, "start", $Start)
 
-	Local $Ret = DllCall($__Binary_User32Dll, "uint", "CallWindowProc", "ptr", $CodeBufferPtr, _
+	Local $Ret = DllCall($USER32_DLL, "uint", "CallWindowProc", "ptr", $CodeBufferPtr, _
 																		"ptr", DllStructGetPtr($Var), _
 																		"int", 0, _
 																		"int", 0, _
@@ -430,7 +431,7 @@ Func _BinaryReplace($Binary, $Search, $Replace, $Occur = 0)
 	DllStructSetData($Var, "len3", $Len3)
 	DllStructSetData($Var, "occur", $Occur)
 
-	Local $Ret = DllCall($__Binary_User32Dll, "uint", "CallWindowProc", "ptr", $CodeBufferPtr, _
+	Local $Ret = DllCall($USER32_DLL, "uint", "CallWindowProc", "ptr", $CodeBufferPtr, _
 																		"ptr", DllStructGetPtr($Var), _
 																		"uint*", 0, _
 																		"uint*", 0, _
@@ -484,7 +485,7 @@ Func _BinaryRandom($Length, $Start = 0, $To = 255, $Seed = 0)
 	If $Length = 0 Then Return Binary("")
 
 	Local $Buffer = DllStructCreate("byte[" & $Length & "]")
-	Local $Ret = DllCall($__Binary_User32Dll, "uint", "CallWindowProc", "ptr", $CodeBufferPtr, _
+	Local $Ret = DllCall($USER32_DLL, "uint", "CallWindowProc", "ptr", $CodeBufferPtr, _
 																		"ptr", DllStructGetPtr($Buffer), _
 																		"uint", $Length, _
 																		"word", $To * 256 + $Start, _
@@ -632,12 +633,8 @@ EndFunc
 ;                  $bBin2               - A binary value.
 ; Return values .: Merged binary
 ; Author ........: rindeal <dev.rindeal@AT@outlook.com>
-; Modified ......:
 ; Version .......: 2014-03-05
-; Requirements ..: Nothing special
 ; Performance ...: 10k times in 200 ms
-; Remarks .......:
-; Related .......:
 ; Link ..........: https://gist.github.com/rindeal/9358771
 ; Example .......: No
 ; ===============================================================================================================================
@@ -666,13 +663,7 @@ EndFunc   ;==>_BinaryMerge
 ; Return values .: Success - (integer) 1
 ;                  Failure - (integer) 0 and sets the @error flag to a non-zero value.
 ; Author ........: rindeal <dev.rindeal at outlook.com>
-; Modified ......:
 ; Version .......: 2014-03-20
-; Requirements ..:
-; Performance ...:
-; Remarks .......:
-; Related .......:
-; Link ..........:
 ; Example .......: No
 ; ===============================================================================================================================
 Func _BinaryEnsure(ByRef $bBinary)

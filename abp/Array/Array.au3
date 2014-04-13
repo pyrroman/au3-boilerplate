@@ -20,7 +20,9 @@
 ; Example .......: No
 ; ===============================================================================================================================
 Func _Array_1DTo2D(ByRef $avArray, $iWidth)
-	If Not IsArray($avArray) Or UBound($avArray, 0) <> 1 Then Return SetError(1, 0, 0)
+	If Not IsArray($avArray) _
+			Or UBound($avArray, 0) <> 1 _
+			Or Not IsInt($iWidth) Then Return SetError(1, 0, 0)
 
 	Local $iArraySize = UBound($avArray), $iHeight = Ceiling($iArraySize / 2), $iPos = 0
 	Local $avReturn[$iHeight][$iWidth]
@@ -214,44 +216,69 @@ Func _ArrayBinarySearch_2D_ByRow(Const ByRef $avArray, $vValue, $iRow = 0, $iSta
 	Return $iMid
 EndFunc   ;==>_ArrayBinarySearch_2D_ByRow
 
-; use Scripting.Dictionary object for simple associative arrays
-; with string keys. Key comparisons are case insensitive.
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Array_Assoc_Create
+; Description ...: Creates a Scripting.Dictionary object that can be used as an associative array
+;                  | - the items are set/get like this: $aAssocArray("key")=$value or $aAssocArray(123)=$value
+;                  | - the key names are case insensitive
+; Syntax ........: _Array_Assoc_Create()
+; Parameters ....: $iCompareMode - defines mode for comparing string keys
+;                  | 0 = binary mode
+;                  | 1 = (default) text mode
+; Return values .: Success - (obj) Scripting.Dictionary object
+;                  Failure - (int) 0 and sets the @error flag to a non-zero value.
+; Version .......: 2014-03-23
+; Remarks .......: The object must be properly destroyed using _Array_Assoc_Destroy
+; Related .......: _Array_Assoc_Destroy
+; Link ..........: http://msdn.microsoft.com/en-us/library/x4k5wbx4.aspx
+; Example .......: No
+; ===============================================================================================================================
+Func _Array_Assoc_Create($iCompareMode = 1)
+	Local $aArray = ObjCreate("Scripting.Dictionary")
+	If @error Then Return SetError(1)
 
-;~ Global $myArray
-;~ $myArray = _AssocArray()
-;~ If @error Then
-;~     MsgBox(0x1010,"_AssocArray() Error", "Error Creating Associative Array!")
-;~     Exit
-;~ EndIf
+	If $iCompareMode <> 0 Or $iCompareMode <> 1 Then $iCompareMode = 1
 
-;~ $myArray("AntiqueWhite") = 0xFAEBD7
-;~ $myArray("Black") = 0x000000
-;~ $myArray("Blue") = 0x0000FF
-;~ $myArray("Brown") = 0xA52A2A
-;~ $myArray("CadetBlue") = 0x5F9EA0
-;~ $myArray("Chocolate") = 0xD2691E
-;~ $myArray("Coral") = 0xFF7F50
+	$aArray.CompareMode = $iCompareMode
 
-;~ MsgBox(0x1040,"","Hex for Chocolate Color is: 0x" & Hex($myArray("Chocolate"),6))
-;~ _AssocArrayDestroy($myArray)
+	Return $aArray
+EndFunc   ;==>_Array_Assoc_Create
 
-Func _Array_Assoc_Create()
-    Local $aArray = ObjCreate("Scripting.Dictionary")
-
-    If @error Then
-        Return SetError(1, 0, 0)
-    EndIf
-
-    $aArray.CompareMode = 1
-
-    Return $aArray
-EndFunc   ;==>_AssocArray
-
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Array_Assoc_Destroy
+; Description ...: Destroys a Scripting.Dictionary object
+; Syntax ........: _Array_Assoc_Destroy(Byref $aArray)
+; Parameters ....: $aArray              - (array)(unknown) [ByRef]
+; Return values .: Success - (integer) 1
+;                  Failure - (integer) 0 - the variable is not a Scripting.Dicitonary object
+; Version .......: 2014-03-23
+; Remarks .......:
+; Related .......: _Array_Assoc_Destroy
+; Link ..........: http://msdn.microsoft.com/en-us/library/x4k5wbx4.aspx
+; Example .......: No
+; ===============================================================================================================================
 Func _Array_Assoc_Destroy(ByRef $aArray)
-    If Not IsObj($aArray) Then
-        Return False
-    EndIf
-    $aArray.RemoveAll()
-    $aArray = 0
-    Return True
-EndFunc   ;==>_AssocArrayDestroy
+	If Not IsObj($aArray) Then Return 0
+	$aArray.RemoveAll()
+	$aArray = 0
+	Return 1
+EndFunc   ;==>_Array_Assoc_Destroy
+
+; #FUNCTION# ====================================================================================================================
+; Name ..........: _Array_Ensure
+; Description ...: Makes sure the variable provided is an array and has at least n-rows
+; Syntax ........: _Array_Ensure(Byref $avArray[, $iRows = 1])
+; Parameters ....: $avArray             - (array)(variant) [ByRef]
+;                  $iRows               - (integer) [optional]->[1]
+; Return values .: If the variable provided
+; Version .......: 2014-03-26
+; Remarks .......:
+; Related .......:
+; Link ..........:
+; ===============================================================================================================================
+Func _Array_Ensure(ByRef $avArray, $iRows = 1)
+	If Not IsArray($avArray) Or UBound($avArray,1) < $iRows Then
+		Local $avNewArray[$iRows]
+		$avArray = $avNewArray
+	EndIf
+EndFunc   ;==>_Array_Ensure

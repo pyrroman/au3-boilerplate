@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{f466f2dc-ae69-4e54-a06f-593ded259a67}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{255aecab-81cc-42fe-9108-77dd6914b9d8}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc</Extensions>
+    </Filter>
+    <Filter Include="Header Files\sciter-x">
+      <UniqueIdentifier>{04d8fe89-0f31-44ad-adb3-dfe107eed09d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{36f329c1-9cc8-4919-82ca-1d4a6529886e}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;jpg;jpeg;jpe;manifest</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="worker_threads.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wtl_threads.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mainfrm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thread_object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\aux-cvt.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\aux-slice.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\sciter-x-aux.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\sciter-x-behavior.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\sciter-x-dom.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\sciter-x-host-callback.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\sciter-x-lite.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\sciter-x-queue.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\sciter-x-script.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\sciter-x-value.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\sciter-x.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\tiscript-streams.hpp">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\tiscript-types.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\tiscript.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\tiscript.hpp">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\value.h">
+      <Filter>Header Files\sciter-x</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\wtl_threads.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="wtl_threads.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\default.htm" />
+  </ItemGroup>
+</Project>
