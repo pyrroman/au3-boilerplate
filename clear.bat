@@ -1,0 +1,1 @@
+@echo off && for %%e in ( sdf pdb pch ) do del /Q /S /F /A *.%%e 2> NUL
