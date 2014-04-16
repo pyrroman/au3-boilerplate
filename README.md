@@ -2,7 +2,9 @@ AutoIt Boilerplate
 ===================
 _A collection of my UDFs, modified and unmodified UDFs from some other authors and general AutoIt snippets_
 
-##### It's still in an early alpha stage, so core changes are expected
+## Important notes
+ - It's still in an early alpha stage, so core changes are expected
+ - always only the newest stable version of AutoIt is supported
 
 ### Useful when:
 
